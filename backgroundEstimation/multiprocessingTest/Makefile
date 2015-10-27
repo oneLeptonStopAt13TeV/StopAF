@@ -34,7 +34,7 @@ LOGS          = $(SOURCES:.$(SrcSuf)=.$(LogSuf))
 
 #------------------------------------------------------------------------------
 
-TARGET = mikasso
+TARGET = ttMarketaStudy
 
 compile: $(TARGET).$(ExeSuf)
 
