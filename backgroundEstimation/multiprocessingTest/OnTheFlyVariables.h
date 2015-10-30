@@ -41,12 +41,14 @@ public:
     float m_ak8WTrimmedMass;
     float m_ak8WSoftDropMass;
     float m_ak8recoWPt;
+    float m_ak8MET;
 
     float m_ak8WFakeMass;
     float m_ak8WFakePrunedMass;
     float m_ak8WFakeTrimmedMass;
     float m_ak8WFakeSoftDropMass;
     float m_ak8recoWFakePt;
+    float m_ak8FakeMET;
 
 };
 
@@ -122,6 +124,51 @@ void findMotherAndDaughters(int idx)
     }
 }
 
+      //@MJ@ TODO what about ak10 jets?
+      void fillRealAndFakes(float deltaR, uint32_t i)
+      {    
+           //Ws
+           if(abs(deltaR) < 0.1 && myEvent.ak8pfjets_pt.at(i) > 100) //@MJ@ TODO put the correct number
+           {
+               //@MJ@ TODO count subjets?
+               onTheFlyVariables.m_ak8WMass = myEvent.ak8pfjets_mass.at(i);
+               onTheFlyVariables.m_ak8WPrunedMass = myEvent.ak8pfjets_pruned_mass.at(i);
+               onTheFlyVariables.m_ak8WTrimmedMass = myEvent.ak8pfjets_trimmed_mass.at(i);
+               onTheFlyVariables.m_ak8WSoftDropMass = myEvent.ak8pfjets_softdrop_mass.at(i);
+               onTheFlyVariables.m_ak8recoWPt = myEvent.ak8pfjets_pt.at(i);
+               onTheFlyVariables.m_ak8MET = myEvent.pfmet; //for the event
+           
+               onTheFlyVariables.m_ak8WFakeMass = -1;
+               onTheFlyVariables.m_ak8WFakePrunedMass = -1;
+               onTheFlyVariables.m_ak8WFakeTrimmedMass = -1;
+               onTheFlyVariables.m_ak8WFakeSoftDropMass = -1;
+               onTheFlyVariables.m_ak8recoWFakePt = -1;
+               onTheFlyVariables.m_ak8FakeMET = -1; //for the event
+           }
+           //fakes
+           else if(myEvent.ak8pfjets_pt.at(i) > 100)
+           {
+               onTheFlyVariables.m_ak8WFakeMass = myEvent.ak8pfjets_mass.at(i);
+               onTheFlyVariables.m_ak8WFakePrunedMass = myEvent.ak8pfjets_pruned_mass.at(i);
+               onTheFlyVariables.m_ak8WFakeTrimmedMass = myEvent.ak8pfjets_trimmed_mass.at(i);
+               onTheFlyVariables.m_ak8WFakeSoftDropMass = myEvent.ak8pfjets_softdrop_mass.at(i);
+               onTheFlyVariables.m_ak8recoWFakePt = myEvent.ak8pfjets_pt.at(i);
+               onTheFlyVariables.m_ak8FakeMET = myEvent.pfmet; //for the event
+           
+               onTheFlyVariables.m_ak8WMass = -1;
+               onTheFlyVariables.m_ak8WPrunedMass = -1;
+               onTheFlyVariables.m_ak8WTrimmedMass = -1;
+               onTheFlyVariables.m_ak8WSoftDropMass = -1;
+               onTheFlyVariables.m_ak8recoWPt = -1;
+               onTheFlyVariables.m_ak8MET = -1; //for the event
+           }
+           //nothing found
+           else
+           {
+               cout << "W boosted jet not found" << endl;
+           }
+       }
+
 void findGenParticleProps(int idx, float* genPt, float* gendR)
 { 
     //do initial clean up
@@ -159,8 +206,23 @@ void findGenParticleProps(int idx, float* genPt, float* gendR)
 }
 
 //count efficiency of particle tagging
-void countEfficiency(int idx)
+void countEfficiency(int idx, string cutName = "", float lowCut = -1, float upCut = -1)
 {
+   //choose on which variable cut
+   vector<float> masses(myEvent.ak8pfjets_mass.size(), -1.0);
+   if(cutName == "raw")
+       masses = myEvent.ak8pfjets_mass;
+   else if(cutName == "pruned")
+       masses = myEvent.ak8pfjets_pruned_mass;
+   else if(cutName == "trimmed")
+       masses = myEvent.ak8pfjets_trimmed_mass;
+   else if(cutName == "softdrop")
+       masses = myEvent.ak8pfjets_softdrop_mass;
+   else
+   {
+       cout << "no cut" << endl;
+   }
+
   //initial clean up
   onTheFlyVariables.m_daughtersIdx.clear();
   onTheFlyVariables.m_ak8WMass = -1;
@@ -168,18 +230,20 @@ void countEfficiency(int idx)
   onTheFlyVariables.m_ak8WTrimmedMass = -1;
   onTheFlyVariables.m_ak8WSoftDropMass = -1;
   onTheFlyVariables.m_ak8recoWPt = -1;
-
+  onTheFlyVariables.m_ak8MET = -1;
 
   onTheFlyVariables.m_ak8WFakeMass = -1;
   onTheFlyVariables.m_ak8WFakePrunedMass = -1;
   onTheFlyVariables.m_ak8WFakeTrimmedMass = -1;
   onTheFlyVariables.m_ak8WFakeSoftDropMass = -1;
   onTheFlyVariables.m_ak8recoWFakePt = -1;
+  onTheFlyVariables.m_ak8FakeMET = -1;
   
   uint32_t nrOfJets = myEvent.ak8pfjets_mass.size();
   
   for(uint32_t i = 0; i < nrOfJets; i++ )
   {
+
        //@MJ@ TODO add another info about W tagged jet in order to discriminate fakes rate
        // e.g. sufficient mass of jet, number of subjets
        // find mother particle
@@ -187,7 +251,7 @@ void countEfficiency(int idx)
        float deta = -13;
        float dphi = -13;
        float dR = -13;
-       
+      
        //count dR
        if(onTheFlyVariables.m_mumIdx != -1)
        {
@@ -195,44 +259,36 @@ void countEfficiency(int idx)
            dphi = myEvent.ak8pfjets_phi.at(i) - myEvent.gen_phi.at(onTheFlyVariables.m_mumIdx);
            dR = TMath::Sqrt( deta*deta+dphi*dphi );
        }
-       //Ws
-       if(abs(dR) < 0.1 && myEvent.ak8pfjets_pt.at(i) > 100) //@MJ@ TODO put the correct number
+      
+       //perform cuts and filling fakes/reals
+       if(cutName == "")
        {
-           //@MJ@ TODO count subjets?
-           onTheFlyVariables.m_ak8WMass = myEvent.ak8pfjets_mass.at(i);
-           onTheFlyVariables.m_ak8WPrunedMass = myEvent.ak8pfjets_pruned_mass.at(i);
-           onTheFlyVariables.m_ak8WTrimmedMass = myEvent.ak8pfjets_trimmed_mass.at(i);
-           onTheFlyVariables.m_ak8WSoftDropMass = myEvent.ak8pfjets_softdrop_mass.at(i);
-           onTheFlyVariables.m_ak8recoWPt = myEvent.ak8pfjets_pt.at(i);
-           
-           onTheFlyVariables.m_ak8WFakeMass = -1;
-           onTheFlyVariables.m_ak8WFakePrunedMass = -1;
-           onTheFlyVariables.m_ak8WFakeTrimmedMass = -1;
-           onTheFlyVariables.m_ak8WFakeSoftDropMass = -1;
-           onTheFlyVariables.m_ak8recoWFakePt = -1;
-           break;
+           fillRealAndFakes(dR, i);
+           if(onTheFlyVariables.m_ak8WMass != myEvent.ak8pfjets_mass.at(i)) //end the loop when W jet found //@MJ@ TODO find better solution
+               break;
        }
-       //fakes
-       else if(myEvent.ak8pfjets_pt.at(i) > 100)
+       else if(cutName != "" && lowCut != -1 && upCut != -1)
        {
-           onTheFlyVariables.m_ak8WFakeMass = myEvent.ak8pfjets_mass.at(i);
-           onTheFlyVariables.m_ak8WFakePrunedMass = myEvent.ak8pfjets_pruned_mass.at(i);
-           onTheFlyVariables.m_ak8WFakeTrimmedMass = myEvent.ak8pfjets_trimmed_mass.at(i);
-           onTheFlyVariables.m_ak8WFakeSoftDropMass = myEvent.ak8pfjets_softdrop_mass.at(i);
-           onTheFlyVariables.m_ak8recoWFakePt = myEvent.ak8pfjets_pt.at(i);
-           
-           onTheFlyVariables.m_ak8WMass = -1;
-           onTheFlyVariables.m_ak8WPrunedMass = -1;
-           onTheFlyVariables.m_ak8WTrimmedMass = -1;
-           onTheFlyVariables.m_ak8WSoftDropMass = -1;
-           onTheFlyVariables.m_ak8recoWPt = -1;
+           if(masses.at(i) > lowCut && masses.at(i) < lowCut)
+               fillRealAndFakes(dR, i);
+           if(onTheFlyVariables.m_ak8WMass != myEvent.ak8pfjets_mass.at(i)) //end the loop when W jet found
+               break;
        }
-       //nothing found
-       else
+       else if(cutName != "" && (lowCut != -1 && upCut != -1))
        {
-           cout << "W boosted jet not found" << endl;
+           if(lowCut != -1 && masses.at(i) > lowCut)
+               fillRealAndFakes(dR, i);
+           if(upCut != -1 && masses.at(i) < upCut)
+               fillRealAndFakes(dR, i);
+           if(onTheFlyVariables.m_ak8WMass != myEvent.ak8pfjets_mass.at(i))  //end the loop when W jet found
+               break;
        }
+      else
+      {
+          cout << "cuts were defined in wrog way!" << endl;
+      }
   }  
 }
+
 
 #endif
