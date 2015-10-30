@@ -6,7 +6,8 @@
 #define NBJET_CUT 1
 #define NLEP_CUT  1
 #define MET_CUTLL 50
-
+#define MTW2_CUT 200
+#define MLB_CUT 175
 
 // Not sure that it is a good idea to include this here,
 // since one often needs to use a modified format because
@@ -58,6 +59,8 @@ bool goesInPreselectionNoVeto()
     if (myEvent.ngoodleps != NLEP_CUT) return false;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+
+    return true;
 }
 
 bool goesInPreselection()
@@ -91,6 +94,166 @@ bool goesInSmallDMSR() { return (goesInPreselection() &&  myEvent.mt_met_lep > 1
 bool goesInSmallDMSR300() { return (goesInPreselection() &&  myEvent.mt_met_lep > 150 && myEvent.minDPhi_jmet> 0.8 && myEvent.hadronic_top_chi2 < 10 && myEvent.pfmet > 300);}
 bool goesInSmallDMSR2b() { return (goesInSmallDMSR() && myEvent.ngoodbtags>=2);}
 */
+
+// Categorization of Events
+// ########################
+
+bool NoAk8Jets()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() != 0) return false;
+
+    return true;
+}
+
+bool AtLeastOneAk8Jet()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+
+    return true;
+}
+
+bool NoAk10Jets()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak10pfjets_mass.size() != 0) return false; //@MJ@ TODO uncomment this one day
+
+    return true;
+}
+
+bool AtLeastOneAk10Jet()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak10pfjets_mass.size() == 0) return false; //@MJ@ TODO uncomment this one day
+
+    return true;
+}
+
+bool ThreeJetsInEventOneOfThemAk8()
+{
+    if (myEvent.ngoodjets < 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() != 0) return false;
+
+    return true;
+}
+
+bool ThreeJetsInEventOneOfThemAk10()
+{
+    if (myEvent.ngoodjets < 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak10pfjets_mass.size() != 0) return false; //@MJ@ TODO uncomment this one day
+
+    return true;
+}
+
+// New signal regions
+// ###################
+
+bool SRbin1()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb > MLB_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.ETmiss < 250)  return false;
+    if (myEvent.ETmiss > 325)  return false;
+
+    return true;
+}
+
+bool SRbin2()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb > MLB_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.ETmiss <= 325)  return false;
+
+    return true;
+}
+
+bool SRbin3()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb > MLB_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ETmiss < 250)  return false;
+    if (myEvent.ETmiss > 375)  return false;
+
+    return true;
+}
+
+bool SRbin4()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb > MLB_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ETmiss <= 375)  return false;
+
+    return true;
+}
+
+bool SRbin5()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb <= MLB_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.ETmiss <= 250)  return false;
+
+    return true;
+}
+
+bool SRbin6()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb <= MLB_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ETmiss < 250)  return false;
+    if (myEvent.ETmiss > 300)  return false;
+
+    return true;
+}
+
+bool SRbin7()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb <= MLB_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ETmiss <= 300)  return false;
+    if (myEvent.ETmiss > 400)  return false;
+
+    return true;
+}
+
+bool SRbin8()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb <= MLB_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ETmiss <= 400)  return false;
+
+    return true;
+}
 
 bool goesInPreselectionNoBVeto()
 {
