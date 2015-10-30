@@ -62,8 +62,8 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
-    //babyTuplePath = "./";
+    //babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
+    babyTuplePath = "./";
     
     totalNumberOfWorkers = 1;
 
