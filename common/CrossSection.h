@@ -21,7 +21,7 @@ float CrossSection(const string& dataset){
 	if(dataset == "TTJets") return  831.76 ;
         if(dataset == "TTJets-FXFX") return  831.76 ; //@MJ@ TODO 
         if(dataset == "WJets") return 61466;
-
+    return 0;
 }
 
 #endif
