@@ -1,0 +1,42 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Root & plots files
+*.root
+*.eps
+*.png
+plots/
+
+# Log/tab/dump files
+*.log
+*.dump
+*.tab
+*.C~
+*.cc~
+*.h~
+
+
+# Executables
+*.run
+
+# Non versionned folders and links
+documentation/
+
+# Various backup/crap
+*.d
+*.tex
+*.pdf
+*.aux
+.list*
+*/list
