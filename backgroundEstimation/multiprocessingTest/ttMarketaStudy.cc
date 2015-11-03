@@ -16,7 +16,7 @@ using namespace std;
 #define USE_GEN_INFO_EXT
 //#define USE_SKIMMING_VAR
 #define USE_JETS
-//#define USE_JETS_EXT
+#define USE_JETS_EXT
 //#define USE_GEN_INFO
 //#define USE_GEN_INFO_EXT
 #define USE_LEP1
@@ -29,7 +29,7 @@ using namespace std;
 #define USE_WEIGHTS
 #define USE_VAR_BASELINE
 #define USE_GLOBAL_VAR
-#define USE_OLD_VAR
+//#define USE_OLD_VAR
 #define USE_AK8_JETS
 
 
@@ -55,6 +55,7 @@ using namespace std;
 
 
 bool muonChannelSelector() { return true; }
+bool electronChannelSelector() { return true; }
 uint64_t counting;
 // ################################################################
 
@@ -62,53 +63,60 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    //babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
-    babyTuplePath = "./";
+    babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
+    //babyTuplePath = "./";
     
-    totalNumberOfWorkers = 1;
+    totalNumberOfWorkers = 2;
 
 
 
-    AddVariable("MT", "M_T [GeV]",  "", 50,   0, 300,  &(myEvent.mt_met_lep));
-    AddVariable("MET", "MET [GeV]",  "", 50,   0, 300,  &(myEvent.pfmet));
-    AddVariable("MT2W", "MT2W",  "", 50,   0, 300,  &(myEvent.MT2W));
-    AddVariable("Njets", "N_{jets}",  "", 11,   0, 10,  &(myEvent.ngoodjets));
-    AddVariable("Nbjets", "N_{b-jets}",  "", 6,   0, 5,  &(myEvent.ngoodbtags));
-    AddVariable("SRBins", "Signal Region box",  "", 11,   -5, 5,  &(onTheFlyVariables.SRbins));
-    AddVariable("genWPt", "Pt of gen W",  "", 500,   0, 1000,  &(onTheFlyVariables.m_genWPt));
-    AddVariable("genTopPt", "Pt of gen top quark",  "", 500,   0, 1000,  &(onTheFlyVariables.m_genTopPt));
-    AddVariable("genWdR", "#delta R related to gen W",  "", 100,   0, 4,  &(onTheFlyVariables.m_genWdR));
-    AddVariable("genTopdR", "#deltar R related to gen top quark",  "", 100,   0, 4,  &(onTheFlyVariables.m_genTopdR));
-    AddVariable("recWPt", "Pt of rec W",  "", 500,   0, 500,  &(onTheFlyVariables.m_recWPt));
-    AddVariable("ak8WMass", "mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WMass));
-    AddVariable("ak8WPrunedMass", "pruned mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WPrunedMass));
-    AddVariable("ak8WTrimmedMass", "trimmed mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WTrimmedMass));
-    AddVariable("ak8WSoftDropMass", "softdrop mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WSoftDropMass));
-    AddVariable("ak8recoWPt", "pt of W ak8 jet",  "", 200,   0, 1000,  &(onTheFlyVariables.m_ak8recoWPt));
-    AddVariable("ak8WFakeMass", "mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeMass));
-    AddVariable("ak8WFakePrunedMass", "pruned mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakePrunedMass));
-    AddVariable("ak8WFakeTrimmedMass", "trimmed mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeTrimmedMass));
-    AddVariable("ak8WFakeSoftDropMass", "softdrop mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeSoftDropMass));
-    AddVariable("ak8recoWFakePt", "pt of fake W ak8 jet",  "", 200,   0, 1000,  &(onTheFlyVariables.m_ak8recoWFakePt));
-       
+    AddVariable("MT", "M_T [GeV]",  "", 50,   0, 300,  &(myEvent.mt_met_lep), "noUnderflowInFirstBin");
+    AddVariable("MET", "MET [GeV]",  "", 50,   0, 300,  &(myEvent.pfmet), "noUnderflowInFirstBin");
+    AddVariable("MT2W", "MT2W",  "", 50,   0, 300,  &(myEvent.MT2W), "noUnderflowInFirstBin");
+    AddVariable("Njets", "N_{jets}",  "", 11,   0, 10,  &(myEvent.ngoodjets), "noUnderflowInFirstBin");
+    AddVariable("Nbjets", "N_{b-jets}",  "", 6,   0, 5,  &(myEvent.ngoodbtags), "noUnderflowInFirstBin");
+    AddVariable("NSubJets", "N_{sub-jets}",  "", 6,   0, 5,  &(onTheFlyVariables.m_ak8WSubJets), "noUnderflowInFirstBin");
+    AddVariable("NFakeSubJets", "N_{fakesub-jets}",  "", 6,   0, 5,  &(onTheFlyVariables.m_ak8WFakeSubJets), "noUnderflowInFirstBin");
+    AddVariable("SRBins", "Signal Region box",  "", 11,   -5, 5,  &(onTheFlyVariables.SRbins), "noUnderflowInFirstBin");
+    AddVariable("genWPt", "Pt of gen W",  "", 100,   0, 1000,  &(onTheFlyVariables.m_genWPt), "noUnderflowInFirstBin");
+    AddVariable("genTopPt", "Pt of gen top quark",  "", 100,   0, 1000,  &(onTheFlyVariables.m_genTopPt), "noUnderflowInFirstBin");
+    AddVariable("genBarTopPt", "Pt of gen bar top quark",  "", 100,   0, 1000,  &(onTheFlyVariables.m_genBarTopPt), "noUnderflowInFirstBin");
+    AddVariable("genWdR", "#delta R related to gen W",  "", 100,   0, 4,  &(onTheFlyVariables.m_genWdR), "noUnderflowInFirstBin");
+    AddVariable("genTopdR", "#deltar R related to gen top quark",  "", 100,   0, 4,  &(onTheFlyVariables.m_genTopdR), "noUnderflowInFirstBin");
+    AddVariable("genBarTopdR", "#deltar R related to gen bar top quark",  "", 100,   0, 4,  &(onTheFlyVariables.m_genBarTopdR), "noUnderflowInFirstBin");
+    AddVariable("recWPt", "Pt of rec W",  "", 100,   0, 1000,  &(onTheFlyVariables.m_recWPt), "noUnderflowInFirstBin");
+    AddVariable("ak8WMass", "mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WPrunedMass", "pruned mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WPrunedMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WTrimmedMass", "trimmed mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WTrimmedMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WSoftDropMass", "softdrop mass of W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WSoftDropMass), "noUnderflowInFirstBin");
+    AddVariable("ak8recoWPt", "pt of W ak8 jet",  "", 100,   0, 1000,  &(onTheFlyVariables.m_ak8recoWPt), "noUnderflowInFirstBin");
+    AddVariable("ak8MET", "MET of W ak8 jet",  "", 100,   0, 300,  &(onTheFlyVariables.m_ak8MET), "noUnderflowInFirstBin");
+    AddVariable("ak8WFakeMass", "mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WFakePrunedMass", "pruned mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakePrunedMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WFakeTrimmedMass", "trimmed mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeTrimmedMass), "noUnderflowInFirstBin");
+    AddVariable("ak8WFakeSoftDropMass", "softdrop mass of fake W ak8 jet",  "", 100,   0, 400,  &(onTheFlyVariables.m_ak8WFakeSoftDropMass), "noUnderflowInFirstBin");
+    AddVariable("ak8recoWFakePt", "pt of fake W ak8 jet",  "", 100,   0, 1000,  &(onTheFlyVariables.m_ak8recoWFakePt), "noUnderflowInFirstBin");
+    AddVariable("ak8FakeMET", "MET of fake W ak8 jet",  "", 100,   0, 300,  &(onTheFlyVariables.m_ak8FakeMET), "noUnderflowInFirstBin");
     // ...
 
     AddProcessClass("TTJets-FXFX", "TTJets-FXFX", "background", kPink);
         AddDataset("TTJets-FXFX", "TTJets-FXFX", 0, 0);
     // ...
 
-    AddRegion("preselection", "Preselection", &goesInPreselection);
-    AddRegion("BaselineSelection", "BaselineSelection", &goesInBaselineSearchSR);
+    AddRegion("preselectionTT", "PreselectionTT", &goesInPreselectionNoVetoNoMetCut);
+    //AddRegion("BaselineSelection", "BaselineSelection", &goesInBaselineSearchSR);
     // ...
 
     AddChannel("muon", "#mu channel", &muonChannelSelector);
+    AddChannel("electron", "e channel", &electronChannelSelector);
     // ...
 
-    SetLumi(2170.);  //@MJ@ TODO correct lumi
+    SetLumi(2169005.);  //@MJ@ TODO correct lumi
 
     Create1DHistos();
     Add2DHisto("genWPt","genWdR");
     Add2DHisto("genTopPt","genTopdR");
+    Add2DHisto("genBarTopPt","genBarTopdR");
 }
 
 // ################################################################
@@ -124,27 +132,35 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     //cout<<"weight: "<<myEvent.mc_weight<<endl;
     // Compute on the fly variables if needed
 
+   // myEvent.totalNumberOfInitialEvent = 50000;
+     
     ComputeOnTheFlyVariables();
     
     //find generated particles and their properties
     //Initial clean up
-    onTheFlyVariables.m_genWPt = 0;
-    onTheFlyVariables.m_genWdR = 0;
-    onTheFlyVariables.m_genTopPt = 0;
-    onTheFlyVariables.m_genTopdR = 0;
+    onTheFlyVariables.m_genWPt = -1;
+    onTheFlyVariables.m_genWdR = -1;
+    onTheFlyVariables.m_genTopPt = -1;
+    onTheFlyVariables.m_genTopdR = -1;
+    onTheFlyVariables.m_genBarTopPt = -1;
+    onTheFlyVariables.m_genBarTopdR = -1;
     
     //find W decaying to two quarks
     findGenParticleProps(24, &(onTheFlyVariables.m_genWPt), &(onTheFlyVariables.m_genWdR)); //W
     //cout << "1) back in main; W: gen pt is: " << onTheFlyVariables.m_genWPt << " gen dR is: " <<  onTheFlyVariables.m_genWdR << " end of one event" << endl;
     
-    //find t decaying to W and quark
+    //find t decaying to W+ and quark
     findGenParticleProps(6, &(onTheFlyVariables.m_genTopPt), &(onTheFlyVariables.m_genTopdR)); //top
     //cout << "2) back in main; top:  gen pt is: " << onTheFlyVariables.m_genTopPt << " gen dR is: " <<  onTheFlyVariables.m_genTopdR << " end of one event" << endl;
+
+    //find bar t decaying to W- and quark
+    findGenParticleProps(-6, &(onTheFlyVariables.m_genBarTopPt), &(onTheFlyVariables.m_genBarTopdR)); //top
+    //cout << "3) back in main; bar top:  gen pt is: " << onTheFlyVariables.m_genBarTopPt << " gen dR is: " <<  onTheFlyVariables.m_genBarTopdR << " end of one event" << endl;
 
     //count efficiency of W tagging
     countEfficiency(24);
     //cout << "W ak8 pt" << onTheFlyVariables.m_ak8recoWPt << "ake ak8 W pt" << onTheFlyVariables.m_ak8recoWFakePt << endl;
-
+    
     // Determine which processClass to fill
     // (in the most trivial case, only call GetProcessClass(currentDataset),
     // but you might want to split a dataset according to
