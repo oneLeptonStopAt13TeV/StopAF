@@ -63,6 +63,15 @@ bool goesInPreselectionNoVeto()
     return true;
 }
 
+bool goesInPreselectionNoVetoNoMetCut()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+
+    return true;
+}
+
 bool goesInPreselection()
 {
     if (myEvent.pfmet < MET_CUT) return false;
