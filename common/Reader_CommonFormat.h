@@ -112,7 +112,7 @@ typedef struct
     int           secondLeptonId;
     float         jetsCSV;
     float         pu_weight;
-    double 	  mc_weight;
+    Double_t 	  mc_weight;
     float         lep1_mass;
     float         lep2_passVeto;
     float         lep1_eta;
@@ -129,7 +129,8 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    uint32_t      totalNumberOfInitialEvent = -13;
+    //uint32_t      totalNumberOfInitialEvent = -13;
+    double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
     int           nvetoleps;
@@ -272,8 +273,12 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     //theTree->SetBranchAddress("crossSection",            &(myEvent->crossSection));
     ////////////////
     //
-    //used for weight
-    theTree->SetBranchAddress("totalNumberOfInitialEvent", &(myEvent->totalNumberOfInitialEvent));
+    
+    // Not loaded anymore
+    // The variable is extrated from the histogram hWeights
+    // It must be a double
+    // used for weight
+    // theTree->SetBranchAddress("totalNumberOfInitialEvent", &(myEvent->totalNumberOfInitialEvent));
 
     // multiplicities
     theTree->SetBranchAddress("nvetoleps",               &(myEvent->nvetoleps));
