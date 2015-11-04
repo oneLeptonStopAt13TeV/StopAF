@@ -249,7 +249,8 @@ void countEfficiency(int idx, string cutName = "", float lowCut = -1, float upCu
   onTheFlyVariables.m_ak8recoWPt = -1;
   onTheFlyVariables.m_ak8WSubJets = -1; //for the event
   onTheFlyVariables.m_ak8MET = -1;
-
+  onTheFlyVariables.m_recWPt = -1;
+  
   onTheFlyVariables.m_ak8WFakeMass = -1;
   onTheFlyVariables.m_ak8WFakePrunedMass = -1;
   onTheFlyVariables.m_ak8WFakeTrimmedMass = -1;
