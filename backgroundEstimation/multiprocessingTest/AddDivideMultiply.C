@@ -102,18 +102,18 @@ void AddDivideMultiply()
     can->Divide(1,1);
     can->cd(1);
     
-
+    //normalize and add
     if(process == "naddition" && inputRootFile.size() > 1)
-    {        
-        for(uint32_t i = 0; i < inputHist.size(); i++)
-        {  
-            Double_t norm = inputHist.at(i)->Integral(); 
-            inputHist.at(i)->Scale(1/norm, "width");
-        }
-        
+    {   
+        //normalize the first one
+        Double_t norm1 = inputHist.at(0)->Integral(); 
+        inputHist.at(0)->Scale(1/norm1, "width");
         for(uint32_t h = 0; h < inputHist.size(); h++)
-        {
-            cout << "adding histos: " << inputHist.size() << endl;
+        {   
+            //normalize
+            Double_t norm = inputHist.at(h+1)->Integral(); 
+            inputHist.at(h+1)->Scale(1/norm, "width");
+            //add
             inputHist.at(0)->Add(inputHist.at(1+h), 1);
         }
 
@@ -121,6 +121,7 @@ void AddDivideMultiply()
         inputHist.at(0)->Draw();
     }
 
+    //merge two histograms
     if(process == "merge")
     {  
         cout << "process merge" << endl;
@@ -137,37 +138,38 @@ void AddDivideMultiply()
         }
     }
 
+    //efficency plus distributions
     if(process == "distrandeff" && inputRootFile.size() == 2)
     { 
         cout << "process distrandeff" << endl; 
         TH1D* division = dynamic_cast<TH1D*>(inputHist.at(0)->Clone());
-        division->Divide(inputHist.at(1));
+        division->Divide(dynamic_cast<TH1D*>(inputHist.at(1)->Clone()));
+        division->SetMaximum(2);
+        division->Draw("hist");
 
         //inputHist.at(0)->GetYaxis()->SetTitle("whatever");
-        //normalize
         Double_t n2 = inputHist.at(1)->Integral(); 
-        inputHist.at(1)->SetMaximum(1.2);
+        cout << "gen events: "  << n2 << endl;
         inputHist.at(1)->SetLineColor(kGreen);
-        inputHist.at(1)->Draw("hist");
         inputHist.at(1)->Scale(1/n2, "width");
+        inputHist.at(1)->Draw("same hist");
 
         Double_t n1 = inputHist.at(0)->Integral(); 
+        cout << "reco events: "  << n1 << endl;
         inputHist.at(0)->SetLineColor(kBlue);
-        inputHist.at(0)->Draw("hist same");
         inputHist.at(0)->Scale(1/n1, "width");
-        division->Draw("same hist");
-        //Double_t n = inputHist.at(0)->Integral(); 
-        //inputHist.at(0)->Draw("same");
+        inputHist.at(0)->Draw("hist same");
     }
   
+    //ROC
     //warning -  histograms must have same amount of bins!
     if(process == "bsefficiency")
     {
         if(inputRootFile.size() == 2)
         {
             cout << "process bsefficiency" << endl;
+           
             Int_t nrOfBins = inputHist.at(0)->GetNbinsX();
-            cout << "nuber of bins: " << nrOfBins << endl;
             TGraph* output = new TGraph(nrOfBins);
             
             //initial number of events
@@ -176,7 +178,7 @@ void AddDivideMultiply()
 
             for(uint32_t bin = 1; bin<(nrOfBins+1); bin++)
             {
-                output->SetPoint(bin, (inputHist.at(0)->Integral(bin, nrOfBins))/norm1, (inputHist.at(1)->Integral(bin, nrOfBins))/norm2); //@MJ@ TODO divide with tot nr of events on beginning
+                output->SetPoint(bin, (inputHist.at(0)->Integral(bin, nrOfBins))/norm1, (inputHist.at(1)->Integral(bin, nrOfBins))/norm2);
             }
             
             output->GetXaxis()->SetTitle(inputCanvasName.at(0));
@@ -185,6 +187,28 @@ void AddDivideMultiply()
         }
     }
     
+    //count mean and rms
+    if(process == "countmean")
+    {
+        ofstream myfile ("TableOfMeanValues.txt");
+        if (myfile.is_open())
+        { 
+            myfile << "process countmean" << endl;
+        
+            myfile << "-------mean and RMS table--------" << endl;
+            myfile << "variable" << endl;      
+            myfile << "        mean          RMS" << endl << endl;
+            for(uint32_t h = 0; h <inputRootFile.size(); h++ )
+            {   
+                Double_t mean = inputHist.at(h)->GetMean(1);
+                Double_t RMS = inputHist.at(h)->GetRMS();
+                myfile << variable.at(h) << endl;
+                myfile << "      " << mean << "        " << RMS << endl << endl;;
+            }
+      }
+      else
+          cout << "unable to open a file!" << endl;
+    }
     
     can->SaveAs("./output/" + process + inputCanvasName.at(0) + ".eps");
     cout << "drawing" << endl;

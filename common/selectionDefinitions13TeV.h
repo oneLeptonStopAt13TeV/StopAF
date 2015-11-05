@@ -8,6 +8,11 @@
 #define MET_CUTLL 50
 #define MTW2_CUT 200
 #define MLB_CUT 175
+#define ETMISS_BOUND_250 250
+#define ETMISS_BOUND_300 300
+#define ETMISS_BOUND_325 325
+#define ETMISS_BOUND_375 375
+#define ETMISS_BOUND_400 400
 
 // Not sure that it is a good idea to include this here,
 // since one often needs to use a modified format because
@@ -17,6 +22,11 @@
 //#include "Reader_final.h"  // Has the extended BDT info defined
 #include "Reader_CommonFormat.h"  // Has the extended BDT info defined
 #include "CrossSection.h" // used to compute the weight
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 // NB : When you call any of the following functions,
 // these three variables must be filled with the current
@@ -164,15 +174,30 @@ bool ThreeJetsInEventOneOfThemAk10()
 // New signal regions
 // ###################
 
-bool SRbin1()
+bool SRbin1(ofstream &outputFile)
 {
+    static uint32_t j;
+    j++;
+
+    if(j == 1)
+    {
+        outputFile << "Signal region bin 1" << endl;
+        outputFile << "----------------------------" << endl;
+        outputFile << "myEvent.ngoodleps == " << NLEP_CUT << endl;
+        outputFile << "myEvent.ngoodjets > " << NJET_CUT << endl;
+        outputFile << "myEvent.ngoodbtags > " << NBJET_CUT << endl;
+        outputFile << "myEvent.Mlb < " << MLB_CUT << endl;
+        outputFile << "myEvent.MT2W < " << MTW2_CUT << endl;
+        //outputFile <<  ETMISS_BOUND_250 " < myEvent.ETmiss <
+    } 
+    
     if (myEvent.ngoodleps != NLEP_CUT) return false;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss < 250)  return false;
-    if (myEvent.ETmiss > 325)  return false;
+    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
+    if (myEvent.ETmiss > ETMISS_BOUND_325)  return false;
 
     return true;
 }
@@ -184,7 +209,7 @@ bool SRbin2()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= 325)  return false;
+    if (myEvent.ETmiss <= ETMISS_BOUND_325)  return false;
 
     return true;
 }
@@ -196,8 +221,8 @@ bool SRbin3()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss < 250)  return false;
-    if (myEvent.ETmiss > 375)  return false;
+    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
+    if (myEvent.ETmiss > ETMISS_BOUND_375)  return false;
 
     return true;
 }
@@ -209,7 +234,7 @@ bool SRbin4()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= 375)  return false;
+    if (myEvent.ETmiss <= ETMISS_BOUND_375)  return false;
 
     return true;
 }
@@ -221,7 +246,7 @@ bool SRbin5()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= 250)  return false;
+    if (myEvent.ETmiss <= ETMISS_BOUND_250)  return false;
 
     return true;
 }
@@ -233,8 +258,8 @@ bool SRbin6()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss < 250)  return false;
-    if (myEvent.ETmiss > 300)  return false;
+    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
+    if (myEvent.ETmiss > ETMISS_BOUND_300)  return false;
 
     return true;
 }
@@ -246,8 +271,8 @@ bool SRbin7()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= 300)  return false;
-    if (myEvent.ETmiss > 400)  return false;
+    if (myEvent.ETmiss <= ETMISS_BOUND_300)  return false;
+    if (myEvent.ETmiss > ETMISS_BOUND_400)  return false;
 
     return true;
 }
@@ -259,7 +284,7 @@ bool SRbin8()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= 400)  return false;
+    if (myEvent.ETmiss <= ETMISS_BOUND_400)  return false;
 
     return true;
 }
