@@ -8,6 +8,7 @@ float CrossSection(const string& dataset){
 	if(dataset == "T2tt_650_100") return 0.107045;
 	if(dataset == "T2tt_650_325") return 0.107045;
 	if(dataset == "T2tt_850_100") return 0.01896;
+        if(dataset == "T2tt_850_325") return 0.01896; //@MJ@ TODO this number is random
 	if(dataset == "singleTopbar_s") return 4.16;
 	if(dataset == "singleTopbar_t") return 80.95;
 	if(dataset == "singleTop_s") return 7.20;
@@ -21,7 +22,7 @@ float CrossSection(const string& dataset){
 	if(dataset == "TTJets") return  831.76 ;
         if(dataset == "TTJets-FXFX") return  831.76 ; //@MJ@ TODO 
         if(dataset == "WJets") return 61466;
-    return 0;
+    return -13;
 }
 
 #endif
