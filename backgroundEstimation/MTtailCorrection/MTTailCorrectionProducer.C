@@ -233,7 +233,8 @@ FitResult  doFit(const FitSetup& setup, string conditions, string fname=string("
 
 
     //--  Constraints on single top and rare --//
-    float RelUncert = 0.2;
+    float RelUncert = 0.5;
+    //cerr<<"RelUncer = "<<RelUncert<<endl;
     // Construct another Gaussian constraint p.d.f on "rare" bkg
     RooGaussian constr_rare("constr_rare","constr_rare",norm_rare,RooConst(mc_norm_rare),RooConst(RelUncert*mc_norm_rare)) ;
     // Construct another Gaussian constraint p.d.f on "tt2l" bkg
@@ -274,6 +275,13 @@ FitResult  doFit(const FitSetup& setup, string conditions, string fname=string("
 
 }
 
+void Stat(std::vector<double>& v, double& mean, double &stdev){
+	double sum = std::accumulate(v.begin(), v.end(), 0.0);
+	mean = sum / v.size();
+	double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+	stdev = std::sqrt(sq_sum / v.size() - mean * mean);
+}
+
 int main()
 {
     randomnessGenerator = new TRandom();
@@ -284,7 +292,7 @@ int main()
     // # Prepare final SFR table #
     // ###########################
 
-    vector<string> columns = { "SFR_1ltop", "SFR_Wjets" };
+    vector<string> columns = { "SFR-1ltop", "SFR-Wjets" };
 
     vector<string> listAllSignalRegion = listCutAndCounts;
 
@@ -292,6 +300,10 @@ int main()
 
     Table tableSFRToBeUsed(columns,listAllSignalRegion);
     Table tableRawSFR(columns,listRawRegion);
+    
+    columns.clear();
+    columns = {"NormPeak_1ltop", "NormTail_1ltop", "SFR-1ltop", "NormPeak_Wjets", "NormTail_Wjets", "SFR-Wjets"};
+    Table tableRawNormValues(columns,listRawRegion);
 
     // Create observables
     RooRealVar var(OBSERVABLE_FOR_FIT,OBSERVABLE_FOR_FIT,0,600) ;
@@ -339,10 +351,35 @@ int main()
         setup.varMin=0;
         setup.varMax=600;
 
-        res = doFit(setup,conditions);
-        SFR_1ltop=Figure(res.SF_1ltop.first,res.SF_1ltop.second);
-        SFR_Wjets=Figure(res.SF_Wjets.first,res.SF_Wjets.second);
-        h_SF_MTtail_CC_1ltop.SetBinContent(i+1,res.SF_1ltop.first);
+	Figure NormTail_1ltop;
+	Figure NormTail_Wjets;
+        if(setup.do_mcstat){
+	vector<double> n_tt1l;
+	vector<double> n_wjets;
+	for(int mc=0;mc<500;mc++){
+	res = doFit(setup,conditions);
+        //Figure NormTail_1ltop(res.SF_1ltop.first,res.SF_1ltop.second);
+        //Figure NormTail_Wjets=Figure(res.SF_Wjets.first,res.SF_Wjets.second);
+      	  Figure n_1ltop(res.SF_1ltop.first,res.SF_1ltop.second);
+       	  Figure n_Wjets(res.SF_Wjets.first,res.SF_Wjets.second);
+	  n_tt1l.push_back(res.SF_1ltop.first);
+	  n_wjets.push_back(res.SF_Wjets.first);
+	}
+	double mean, stdev;
+	Stat(n_tt1l, mean, stdev);
+	NormTail_1ltop = Figure(mean, stdev);
+	Stat(n_wjets, mean, stdev);
+	NormTail_Wjets = Figure(mean, stdev);
+	}
+	else{
+	res = doFit(setup,conditions);
+        NormTail_1ltop = Figure(res.SF_1ltop.first,res.SF_1ltop.second);
+        NormTail_Wjets=Figure(res.SF_Wjets.first,res.SF_Wjets.second);
+	}
+	tableRawNormValues.Set("NormTail_1ltop",listIndividualCuts[i],NormTail_1ltop);
+	tableRawNormValues.Set("NormTail_Wjets",listIndividualCuts[i],NormTail_Wjets);
+        
+	h_SF_MTtail_CC_1ltop.SetBinContent(i+1,res.SF_1ltop.first);
         h_SF_MTtail_CC_1ltop.SetBinError(i+1,res.SF_1ltop.second);
         h_SF_MTtail_CC_1ltop.GetXaxis()->SetBinLabel(i+1,label.c_str());
         h_SF_MTtail_CC_Wjets.SetBinContent(i+1,res.SF_Wjets.first);
@@ -365,9 +402,17 @@ int main()
         h_SF_MTpeak_CC_Wjets.SetBinError(i+1,res.SF_Wjets.second);
         h_SF_MTpeak_CC_Wjets.GetXaxis()->SetBinLabel(i+1,label.c_str());
 
+	//tableRawNormValues.Set("NormTail_1ltop",SFR_1ltop);
+	//tableRawNormValues.Set("NormTail_Wjets",SFR_Wjets);
+
+	Figure NormPeak_1ltop(res.SF_1ltop.first, res.SF_1ltop.second);
+	Figure NormPeak_Wjets(res.SF_Wjets.first, res.SF_Wjets.second);
+	tableRawNormValues.Set("NormPeak_1ltop",listIndividualCuts[i],NormPeak_1ltop);
+	tableRawNormValues.Set("NormPeak_Wjets",listIndividualCuts[i],NormPeak_Wjets);
+
         // Now compute the ration : SF_tail/SF_peak
-        SFR_1ltop /= Figure(res.SF_1ltop.first, res.SF_1ltop.second);
-        SFR_Wjets /= Figure(res.SF_Wjets.first, res.SF_Wjets.second);
+        SFR_1ltop = NormTail_1ltop/NormPeak_1ltop; //Figure(res.SF_1ltop.first, res.SF_1ltop.second);
+        SFR_Wjets = NormTail_Wjets/NormPeak_Wjets; //Figure(res.SF_Wjets.first, res.SF_Wjets.second);
 
         // It is based on the ratio SF_tail/SF_peak
         SFR_CC_1ltop_map[label] = SFR_1ltop;
@@ -383,8 +428,10 @@ int main()
 
         cout<<"individual cut: " << listIndividualCuts[i] << " ; SFR_1ltop: "<<SFR_1ltop.Print()<<" SFR_Wjets: "<<SFR_Wjets.Print()<<endl;
 
-        tableRawSFR.Set("SFR_1ltop",listIndividualCuts[i],SFR_1ltop);
-        tableRawSFR.Set("SFR_Wjets",listIndividualCuts[i],SFR_Wjets);
+        tableRawNormValues.Set("SFR-1ltop",listIndividualCuts[i],SFR_1ltop);
+        tableRawNormValues.Set("SFR-Wjets",listIndividualCuts[i],SFR_Wjets);
+        tableRawSFR.Set("SFR-1ltop",listIndividualCuts[i],SFR_1ltop);
+        tableRawSFR.Set("SFR-Wjets",listIndividualCuts[i],SFR_Wjets);
     }
 
     //Save plots in roofile
@@ -429,10 +476,13 @@ int main()
         SFR_CC_1ltop *= Figure(1.0,TEMPLATE_FIT_METHOD_UNCERTAINTY);
         SFR_CC_Wjets *= Figure(1.0,TEMPLATE_FIT_METHOD_UNCERTAINTY);
 
-        tableSFRToBeUsed.Set("SFR_1ltop",listCutAndCounts[r],SFR_CC_1ltop);
-        tableSFRToBeUsed.Set("SFR_Wjets",listCutAndCounts[r],SFR_CC_Wjets);
+        tableSFRToBeUsed.Set("SFR-1ltop",listCutAndCounts[r],SFR_CC_1ltop);
+        tableSFRToBeUsed.Set("SFR-Wjets",listCutAndCounts[r],SFR_CC_Wjets);
     }
 
-    tableRawSFR     .Print(string(OUTPUT_FOLDER)+"/rawSFR.tab"   ,4);
+    tableRawSFR.Print(string(OUTPUT_FOLDER)+"/rawSFR.tab"   ,4);
+    tableRawNormValues.Print(string(OUTPUT_FOLDER)+"/rawNormValues.tab"   ,4);
     tableSFRToBeUsed.Print(string(OUTPUT_FOLDER)+"/SF_MTtail.tab",4);
+    
+    tableRawSFR.PrintLatex(string(OUTPUT_FOLDER)+"/SF_MTtail.tex",4);
 }
