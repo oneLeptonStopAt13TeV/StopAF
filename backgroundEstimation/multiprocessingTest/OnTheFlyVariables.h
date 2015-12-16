@@ -11,7 +11,8 @@ public:
       m_genWdR(0),
       m_genTopdR(0),
       m_genBarTopdR(0),
-      m_mumIdx(-1)
+      m_mumIdx(-1),
+      QGtag_leadJet(-1)
      {
      }
 
@@ -19,6 +20,7 @@ public:
     float someCoolVariable;
 
     int SRbins;
+    float QGtag_leadJet;
 
 public:
     float m_genWPt;
@@ -81,7 +83,13 @@ void ComputeOnTheFlyVariables()
     }
     //-- End SRbin computation
 
+    onTheFlyVariables.QGtag_leadJet = -999;
+    if(myEvent.ak4pfjets_qgtag.size()>0){
+	onTheFlyVariables.QGtag_leadJet = myEvent.ak4pfjets_qgtag[0];
+    }
 }
+
+#ifdef USE_GEN_INFO
 
 //find mother particle with given index
 //looking for particle which is decaying to two particles, which are not lepton
@@ -145,6 +153,8 @@ void findMotherAndDaughters(int idx)
 
     }
 }
+#endif
+
 
       //@MJ@ TODO what about ak10 jets?
       void fillRealAndFakes(float deltaR, uint32_t i)
@@ -200,6 +210,8 @@ void findMotherAndDaughters(int idx)
            }
        }
 
+#ifdef USE_GEN_INFO
+
 void findGenParticleProps(int idx, float* genPt, float* gendR)
 { 
     //do initial clean up
@@ -236,6 +248,11 @@ void findGenParticleProps(int idx, float* genPt, float* gendR)
     onTheFlyVariables.m_daughtersIdx.clear();
     onTheFlyVariables.m_mumIdx = -1; 
 }
+
+#endif
+
+
+#ifdef USE_GEN_INFO
 
 //count efficiency of particle tagging
 void countEfficiency(int idx, string cutName = "", float lowCut = -1, float upCut = -1)
@@ -326,6 +343,9 @@ void countEfficiency(int idx, string cutName = "", float lowCut = -1, float upCu
       }
   }  
 }
+
+
+#endif
 
 
 #endif
