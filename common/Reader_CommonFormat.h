@@ -27,6 +27,7 @@
  
 typedef struct
 {
+    bool hasGenInfo;
     vector<float> jet_pt;
     vector<float> jet_eta;
     vector<float> jet_phi;
@@ -124,6 +125,7 @@ typedef struct
     int           numberOfSelectedElectrons;
     bool          HLT_SingleMu;
     vector<float> ak4pfjets_CSV;
+    vector<float> ak4pfjets_qgtag;
     int           ngoodleps;
     float         topness;
     float         dphi_ak4pfjets_met;
@@ -136,9 +138,15 @@ typedef struct
     int           nvetoleps;
     int           numberOfSelectedMuons = -13;
     float         hadronic_top_chi2;
-   
+    float 	  met_sig;
+
     bool PassTrackVeto;
     bool PassTauVeto;
+
+    float metGen_pt;
+    float metGen_phi;
+
+    float DeltaRlj;
 
     #ifdef USE_GEN_INFO
     int gen_n;
@@ -213,6 +221,7 @@ typedef struct
     vector<int>*   pointerForak8pfjets_nSubJets;
     vector<bool>*  pointerForak4pfjets_loose_pfid;
     vector<float>* pointerForak4pfjets_CSV;
+    vector<float>* pointerForak4pfjets_qgtag;
 
    
 
@@ -230,6 +239,7 @@ babyEvent;
  
 void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
 {
+    myEvent->hasGenInfo = false;
 
     #ifdef USE_JETS
     myEvent->pointerForak4pfjets_pt = 0;
@@ -239,6 +249,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForak4pfjets_puid = 0;
     myEvent->pointerForak4pfjets_loose_pfid = 0;
     myEvent->pointerForak4pfjets_CSV = 0;
+    myEvent->pointerForak4pfjets_qgtag = 0;
     #endif
 
     #ifdef USE_AK8_JETS
@@ -298,6 +309,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("PassTrackVeto",            &(myEvent->PassTrackVeto));
     theTree->SetBranchAddress("PassTauVeto",             &(myEvent->PassTauVeto));
     
+    //gen met
+    theTree->SetBranchAddress("metGen_pt",            &(myEvent->metGen_pt));
+    theTree->SetBranchAddress("metGen_phi",             &(myEvent->metGen_phi));
+    
     //needed to define the channel !
     theTree->SetBranchAddress("lep1_pdgid",              &(myEvent->lep1_pdgid));
     #ifdef USE_LEP1
@@ -334,6 +349,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("ak4pfjets_eta",           &(myEvent->pointerForak4pfjets_eta));
     theTree->SetBranchAddress("ak4pfjets_mass",          &(myEvent->pointerForak4pfjets_mass));
     theTree->SetBranchAddress("ak4pfjets_CSV",           &(myEvent->pointerForak4pfjets_CSV));
+    theTree->SetBranchAddress("ak4pfjets_qgtag",           &(myEvent->pointerForak4pfjets_qgtag));
     #endif
 
     #ifdef USE_JETS_EXT
@@ -375,6 +391,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("mt_met_lep",              &(myEvent->mt_met_lep));
     theTree->SetBranchAddress("hadronic_top_chi2",       &(myEvent->hadronic_top_chi2));
     theTree->SetBranchAddress("dphi_Wlep",               &(myEvent->dphi_Wlep));
+    theTree->SetBranchAddress("met_sig",		 &(myEvent->met_sig));
     #endif
 
     #ifdef USE_GLOBAL_VAR
@@ -386,6 +403,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("Mlb",                     &(myEvent->Mlb));
     theTree->SetBranchAddress("Mlb_leadb",               &(myEvent->Mlb_leadb));
     theTree->SetBranchAddress("topness",                 &(myEvent->topness));
+    theTree->SetBranchAddress("numberOfGeneratedLeptons", &(myEvent->numberOfGeneratedLeptons));
     #endif
 
     //old framework
@@ -404,7 +422,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     
     theTree->SetBranchAddress("runId",                   &(myEvent->runId));
     
-    theTree->SetBranchAddress("numberOfGeneratedLeptons", &(myEvent->numberOfGeneratedLeptons));
     theTree->SetBranchAddress("numberOfSelectedLeptons", &(myEvent->numberOfSelectedLeptons));
     theTree->SetBranchAddress("numberOfSelectedElectrons", &(myEvent->numberOfSelectedElectrons));
     theTree->SetBranchAddress("numberOfSelectedMuons",   &(myEvent->numberOfSelectedMuons));
@@ -432,6 +449,18 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
    
    //*/
     #ifdef USE_GEN_INFO
+    myEvent->hasGenInfo = false;
+    try{
+    	if(theTree->GetListOfBranches()->FindObject("gen_pt")!=0){
+    		myEvent->hasGenInfo = true;
+    	}
+    }
+    catch(...){
+    	myEvent->hasGenInfo = false;
+    }
+    //if(theTree->GetListOfBranches()->FindObject("gen_pt")!=0){
+    //myEvent->hasGenInfo = true;
+    if(myEvent->hasGenInfo){
     theTree->SetBranchAddress("gen_pt", &(myEvent->pointerForgen_pt));
     theTree->SetBranchAddress("gen_eta",  &(myEvent->pointerForgen_eta));
     theTree->SetBranchAddress("gen_phi",  &(myEvent->pointerForgen_phi));
@@ -440,6 +469,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("gen_id",  &(myEvent->pointerForgen_id));
     theTree->SetBranchAddress("gen_daughter_n",  &(myEvent->pointerForgen_daughter_n));
     theTree->SetBranchAddress("gen_daughter_index", &(myEvent->pointerForgen_daughter_index));
+    }
     #endif
     #ifdef USE_GEN_INFO_EXT
     theTree->SetBranchAddress("gen_mother_index",  &(myEvent->pointerForgen_mother_index));
@@ -507,6 +537,7 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->jet_eta             = *(myEvent->pointerForak4pfjets_eta);
     myEvent->jet_mass            = *(myEvent->pointerForak4pfjets_mass);
     myEvent->jet_CSV             = *(myEvent->pointerForak4pfjets_CSV);
+    myEvent->ak4pfjets_qgtag     = *(myEvent->pointerForak4pfjets_qgtag);
     #endif
     #ifdef USE_JETS_EXT
     myEvent->jet_puid      	= *(myEvent->pointerForak4pfjets_puid);
@@ -524,14 +555,16 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     #endif
     //*/
     #ifdef USE_GEN_INFO
-    myEvent->gen_pt			 =			*(myEvent->pointerForgen_pt);            	 
-    myEvent->gen_eta			 =                      *(myEvent->pointerForgen_eta);
-    myEvent->gen_phi			 =                      *(myEvent->pointerForgen_phi);
-    myEvent->gen_m			 =                      *(myEvent->pointerForgen_m);
-    myEvent->gen_status			 =                      *(myEvent->pointerForgen_status);
-    myEvent->gen_id			 =                      *(myEvent->pointerForgen_id);
-    myEvent->gen_daughter_n			 =              *(myEvent->pointerForgen_daughter_n);
-    myEvent->gen_daughter_index			 =      *(myEvent->pointerForgen_daughter_index);
+    if(myEvent->hasGenInfo){
+	    myEvent->gen_pt			 =			*(myEvent->pointerForgen_pt);            	 
+	    myEvent->gen_eta			 =                      *(myEvent->pointerForgen_eta);
+ 	    myEvent->gen_phi			 =                      *(myEvent->pointerForgen_phi);
+  	    myEvent->gen_m			 =                      *(myEvent->pointerForgen_m);
+   	    myEvent->gen_status			 =                      *(myEvent->pointerForgen_status);
+   	    myEvent->gen_id			 =                      *(myEvent->pointerForgen_id);
+ 	    myEvent->gen_daughter_n			 =              *(myEvent->pointerForgen_daughter_n);
+   	    myEvent->gen_daughter_index			 =      *(myEvent->pointerForgen_daughter_index);
+    }
     #endif
     #ifdef USE_GEN_INFO_EXT
     myEvent->gen_charge			 =                      *(myEvent->pointerForgen_charge);
