@@ -17,8 +17,8 @@ using namespace std;
 //#define USE_SKIMMING_VAR
 #define USE_JETS
 #define USE_JETS_EXT
-//#define USE_GEN_INFO
-//#define USE_GEN_INFO_EXT
+#define USE_GEN_INFO
+#define USE_GEN_INFO_EXT
 #define USE_LEP1
 //#define USE_LEP1_EXT
 #define USE_LEP2
@@ -31,6 +31,7 @@ using namespace std;
 #define USE_GLOBAL_VAR
 //#define USE_OLD_VAR
 #define USE_AK8_JETS
+#define USE_AK10_JETS
 
 
 //-----------------------------------
@@ -54,22 +55,24 @@ using namespace std;
 
 
 
-bool muonChannelSelector() { return true; }
-bool electronChannelSelector() { return true; }
+//bool muonChannelSelector() { return true; }
+//bool electronChannelSelector() { return true; }
 bool combinedChannelSelector() { return true; }
 uint64_t counting;
 int nrOfW;
+TString storedDataset = "";
+TH2D *h2 = NULL;
 // ################################################################
 
 void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Nov1st_all_3j_lowpt_dphi_v2";
+    babyTuplePath = "/opt/sbg/scratch1/cms/mjansova/store/tmp/2902/";
     //babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
     //babyTuplePath = "./";
     
-    totalNumberOfWorkers = 1;
+    totalNumberOfWorkers = 5;
 
 
     AddVariable("MT", "M_T [GeV]",  "", 50,   0, 300,  &(myEvent.mt_met_lep), "noUnderflowInFirstBin");
@@ -117,10 +120,14 @@ void BabyScrewdriver::Init()
 // ...
 
     // background
+    AddProcessClass("SingleTop", "Single top", "background", kGreen);
+    	AddDataset("ST_tW-atop", "SingleTop", 0, 35.85 );
     
+    AddProcessClass("T2tt_600-950_1to450", "T2tt_600-950_1to450", "signal", kBlue);
+    	AddDataset("600-950_1to450", "T2tt_600-950_1to450", 0, 0 );
     // Signal(s)
   
-    AddProcessClass("SingleTop", "Single top", "background", kGreen);
+/*    AddProcessClass("SingleTop", "Single top", "background", kGreen);
     	AddDataset("ST_s", "SingleTop", 0, 3.38 );
     	AddDataset("ST_t-atop", "SingleTop", 0, 26.49 );
     	AddDataset("ST_t-top", "SingleTop", 0, 44.51 );
@@ -137,20 +144,11 @@ void BabyScrewdriver::Init()
     	AddDataset("WW_aMC", "VV", 0 , 48.4);
     	AddDataset("ZZ", "VV", 0, 16.523);
     	AddDataset("WZ", "VV", 0 , 47.13);
-    
-    AddProcessClass("T2tt_850_325", "T2tt_850_325", "background",  kMagenta+3);
-        AddDataset("T2tt_850_325","T2tt_850_325", 0, 0.01896);
-    
-    AddProcessClass("T2tt_650_325", "T2tt_650_325", "signal",  kViolet+6);
-        AddDataset("T2tt_650_325","T2tt_650_325", 0, 0.107045);
-    
-    AddProcessClass("T2tt_500_325", "T2tt_500_325", "signal",  kOrange+7);
-        AddDataset("T2tt_500_325","T2tt_500_325", 0, 0.51848);
   
    AddProcessClass("TTJets", "TT+jets", "background", kRed);
         AddDataset("TTjets_M5", "TTJets", 0, 831.76);
     //AddProcessClass("TT_2l", "TT+jets - 2l", "background", kCyan);
-
+*/
  
 //    AddProcessClass("WJets14", "W+jets14", "background", kBlue);
 //    	AddDataset("WJetsToLNu_HT-100to200_P14", "WJets14", 0, 1345*1.21 ); 
@@ -158,30 +156,41 @@ void BabyScrewdriver::Init()
 //    	AddDataset("WJetsToLNu_HT-400to600_14", "WJets14", 0, 48.91*1.21 ); 
 //    	AddDataset("WJetsToLNu_HT-600toInf_P14", "WJets14", 0, 18.77*1.21 ); 
  
-   AddProcessClass("WJetsNew", "W+jetsNew", "background", kBlack);
+/*   AddProcessClass("WJetsNew", "W+jetsNew", "background", kBlack);
     	AddDataset("WJetsToLNu_HT-100To200", "WJetsNew", 0, 1345*1.21); 
     	AddDataset("WJetsToLNu_HT-200To400", "WJetsNew", 0, 359.7*1.21 ); 
     	AddDataset("WJetsToLNu_HT-400To600", "WJetsNew", 0, 48.91*1.21 ); 
     	AddDataset("WJetsToLNu_HT-600To800", "WJetsNew", 0, 12.05*1.21); 
-    	AddDataset("WJetsToLNu_HT-600ToInf", "WJetsNew", 0, 18.77*1.21 ); 
     	AddDataset("WJetsToLNu_HT-800To1200", "WJetsNew", 0, 5.501*1.21 ); 
     	AddDataset("WJetsToLNu_HT-1200To2500", "WJetsNew", 0, 1.329*1.21); 
     	AddDataset("WJetsToLNu_HT-2500ToInf", "WJetsNew", 0, 0.03216*1.21); 
 
     AddRegion("defaultSearch", "defaultSearch", &defaultSearch);
     AddRegion("boostedSearch", "boostedSearch", &boostedSearch);
-/*   
+*/   
     AddRegion("DefaultBin1", "DefaultBin1", &DefaultBin1);
     AddRegion("DefaultBin2", "DefaultBin2", &DefaultBin2);
     AddRegion("DefaultBin3", "DefaultBin3", &DefaultBin3);
     AddRegion("DefaultBin4", "DefaultBin4", &DefaultBin4);
     AddRegion("DefaultBin5", "DefaultBin5", &DefaultBin5);
+    AddRegion("DefaultBin6", "DefaultBin6", &DefaultBin6);
     
-    AddRegion("NoAk8JetsBin1", "NoAk8JetsBin1", &NoAk8JetsBin1);
-    AddRegion("NoAk8JetsBin2", "NoAk8JetsBin2", &NoAk8JetsBin2);
-    AddRegion("NoAk8JetsBin3", "NoAk8JetsBin3", &NoAk8JetsBin3);
-    AddRegion("NoAk8JetsBin4", "NoAk8JetsBin4", &NoAk8JetsBin4);
-    AddRegion("NoAk8JetsBin5", "NoAk8JetsBin5", &NoAk8JetsBin5);
+    AddRegion("NoAk8JetsBin", "NoAk8JetsBin", &NoAk8JetsBin);
+    AddRegion("OneAk8JetBin", "OneAk8JetBin", &OneAk8JetBin);
+    AddRegion("AtLeastTwoAk8JetBin", "AtLeastTwoAk8JetBin", &AtLeastTwoAk8JetBin);
+
+    AddRegion("threeJetsNoAk8JetsBin", "threeJetsNoAk8JetsBin", &threeJetsNoAk8JetsBin);
+    AddRegion("threeJetsOneAk8JetBin", "threeJetsOneAk8JetBin", &OneAk8JetBin);
+    AddRegion("threeJetsAtLeastTwoAk8JetBin", "threeJetsAtLeastTwoAk8JetBin", &threeJetsAtLeastTwoAk8JetBin);
+
+    AddRegion("NoAk10JetsBin", "NoAk10JetsBin", &NoAk10JetsBin);
+    AddRegion("OneAk10JetBin", "OneAk10JetBin", &OneAk10JetBin);
+    AddRegion("AtLeastTwoAk10JetBin", "AtLeastTwoAk10JetBin", &AtLeastTwoAk10JetBin);
+
+    AddRegion("threeJetsNoAk10JetsBin", "threeJetsNoAk10JetsBin", &threeJetsNoAk10JetsBin);
+    AddRegion("threeJetsOneAk10JetBin", "threeJetsOneAk10JetBin", &OneAk10JetBin);
+    AddRegion("threeJetsAtLeastTwoAk10JetBin", "threeJetsAtLeastTwoAk10JetBin", &threeJetsAtLeastTwoAk10JetBin);
+/*
 
     AddRegion("AtLeastOneAk8JetBin1", "AtLeastOneAk8JetBin1", &AtLeastOneAk8JetBin1);
     AddRegion("AtLeastOneAk8JetBin2", "AtLeastOneAk8JetBin2", &AtLeastOneAk8JetBin2);
@@ -253,13 +262,12 @@ void BabyScrewdriver::Init()
     
      //AddRegion("preselectionTT", "preselectionTT", &goesInPreselectionNoVetoNoMetCut);
     // ...
-
     //AddChannel("muon", "#mu channel", &muonChannelSelector);
     //AddChannel("electron", "e channel", &electronChannelSelector);
     AddChannel("combinedChannel","e/#mu-channel",&combinedChannelSelector);
     // ...
 
-    SetLumi(2000.);  //@MJ@ TODO correct lumi
+    SetLumi(2440.);
 
     Create1DHistos();
     Add2DHisto("MET","nrOfW");
@@ -273,8 +281,44 @@ void BabyScrewdriver::Init()
 
 void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 {
+    //store previous dataset and if it does not equal to other clone histogram from file
 
     counting++;
+    //cout << "processing event" << endl;
+    
+    // Determine which processClass to fill
+    // (in the most trivial case, only call GetProcessClass(currentDataset),
+    // but you might want to split a dataset according to
+    // the number of generated leptons, for instance)
+    string currentProcessClass = GetProcessClass(currentDataset);
+    string currentProcessType  = GetProcessClassType(currentProcessClass);
+    TFile *fle = NULL;
+    float weightSignal = -13;
+    if (currentProcessType == "signal")
+    {
+        if(currentDataset != storedDataset)
+        {
+            storedDataset = currentDataset;
+            TString fName =  babyTuplePath+currentDataset+".root";
+            fle = new TFile(fName);
+            h2 = (TH2D*)fle->Get("hStopNeutralino")->Clone();
+        }
+        //std::cout << "reading stop mass from file: "<<babyTuplePath+currentDataset <<".root"<< std::endl;
+        if (h2 == NULL) throw std::runtime_error("The histogram used for CS was not filled!");
+        float neutralinoMass = myEvent.gen_neutralino_m.at(0);
+        float stopMass = myEvent.gen_stop_m.at(0);
+        float sigCrossSection = returnSigCS(stopMass);
+        TAxis *xaxis = h2->GetXaxis();
+        TAxis *yaxis = h2->GetYaxis();
+        Int_t binx = xaxis->FindBin(stopMass);
+        Int_t biny = yaxis->FindBin(neutralinoMass);
+        uint32_t totalNrOfEvents = h2->GetBinContent(binx, biny);
+        weightSignal = sigCrossSection * GetLumi() * myEvent.mc_weight / totalNrOfEvents;
+        //cout << "signal weight " << weightSignal << endl;
+    }
+
+    //cout << "after signal things" << endl;
+
     //@MJ@ TODO
     //some fake info due to missing info in babytuple
    //myEvent.ngoodbtags = 1;
@@ -302,7 +346,7 @@ i
     //cout<<"tot weight: "<<myEvent.totalNumberOfInitialEvent<<endl;
     //cout<<"weight: "<<myEvent.mc_weight<<endl;
     // Compute on the fly variables if needed
-
+/*
      
     ComputeOnTheFlyVariables();
     
@@ -334,28 +378,25 @@ i
     //count efficiency of W tagging
     countEfficiency(24);
     //cout << "W ak8 pt" << onTheFlyVariables.m_ak8recoWPt << "ake ak8 W pt" << onTheFlyVariables.m_ak8recoWFakePt << endl;
-
+*/
     nrOfW = nrOfWTaggs();
 
     
-    // Determine which processClass to fill
-    // (in the most trivial case, only call GetProcessClass(currentDataset),
-    // but you might want to split a dataset according to
-    // the number of generated leptons, for instance)
-    string currentProcessClass = GetProcessClass(currentDataset);
-    string currentProcessType  = GetProcessClassType(currentProcessClass);
 
     //if (currentProcessClass == "TT_1l" && (myEvent.numberOfGeneratedLeptons == 2))
     //               currentProcessClass = "TT_2l";
    
      // Compute weight for current event
 
+    //@MJ@ TODO if signal do differently
     float weightLumi = myEvent.crossSection * GetLumi() * myEvent.mc_weight / myEvent.totalNumberOfInitialEvent;
 
     float weight     = weightLumi;
     //float weight     = 1;
     //float weight     = 1;
     if (currentProcessType == "data") weight = 1.0;
+    if (currentProcessType == "signal") weight = weightSignal;
+
 
     //cout << "weight " << weight << endl;
     // Fill this event in the histo collections
@@ -373,6 +414,11 @@ i
         cout << counting << endl;
 
     }
+
+    //cout << "up to here" << std::endl;
+   
+    //delete fle; //@MJ@ TODO be aware of deleting in here, may not be good with null
+    
 }
 
 // ################################################################
@@ -409,47 +455,26 @@ void BabyScrewdriver::PostProcessingStep()
     // ######################
     //  Tables and other stuff
     // ######################
-    /*
-   vector<string> regions = {"boostedSearch","DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5", "NoAk8JetsBin1", "NoAk8JetsBin2", "NoAk8JetsBin3", "NoAk8JetsBin4", "NoAk8JetsBin5", "AtLeastOneAk8JetBin1", "AtLeastOneAk8JetBin2", "AtLeastOneAk8JetBin3", "AtLeastOneAk8JetBin4", "AtLeastOneAk8JetBin5", "AtLeastOneAk8JetNoCutBin1", "AtLeastOneAk8JetNoCutBin2", "AtLeastOneAk8JetNoCutBin3", "AtLeastOneAk8JetNoCutBin4", "AtLeastOneAk8JetNoCutBin5", "ThreeJetsDefaultBin1", "ThreeJetsDefaultBin2", "ThreeJetsDefaultBin3", "ThreeJetsDefaultBin4", "ThreeJetsDefaultBin5", "ThreeJetsDefaultMiasBin",  "ThreeJetsInEventNoAk8Bin1", "ThreeJetsInEventNoAk8Bin2", "ThreeJetsInEventNoAk8Bin3", "ThreeJetsInEventNoAk8Bin4", "ThreeJetsInEventNoAk8Bin5", "ThreeJetsInEventNoAk8MiasBin", "ThreeJetsInEventOneOfThemAk8Bin1", "ThreeJetsInEventOneOfThemAk8Bin2", "ThreeJetsInEventOneOfThemAk8Bin3", "ThreeJetsInEventOneOfThemAk8Bin4", "ThreeJetsInEventOneOfThemAk8Bin5", "ThreeJetsInEventOneOfThemAk8MiasBin", "lowMT2WDefaultBin1",  "lowMT2WDefaultBin2", "lowMT2WDefaultBin3", "lowMT2WDefaultBin4", "lowMT2WDefaultBin5", "lowMT2WThreeJetsDefaultMiasBin", "NewSRDefaultForLowMETBin1", "NewSR0ak8Bin2", "NewSR1andMoreak8Bin3", "Default2Bin1", "Default2Bin2", "Default2Bin3", "NewThreeJetsInEventOneOfThemAk8MiasBin", "NewThreeJetsInEventNoAk8MiasBin","NewSR0ak8Bin2WOCuts", "NewSR1andMoreak8Bin3WOCuts"};
-    
-   TableBackgroundSignal(this, regions,"combinedChannel" ).Print("yieldTable3fb.tab", 4);
+  
+   vector<string> regionsDef = {"DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5", "DefaultBin6"};
+   TableBackgroundSignal(this, regionsDef,"combinedChannel" ).Print("defReg.tab", 4);
+   TableBackgroundSignal(this, regionsDef,"combinedChannel" ).PrintLatex("defReg.tex", 4);
    
-   vector<string> regionsDef = {"DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5"};
-   TableBackgroundSignal(this, regionsDef,"combinedChannel" ).Print("def3fb.tab", 4);
-   TableBackgroundSignal(this, regionsDef,"combinedChannel" ).PrintLatex("def3fb.tex", 4);
+   vector<string> regions4Ak8 = {"NoAk8JetsBin", "OneAk8JetBin", "AtLeastTwoAk8JetBin"};
+   TableBackgroundSignal(this, regions4Ak8,"combinedChannel" ).Print("4ak8.tab", 4);
+   TableBackgroundSignal(this, regions4Ak8,"combinedChannel" ).PrintLatex("4ak8.tex", 4);
+
+   vector<string> regions3Ak8 = {"threeJetsNoAk8JetsBin", "threeJetsOneAk8JetBin", "threeJetsAtLeastTwoAk8JetBin"};
+   TableBackgroundSignal(this, regions3Ak8,"combinedChannel" ).Print("3ak8.tab", 4);
+   TableBackgroundSignal(this, regions3Ak8,"combinedChannel" ).PrintLatex("3ak.tex", 4);
+
+   vector<string> regions4Ak10 = {"NoAk10JetsBin", "OneAk10JetBin", "AtLeastTwoAk10JetBin"};
+   TableBackgroundSignal(this, regions4Ak10,"combinedChannel" ).Print("4ak10.tab", 4);
+   TableBackgroundSignal(this, regions4Ak10,"combinedChannel" ).PrintLatex("4ak10.tex", 4);
+
+   vector<string> regions3Ak10 = {"threeJetsNoAk10JetsBin", "threeJetsOneAk10JetBin", "threeJetsAtLeastTwoAk10JetBin"};
+   TableBackgroundSignal(this, regions3Ak10,"combinedChannel" ).Print("3ak10.tab", 4);
+   TableBackgroundSignal(this, regions3Ak10,"combinedChannel" ).PrintLatex("3ak10.tex", 4);
    
-   vector<string> regionsNoAk8 = {"NoAk8JetsBin1", "NoAk8JetsBin2", "NoAk8JetsBin3", "NoAk8JetsBin4", "NoAk8JetsBin5"};
-   TableBackgroundSignal(this, regionsNoAk8,"combinedChannel" ).Print("noak83fb.tab", 4);
-   TableBackgroundSignal(this, regionsNoAk8,"combinedChannel" ).PrintLatex("noak83fb.tex", 4);
-
-   vector<string> regionsAk8 = {"AtLeastOneAk8JetBin1", "AtLeastOneAk8JetBin2", "AtLeastOneAk8JetBin3", "AtLeastOneAk8JetBin4", "AtLeastOneAk8JetBin5"};
-   TableBackgroundSignal(this, regionsAk8,"combinedChannel" ).Print("ak83fb.tab", 4);
-   TableBackgroundSignal(this, regionsAk8,"combinedChannel" ).PrintLatex("ak83fb.tex", 4);
-
-   vector<string> regions3Jets = {"ThreeJetsDefaultMiasBin", "ThreeJetsInEventNoAk8MiasBin", "ThreeJetsInEventOneOfThemAk8MiasBin", "NewThreeJetsInEventOneOfThemAk8MiasBin", "NewThreeJetsInEventNoAk8MiasBin"};
-   TableBackgroundSignal(this, regions3Jets,"combinedChannel" ).Print("3jets3fb.tab", 4);
-   TableBackgroundSignal(this, regions3Jets,"combinedChannel" ).PrintLatex("3jets3fb.tex", 4);
-
-   vector<string> regionsLowMT2W = {"lowMT2WDefaultBin1",  "lowMT2WDefaultBin2", "lowMT2WDefaultBin3", "lowMT2WDefaultBin4", "lowMT2WDefaultBin5", "lowMT2WThreeJetsDefaultMiasBin"};
-   TableBackgroundSignal(this, regionsLowMT2W,"combinedChannel" ).Print("lowMT2W3fb.tab", 4);
-   TableBackgroundSignal(this, regionsLowMT2W,"combinedChannel" ).PrintLatex("lowMT2W23fb.tex", 4);
-   
-   vector<string> regions4JetsNew = {"NewSRDefaultForLowMETBin1", "NewSR0ak8Bin2", "NewSR1andMoreak8Bin3", "NewSR0ak8Bin2WOCuts", "NewSR1andMoreak8Bin3WOCuts"};
-   TableBackgroundSignal(this, regions4JetsNew,"combinedChannel" ).Print("newSR4Jets3fb.tab", 4);
-   TableBackgroundSignal(this, regions4JetsNew,"combinedChannel" ).PrintLatex("newSR4Jets3fb.tex", 4);
-   
-   vector<string> default2 = {"Default2Bin1", "Default2Bin2", "Default2Bin3"};
-   TableBackgroundSignal(this, default2, "combinedChannel" ).Print("default23fb.tab", 4);
-   TableBackgroundSignal(this, default2, "combinedChannel" ).PrintLatex("default23fb.tex", 4);
-
-
-   vector<string> newBLregionsNoAk8 = {"Default2NoAk8Bin1", "Default2NoAk8Bin2", "Default2NoAk8Bin3"};
-   TableBackgroundSignal(this, newBLregionsNoAk8,"combinedChannel" ).Print("newBLnoak82fb.tab", 4);
-   TableBackgroundSignal(this, newBLregionsNoAk8,"combinedChannel" ).PrintLatex("newBLnoak82fb.tex", 4);
-
-   vector<string> newBLregionsAk8 = {"Default2OneAk8Bin1", "Default2OneAk8Bin2", "Default2OneAk8Bin3"};
-   TableBackgroundSignal(this, newBLregionsAk8,"combinedChannel" ).Print("newBLak82fb.tab", 4);
-   TableBackgroundSignal(this, newBLregionsAk8,"combinedChannel" ).PrintLatex("newBLak82fb.tex", 4);
-*/
 }
 
