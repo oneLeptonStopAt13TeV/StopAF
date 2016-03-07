@@ -8,11 +8,14 @@
 #define MET_CUTLL 50
 #define MTW2_CUT 200
 #define MLB_CUT 175
-#define ETMISS_BOUND_250 250
-#define ETMISS_BOUND_300 300
-#define ETMISS_BOUND_325 325
-#define ETMISS_BOUND_375 375
-#define ETMISS_BOUND_400 400
+#define MET_BOUND_250 250
+#define MET_BOUND_300 300
+#define MET_BOUND_325 325
+#define MET_BOUND_350 350
+#define MET_BOUND_375 375
+#define MET_BOUND_400 400
+#define MET_BOUND_450 450
+#define MET_BOUND_500 500
 
 // Not sure that it is a good idea to include this here,
 // since one often needs to use a modified format because
@@ -25,6 +28,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <cmath>
+#include <ctgmath>
 
 using namespace std;
 
@@ -53,7 +58,7 @@ bool goesInPreVetoSelection()
     if (myEvent.pfmet < MET_PSCUT) return false;
     if (myEvent.ngoodleps != NLEP_CUT) return false;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
-    //if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
 
     return true;
 }
@@ -81,6 +86,7 @@ bool goesInPreselectionNoVetoNoMetCut()
 
     return true;
 }
+
 
 bool goesInPreselection()
 {
@@ -113,26 +119,1558 @@ bool goesInSmallDMSR() { return (goesInPreselection() &&  myEvent.mt_met_lep > 1
 bool goesInSmallDMSR300() { return (goesInPreselection() &&  myEvent.mt_met_lep > 150 && myEvent.minDPhi_jmet> 0.8 && myEvent.hadronic_top_chi2 < 10 && myEvent.pfmet > 300);}
 bool goesInSmallDMSR2b() { return (goesInSmallDMSR() && myEvent.ngoodbtags>=2);}
 */
+//background
 
-// Categorization of Events
-// ########################
-
-bool NoAk8Jets()
+bool stBackground()
 {
-    if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 2)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
 
     return true;
 }
 
-bool AtLeastOneAk8Jet()
+bool stBackgroundMET50()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1 && myEvent.ngoodjets != 2 )  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET80()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1 && myEvent.ngoodjets != 2 )  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 80) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501j()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt20()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt60()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 60)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET502jPt20()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET502jPt60()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 60)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt20b1()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if (myEvent.pfmet > 250) return false;
+    if(im>70 && im<120) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt20b2()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 250) return false;
+    if (myEvent.pfmet > 350) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt20b3()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 350) return false;
+    if (myEvent.pfmet > 450) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt20b4()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 450) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 20)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt40()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET502jPt40()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt40b1()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if (myEvent.pfmet > 250) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt40b2()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 250) return false;
+    if (myEvent.pfmet > 350) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt40b3()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 350) return false;
+    if (myEvent.pfmet > 450) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET501jPt40b4()
+{
+
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet <= 450) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+
+        TLorentzVector l1;
+        TLorentzVector l2;
+        TLorentzVector j1;
+        TLorentzVector met;
+        TLorentzVector sum;
+
+            // @MJ@ TODO eta
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            l2.SetPtEtaPhiM(myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_phi, myEvent.lep2_mass);
+            j1.SetPtEtaPhiM(myEvent.jet_pt.at(0), myEvent.jet_eta.at(0), myEvent.jet_phi.at(0), myEvent.jet_mass.at(0));
+            met.SetPtEtaPhiE(myEvent.pfmet, 0, myEvent.pfmet_phi, myEvent.pfmet);
+
+            sum = l1 + l2 + j1 + met;
+            if(sum.Pt() > 40)
+               return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET801j()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 1)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 80) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET502j()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool stBackgroundMET802j()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    if (myEvent.ngoodleps != 2) return false;
+    if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets != 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 80) return false;
+    if(im>70 && im<100) return false;
+    if(im<20) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+
+bool stBackgroundTest()
+{
+    float im = 2*myEvent.lep1_pt*myEvent.lep2_pt*(cosh(myEvent.lep1_eta - myEvent.lep2_eta) - cos(myEvent.lep1_phi - myEvent.lep2_phi));
+    //if (myEvent.ngoodleps != 2) return false;
+    //if (myEvent.ngoodbtags != 1)  return false;
+    if (myEvent.ngoodjets < 2)  return false;
+    //if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < 50) return false;
+    //if(im>60 && im<120) return false;
+    
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+
+// Categorization of Events
+// ########################
+bool boostedSearch()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    //if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < MET_CUT) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearch()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchMETCut()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchMTCut()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchMT2WCut()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsExcMET()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsExcMETLooseMT()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_PSCUT) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsExcMT()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+
+bool defaultSearchAllCuts()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+
+bool defaultSearchAllCutsMS()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.met_sig < 88) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsMSToMET()
+{
+    Double_t met_sigTomet = myEvent.met_sig / myEvent.pfmet;
+   
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (met_sigTomet < 0.35) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsLooseMTMS()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_PSCUT) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.met_sig < 144) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsMTS()
+{
+    Double_t deltaPhi = myEvent.lep1_phi - myEvent.pfmet_phi;
+    Double_t MT_sig = sqrt(2 * myEvent.lep1_pt * myEvent.met_sig * (1 - cos(deltaPhi) ));
+
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (MT_sig < 96) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsMTSToMT()
+{
+    Double_t deltaPhi = myEvent.lep1_phi - myEvent.pfmet_phi;
+    Double_t MT_sig = sqrt(2 * myEvent.lep1_pt * myEvent.met_sig * (1 - cos(deltaPhi) ));
+    Double_t MT_sigToMT = MT_sig / myEvent.mt_met_lep;
+
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (MT_sigToMT < 0.75) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsZ()
+{
+    Double_t met_sigTomet = myEvent.met_sig / myEvent.pfmet;
+    Double_t Z = (myEvent.mt_met_lep - 80.385)/(myEvent.mt_met_lep*met_sigTomet);    
+
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (Z < 1.2) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsLooser()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W < 150)  return false;
+    if (myEvent.mt_met_lep < 100) return false;
+    if (myEvent.pfmet < 200) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchAllCutsFakes()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin1()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex > 5)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false; 
+    return true;
+}
+
+bool preselectionPUBin2()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 5)  return false;
+    if (myEvent.nvertex > 10)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin3()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 10)  return false;
+    if (myEvent.nvertex > 15)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin4()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 15)  return false;
+    if (myEvent.nvertex > 20)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin5()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 20)  return false;
+    if (myEvent.nvertex > 25)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin6()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 25)  return false;
+    if (myEvent.nvertex > 30)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin7()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 30)  return false;
+    if (myEvent.nvertex > 35)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool preselectionPUBin8()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.nvertex <= 35)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool noCuts()
+{
+   return true;
+}
+
+bool defaultSearchAllCutsLowMT2W()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool lowMT2WboostedSearch()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.pfmet < MET_CUT) return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool lowMT2WDefaultBin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool lowMT2WDefaultBin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool lowMT2WDefaultBin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool lowMT2WDefaultBin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool lowMT2WDefaultBin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool DefaultBin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_325) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_325) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_450) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_450) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin6()
+{
+    if (myEvent.ngoodjets < 3)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+
+bool NoAk8JetsBin1()
+{
+    //if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool NoAk8JetsBin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool NoAk8JetsBin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool NoAk8JetsBin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool NoAk8JetsBin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool NoAk8JetsBin()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool OneAk8JetBin()
+{
+    uint32_t ak8ts = 0;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             ak8ts++;
+         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak8ts != 1) return false;
+    return boostedSearch();
+}
+
+bool AtLeastTwoAk8JetBin()
+{
+    uint32_t ak8ts = 0;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             ak8ts++;
+         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak8ts < 2) return false;
+    return boostedSearch();
+}
+
+bool threeJetsNoAk8JetsBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool threeJetsOneAk8JetBin()
+{
+    uint32_t ak8ts = 0;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             ak8ts++;
+         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak8ts != 1) return false;
+    return boostedSearch();
+}
+
+bool threeJetsAtLeastTwoAk8JetBin()
+{
+    uint32_t ak8ts = 0;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             ak8ts++;
+         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak8ts < 2) return false;
+    return boostedSearch();
+}
+
+
+bool NoAk10JetsBin()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool OneAk10JetBin()
+{
+    uint32_t ak10ts = 0;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
+             ak10ts++;
+         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak10ts != 1) return false;
+    return boostedSearch();
+}
+
+bool AtLeastTwoAk10JetBin()
+{
+    uint32_t ak10ts = 0;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
+             ak10ts++;
+         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak10ts < 2) return false;
+    return boostedSearch();
+}
+
+bool threeJetsNoAk10JetsBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool threeJetsOneAk10JetBin()
+{
+    uint32_t ak10ts = 0;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
+             ak10ts++;
+         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak10ts != 1) return false;
+    return boostedSearch();
+}
+
+bool threeJetsAtLeastTwoAk10JetBin()
+{
+    uint32_t ak10ts = 0;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+    {
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
+             ak10ts++;
+         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
+             return false;
+    }    
+
+    if (ak10ts < 2) return false;
+    return boostedSearch();
+}
+
+
+bool AtLeastOneAk8JetBin1()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;
     if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
 
-    return true;
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetBin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetBin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetBin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetBin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetNoCutBin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+ 
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetNoCutBin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetNoCutBin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetNoCutBin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    return boostedSearch();
+}
+
+bool AtLeastOneAk8JetNoCutBin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    return boostedSearch();
 }
 
 bool NoAk10Jets()
@@ -141,7 +1679,7 @@ bool NoAk10Jets()
     if (myEvent.MT2W < MTW2_CUT)  return false;
     //if (myEvent.ak10pfjets_mass.size() != 0) return false; //@MJ@ TODO uncomment this one day
 
-    return true;
+    return boostedSearch();
 }
 
 bool AtLeastOneAk10Jet()
@@ -150,30 +1688,558 @@ bool AtLeastOneAk10Jet()
     if (myEvent.MT2W < MTW2_CUT)  return false;
     //if (myEvent.ak10pfjets_mass.size() == 0) return false; //@MJ@ TODO uncomment this one day
 
-    return true;
+    return boostedSearch();
 }
 
-bool ThreeJetsInEventOneOfThemAk8()
+bool ThreeJetsDefaultBin1()
 {
-    if (myEvent.ngoodjets < 3)  return false;
+    if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
 
-    return true;
+    return boostedSearch();
+}
+
+bool ThreeJetsDefaultBin2()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool ThreeJetsDefaultBin3()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    return boostedSearch();
+}
+
+bool ThreeJetsDefaultBin4()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    return boostedSearch();
+}
+
+bool ThreeJetsDefaultBin5()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    return boostedSearch();
+}
+
+bool ThreeJetsDefaultMiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool lowMT2WThreeJetsDefaultMiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    return lowMT2WboostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8Bin1()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8Bin2()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8Bin3()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8Bin4()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8Bin5()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+ 
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventNoAk8MiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+ 
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8Bin1()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8Bin2()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8Bin3()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8Bin4()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8Bin5()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool ThreeJetsInEventOneOfThemAk8MiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             break;
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
 }
 
 bool ThreeJetsInEventOneOfThemAk10()
 {
     if (myEvent.ngoodjets < 3)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;
-    //if (myEvent.ak10pfjets_mass.size() != 0) return false; //@MJ@ TODO uncomment this one day
+    //if (myEvent.ak10pfjets_mass.size() == 0) return false; //@MJ@ TODO uncomment this one day
 
-    return true;
+    return boostedSearch();
+}
+
+bool Default2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    return boostedSearch();
+}
+
+bool Default2Bin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool Default2Bin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_450) return false;
+    
+    return boostedSearch();
+}
+
+bool Default2Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_450) return false;
+    
+    return boostedSearch();
+}
+
+bool Default2OneAk8Bin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+            if ((myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool Default2OneAk8Bin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_450) return false;
+ 
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+            if ((myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    } 
+   
+    return boostedSearch();
+}
+
+bool Default2OneAk8Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_450) return false;
+ 
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+            if ((myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    } 
+   
+    return boostedSearch();
+}
+
+bool Default2NoAk8Bin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+
+    return boostedSearch();
+}
+
+bool Default2NoAk8Bin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet >= MET_BOUND_450) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+    
+    return boostedSearch();
+}
+
+bool Default2NoAk8Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_450) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+    
+    return boostedSearch();
+}
+
+bool NewSR0ak8Bin2WOCuts()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+             return false;
+    } 
+    return boostedSearch();
+}
+
+bool NewSR1andMoreak8Bin3WOCuts()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;   
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    } 
+    return boostedSearch();
+}
+
+bool NewSRDefaultForLowMETBin1()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool NewSR0ak8Bin2()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+    return boostedSearch();
+}
+
+bool NewSR1andMoreak8Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;   
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+            if ((myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    } 
+    return boostedSearch();
+}
+
+bool NewThreeJetsInEventOneOfThemAk8MiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
+         {
+            if ((myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+                 break;
+         }
+         if(idx == (myEvent.ak8pfjets_mass.size() -1))
+             return false;
+    }    
+
+    return boostedSearch();
+}
+
+bool NewThreeJetsInEventNoAk8MiasBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+    //if (myEvent.ak8pfjets_mass.size() != 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+ 
+    return boostedSearch();
 }
 
 // New signal regions
 // ###################
-
+/*
 bool SRbin1(ofstream &outputFile)
 {
     static uint32_t j;
@@ -188,7 +2254,7 @@ bool SRbin1(ofstream &outputFile)
         outputFile << "myEvent.ngoodbtags > " << NBJET_CUT << endl;
         outputFile << "myEvent.Mlb < " << MLB_CUT << endl;
         outputFile << "myEvent.MT2W < " << MTW2_CUT << endl;
-        //outputFile <<  ETMISS_BOUND_250 " < myEvent.ETmiss <
+        outputFile <<  MET_BOUND_250 <=" < myEvent.pfmet <= MET_BOUND_325 << endl;
     } 
     
     if (myEvent.ngoodleps != NLEP_CUT) return false;
@@ -196,8 +2262,23 @@ bool SRbin1(ofstream &outputFile)
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
-    if (myEvent.ETmiss > ETMISS_BOUND_325)  return false;
+    if (myEvent.pfmet < MET_BOUND_250)  return false;
+    if (myEvent.pfmet > MET_BOUND_325)  return false;
+
+    return true;
+}
+*/
+bool SRbin1()
+{
+
+    
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.Mlb > MLB_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250)  return false;
+    if (myEvent.pfmet > MET_BOUND_325)  return false;
 
     return true;
 }
@@ -209,7 +2290,7 @@ bool SRbin2()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= ETMISS_BOUND_325)  return false;
+    if (myEvent.pfmet <= MET_BOUND_325)  return false;
 
     return true;
 }
@@ -221,8 +2302,8 @@ bool SRbin3()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
-    if (myEvent.ETmiss > ETMISS_BOUND_375)  return false;
+    if (myEvent.pfmet < MET_BOUND_250)  return false;
+    if (myEvent.pfmet > MET_BOUND_375)  return false;
 
     return true;
 }
@@ -234,7 +2315,7 @@ bool SRbin4()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb > MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= ETMISS_BOUND_375)  return false;
+    if (myEvent.pfmet <= MET_BOUND_375)  return false;
 
     return true;
 }
@@ -246,7 +2327,7 @@ bool SRbin5()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W > MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= ETMISS_BOUND_250)  return false;
+    if (myEvent.pfmet <= MET_BOUND_250)  return false;
 
     return true;
 }
@@ -258,8 +2339,8 @@ bool SRbin6()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss < ETMISS_BOUND_250)  return false;
-    if (myEvent.ETmiss > ETMISS_BOUND_300)  return false;
+    if (myEvent.pfmet < MET_BOUND_250)  return false;
+    if (myEvent.pfmet > MET_BOUND_300)  return false;
 
     return true;
 }
@@ -271,8 +2352,8 @@ bool SRbin7()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= ETMISS_BOUND_300)  return false;
-    if (myEvent.ETmiss > ETMISS_BOUND_400)  return false;
+    if (myEvent.pfmet <= MET_BOUND_300)  return false;
+    if (myEvent.pfmet > MET_BOUND_400)  return false;
 
     return true;
 }
@@ -284,7 +2365,7 @@ bool SRbin8()
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
     if (myEvent.Mlb <= MLB_CUT)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.ETmiss <= ETMISS_BOUND_400)  return false;
+    if (myEvent.pfmet <= MET_BOUND_400)  return false;
 
     return true;
 }
