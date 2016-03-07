@@ -1,10 +1,11 @@
 #define MT_CUT    150
 #define MET_CUT   250
-#define MT_PSCUT    100
-#define MET_PSCUT   80
-#define NJET_CUT  4
+#define MT_PSCUT    0
+#define MET_PSCUT   50
+#define NJET_CUT 4
 #define NBJET_CUT 1
 #define NLEP_CUT  1
+#define DPHI_CUT 0.8
 #define MET_CUTLL 50
 #define MTW2_CUT 200
 #define MLB_CUT 175
@@ -16,6 +17,8 @@
 #define MET_BOUND_400 400
 #define MET_BOUND_450 450
 #define MET_BOUND_500 500
+
+#define MET_CR 50
 
 // Not sure that it is a good idea to include this here,
 // since one often needs to use a modified format because
@@ -45,7 +48,7 @@ string sampleType;
 // MT cuts definitions
 // ###################
 
-bool goesInMTpeak()     { if ((myEvent.mt_met_lep > 50) && (myEvent.mt_met_lep < 80)) return true; else return false; }
+bool goesInMTpeak()     { if ((myEvent.mt_met_lep > 30) && (myEvent.mt_met_lep < 80)) return true; else return false; }
 bool goesInMTtail()     { if (myEvent.mt_met_lep > MT_CUT)                    return true; else return false; }
 bool goesInMTinverted() { if (myEvent.mt_met_lep < MT_CUT)                    return true; else return false; }
 
@@ -90,12 +93,18 @@ bool goesInPreselectionNoVetoNoMetCut()
 
 bool goesInPreselection()
 {
-    if (myEvent.pfmet < MET_CUT) return false;
+    
+    if (myEvent.pfmet < MET_PSCUT) return false;
+    //cout<<"1"<<endl;
     if (myEvent.ngoodleps != NLEP_CUT) return false;
+    //cout<<"2"<<endl;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
+    //cout<<"3"<<endl;
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    //cout<<"4"<<endl;
     
     if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    //cout<<"5"<<endl;
 
     return true;
 }
@@ -105,10 +114,11 @@ bool goesInBaselineSearchSR() {
     if (myEvent.ngoodleps != NLEP_CUT) return false;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.ngoodbtags < NBJET_CUT)  return false;
-    
+    if (myEvent.dphi_ak4pfjets_met < DPHI_CUT) return false; 
     if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
 
-return (goesInPreselection() && goesInMTtail() );}
+    return (goesInPreselection() && goesInMTtail() );
+}
 bool goesInBaselineSearchSR2b() { return (goesInPreselection() && goesInMTtail() && myEvent.ngoodbtags >=2 );}
 //bool goesInLargeDMSR() { return (goesInPreselection() &&  myEvent.mt_met_lep > 150 && myEvent.MT2W > 200 && myEvent.dphi_Wlep> 0.8 && myEvent.hadronic_top_chi2 < 10 && myEvent.pfmet > 200);}
 //bool goesInSmallDMSR() { return (goesInPreselection() &&  myEvent.mt_met_lep > 150 && myEvent.dphi_Wlep> 0.8 && myEvent.hadronic_top_chi2 < 10 && myEvent.pfmet > 200);}
@@ -735,6 +745,107 @@ bool stBackgroundTest()
     return true;
 }
 
+
+
+
+bool CR0b_presel_nojetreq()
+{
+    if (myEvent.pfmet < MET_CR) return false;
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodbtags > 0 )  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+
+bool CR0b_presel()
+{
+    if (myEvent.pfmet < MET_CR) return false;
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    //if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.ngoodjets < 3)  return false;
+    //WARNING: REMOVED TEMPORARILY
+    //if (myEvent.ngoodbtags > 0 )  return false;
+    //WARNING: ADDED TEMPORARILY
+    if (myEvent.mt_met_lep > 100) return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    return true;
+}
+
+bool CR_MET250_lowMT(){
+    if (myEvent.pfmet < 250) return false;
+    if (myEvent.ngoodleps != 1) return false;
+    if (myEvent.ngoodjets < 4)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    if (myEvent.mt_met_lep<100) return false;
+    return true;
+}
+bool CR_MET250_lowMT_3j(){
+    if (myEvent.pfmet < 250) return false;
+    if (myEvent.ngoodleps != 1) return false;
+    if (myEvent.ngoodjets < 3)  return false;
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+    if (myEvent.mt_met_lep<100) return false;
+    return true;
+}
+
+bool CR0b_MET250_lowMT(){
+	return (CR_MET250_lowMT() && myEvent.ngoodbtags == 0 );
+}
+bool CR0b_MET250_lowMT_3j(){
+	return (CR_MET250_lowMT_3j() && myEvent.ngoodbtags == 0 );
+}
+
+
+bool CR0b_presel_MET50(){ return (CR0b_presel() && myEvent.pfmet>50 && myEvent.pfmet<100); }
+bool CR0b_presel_MET100(){ return (CR0b_presel() && myEvent.pfmet>100 && myEvent.pfmet<150); }
+bool CR0b_presel_MET150(){ return (CR0b_presel() && myEvent.pfmet>150 && myEvent.pfmet<200); }
+bool CR0b_presel_MET200(){ return (CR0b_presel() && myEvent.pfmet>200 && myEvent.pfmet<250); }
+bool CR0b_presel_MET250(){ return (CR0b_presel() && myEvent.pfmet>250 && myEvent.pfmet<300); }
+bool CR0b_presel_MET300(){ return (CR0b_presel() && myEvent.pfmet>300); }
+
+bool CR0b_presel_MT2Wtail()
+{
+	return (CR0b_presel() && myEvent.MT2W>200);
+}
+
+bool CR0b_presel_MT2W200(){return (CR0b_presel() && myEvent.MT2W>200 && myEvent.MT2W<250);}
+bool CR0b_presel_MT2W250(){return (CR0b_presel() && myEvent.MT2W>250);}
+
+
+bool CR0b_presel_MTpeak() { return CR0b_presel() && (myEvent.mt_met_lep> 50 && myEvent.mt_met_lep < 80) ; }
+bool CR0b_presel_MTtail() { return CR0b_presel() && (myEvent.mt_met_lep > 100) ; }
+bool CR0b_presel_MTtail_80() { return CR0b_presel() && (myEvent.mt_met_lep > 80) ; }
+bool CR0b_presel_MTtail_90() { return CR0b_presel() && (myEvent.mt_met_lep > 90) ; }
+bool CR0b_presel_MTtail_100() { return CR0b_presel() && (myEvent.mt_met_lep > 100) ; }
+bool CR0b_presel_MTtail_110() { return CR0b_presel() && (myEvent.mt_met_lep > 110) ; }
+bool CR0b_presel_MTtail_120() { return CR0b_presel() && (myEvent.mt_met_lep > 120) ; }
+bool CR0b_presel_MTtail_130() { return CR0b_presel() && (myEvent.mt_met_lep > 120) ; }
+bool CR0b_presel_MTtail_140() { return CR0b_presel() && (myEvent.mt_met_lep > 130) ; }
+bool CR0b_presel_MTtail_150() { return CR0b_presel() && (myEvent.mt_met_lep > 140) ; }
+
+bool CR0b_presel_MTtail_80_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 80 && myEvent.mt_met_lep < 90) ; }
+bool CR0b_presel_MTtail_90_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 90 && myEvent.mt_met_lep < 100) ; }
+bool CR0b_presel_MTtail_100_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 100 &&  myEvent.mt_met_lep < 110) ; }
+bool CR0b_presel_MTtail_110_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 110 &&  myEvent.mt_met_lep < 120) ; }
+bool CR0b_presel_MTtail_120_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 120 &&  myEvent.mt_met_lep < 130) ; }
+bool CR0b_presel_MTtail_130_ex() { return CR0b_presel() && (myEvent.mt_met_lep > 120 &&  myEvent.mt_met_lep < 140) ; }
+
+bool CR0b_presel_2j_MTpeak() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 2 && (myEvent.mt_met_lep> 50 && myEvent.mt_met_lep < 80) ; }
+bool CR0b_presel_2j_MTtail() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 2 && (myEvent.mt_met_lep > 100) ; }
+bool CR0b_presel_3j_MTpeak() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 3 && (myEvent.mt_met_lep> 50 && myEvent.mt_met_lep < 80) ; }
+bool CR0b_presel_3j_MTtail() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 3 && (myEvent.mt_met_lep > 100) ; }
+bool CR0b_presel_4j_MTpeak() { return CR0b_presel_nojetreq() && myEvent.ngoodjets >= 4 && (myEvent.mt_met_lep> 50 && myEvent.mt_met_lep < 80) ; }
+bool CR0b_presel_4j_MTtail() { return CR0b_presel_nojetreq() && myEvent.ngoodjets >= 4 && (myEvent.mt_met_lep > 100) ; }
+
+
+bool CR0b_presel_2j() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 2  ; }
+bool CR0b_presel_3j() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 3 ; }
+bool CR0b_presel_4j() { return CR0b_presel_nojetreq() && myEvent.ngoodjets >= 4 ; }
+
+bool CR0b_presel_2j_MET100() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 2  && myEvent.pfmet > 100; }
+bool CR0b_presel_3j_MET100() { return CR0b_presel_nojetreq() && myEvent.ngoodjets == 3  && myEvent.pfmet > 100; }
+bool CR0b_presel_4j_MET100() { return CR0b_presel_nojetreq() && myEvent.ngoodjets >= 4  && myEvent.pfmet > 100; }
 
 // Categorization of Events
 // ########################
@@ -2451,7 +2562,48 @@ bool goesInVetoControlRegionMTinverted() { return (goesInVetosControlRegion() &&
 bool goesInSingleElecChannel()
 {
     // Keep only events with ngoodleps == 1
-    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodleps != 1) return false;
+    //if (!myEvent.HLT_SingleE) return false;
+    // For data, keep only events from SingleElec dataset that fired the trigger
+    /*
+    if (sampleType == "data")
+    {
+        if ((sampleName != "SingleElec") || (!myEvent.triggerElec)) return false;
+    }*/
+
+    // Remove electrons with pT < 30 GeV
+    //if (myEvent.leadingLepton.Pt() < 30)  return false;
+
+    // Keep only events with an electron as leading lepton
+    return (abs(myEvent.lep1_pdgid) == 11);
+}
+
+bool goesInSingleElecBarrelChannel()
+{
+    // Keep only events with ngoodleps == 1
+    if (myEvent.ngoodleps != 1) return false;
+    if (myEvent.lep1_eta>=1.479) return false;
+    //if (!myEvent.HLT_SingleE) return false;
+    // For data, keep only events from SingleElec dataset that fired the trigger
+    /*
+    if (sampleType == "data")
+    {
+        if ((sampleName != "SingleElec") || (!myEvent.triggerElec)) return false;
+    }*/
+
+    // Remove electrons with pT < 30 GeV
+    //if (myEvent.leadingLepton.Pt() < 30)  return false;
+
+    // Keep only events with an electron as leading lepton
+    return (abs(myEvent.lep1_pdgid) == 11);
+}
+
+bool goesInSingleElecECChannel()
+{
+    // Keep only events with ngoodleps == 1
+    if (myEvent.ngoodleps != 1) return false;
+    if (myEvent.lep1_eta<1.479) return false;
+    //if (!myEvent.HLT_SingleE) return false;
     // For data, keep only events from SingleElec dataset that fired the trigger
     /*
     if (sampleType == "data")
@@ -2471,6 +2623,7 @@ bool goesInSingleMuonChannel()
 {
     // Keep only events with ngoodleps == 1
     if (myEvent.ngoodleps != 1) return false;
+    //if (!myEvent.HLT_SingleMu) return false;
     // For data, keep only events from SingleMuon dataset that fired the trigger
     /*
     if (sampleType == "data")

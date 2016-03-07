@@ -56,7 +56,7 @@ typedef struct
     int   lumiId;
     int   trigger;
     int   runId;
-    int   totalNumberOfInitialEvent;
+    UInt_t   totalNumberOfInitialEvent;
     float ETmissSumet;
     float metPuppiSumet;
     float jetsEta;
