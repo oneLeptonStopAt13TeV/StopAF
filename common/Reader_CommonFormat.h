@@ -146,8 +146,8 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    //uint32_t      totalNumberOfInitialEvent = -13;
-    double      totalNumberOfInitialEvent = -13;
+    uint32_t      totalNumberOfInitialEvent = -13;
+    //double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
     int           nvetoleps;
@@ -165,6 +165,8 @@ typedef struct
     float metGen_phi;
 
     float DeltaRlj;
+    vector<float> ak8pfjets_nsubjettines; //WARNING! this is empty now
+    vector<float> ak10pfjets_nsubjettines; //WARNING! this is empty now
 
     #ifdef USE_GEN_INFO
     int gen_n;
