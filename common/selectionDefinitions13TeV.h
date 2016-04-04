@@ -1322,13 +1322,81 @@ bool DefaultBin5()
 
 bool DefaultBin6()
 {
-    if (myEvent.ngoodjets < 3)  return false;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_350) return false;
+
+    return boostedSearch();
+}
+
+bool DefaultBin7()
+{
+    if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.pfmet < MET_BOUND_350) return false;
 
     return boostedSearch();
 }
 
+
+bool Default2Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    return boostedSearch();
+}
+
+bool Default2Bin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+    if (myEvent.pfmet >= MET_BOUND_500) return false;
+
+    return boostedSearch();
+}
+
+bool Default2Bin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_500) return false;
+
+    return boostedSearch();
+}
+
+bool Default3Bin3()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet >= MET_BOUND_300) return false;
+
+    return boostedSearch();
+}
+
+bool Default3Bin4()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_300) return false;
+    if (myEvent.pfmet >= MET_BOUND_400) return false;
+
+    return boostedSearch();
+}
+
+bool Default3Bin5()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_400) return false;
+
+    return boostedSearch();
+}
 
 bool NoAk8JetsBin1()
 {
@@ -1414,225 +1482,196 @@ bool NoAk8JetsBin5()
     return boostedSearch();
 }
 
+bool NoAk8()
+{
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+             return false;
+    } 
+    return true;
+}
+
+bool Ak8(uint8_t nr)
+{
+    uint32_t ak8ts = 0;
+    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    {
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+         {
+             ak8ts++;
+         }
+         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
+         {
+             if(ak8ts == 0)
+                 return false;
+             else
+                 break;
+         }
+    }    
+
+    if (nr==1 && ak8ts<nr) 
+        return false;
+    else if(nr >1 && ak8ts<nr)
+        return false;
+
+    return true;
+}
+
+
+bool lowDmNoAk8JetsBin()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+
+    return (boostedSearch() && NoAk8());
+}
+
+bool lowDmOnePlusAk8JetBin()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    return (boostedSearch() && Ak8(1));
+}
+
 bool NoAk8JetsBin()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
-    {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
-             return false;
-    } 
-
-    return boostedSearch();
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    
+    return (boostedSearch() && NoAk8());
 }
 
-bool OneAk8JetBin()
+bool OnePlusAk8JetBin()
 {
-    uint32_t ak8ts = 0;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
 
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
-    {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
-             ak8ts++;
-         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak8ts != 1) return false;
-    return boostedSearch();
-}
-
-bool AtLeastTwoAk8JetBin()
-{
-    uint32_t ak8ts = 0;
-    if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
-    {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
-             ak8ts++;
-         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak8ts < 2) return false;
-    return boostedSearch();
+    return (boostedSearch() && Ak8(1));
 }
 
 bool threeJetsNoAk8JetsBin()
 {
     if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    
+    return (boostedSearch() && NoAk8());
+}
 
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+bool threeJetsOnePlusAk8JetBin()
+{
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+
+    return (boostedSearch() && Ak8(1));
+}
+
+
+bool NoAk10()
+{
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_mass.size(); idx++)
     {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5)
              return false;
     } 
-
-    return boostedSearch();
+    return true;
 }
 
-bool threeJetsOneAk8JetBin()
+bool Ak10(uint8_t nr)
 {
-    uint32_t ak8ts = 0;
-    if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
+    uint32_t ak10ts = 0;
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
     {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
-             ak8ts++;
-         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
-             return false;
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5)
+         {
+             ak10ts++;
+         }
+         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
+         {
+             if(ak10ts == 0)
+                 return false;
+             else
+                 break;
+         }
     }    
 
-    if (ak8ts != 1) return false;
-    return boostedSearch();
+    if (nr==1 && ak10ts<nr) 
+        return false;
+    else if(nr>1 && ak10ts<nr)
+        return false;
+
+    return true;
 }
 
-bool threeJetsAtLeastTwoAk8JetBin()
+bool lowDmNoAk10JetsBin()
 {
-    uint32_t ak8ts = 0;
-    if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
     if (myEvent.pfmet < MET_BOUND_250) return false;
 
-    for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
-    {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 80 && myEvent.ak8pfjets_pt.at(idx) > 200)
-             ak8ts++;
-         if(idx == (myEvent.ak8pfjets_corrpruned_mass.size() -1))
-             return false;
-    }    
 
-    if (ak8ts < 2) return false;
-    return boostedSearch();
+    return (boostedSearch() && NoAk10());
+}
+
+bool lowDmOnePlusAk10JetBin()
+{
+    if (myEvent.ngoodjets < NJET_CUT)  return false;
+    if (myEvent.MT2W > MTW2_CUT)  return false;
+    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+
+    return (boostedSearch() && Ak10(1));
 }
 
 
 bool NoAk10JetsBin()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
 
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
-             return false;
-    } 
-
-    return boostedSearch();
+    return (boostedSearch() && NoAk10());
 }
 
-bool OneAk10JetBin()
+bool OnePlusAk10JetBin()
 {
-    uint32_t ak10ts = 0;
     if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
-             ak10ts++;
-         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak10ts != 1) return false;
-    return boostedSearch();
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    
+    return (boostedSearch() && Ak10(1));
 }
 
-bool AtLeastTwoAk10JetBin()
-{
-    uint32_t ak10ts = 0;
-    if (myEvent.ngoodjets < NJET_CUT)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
-             ak10ts++;
-         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak10ts < 2) return false;
-    return boostedSearch();
-}
 
 bool threeJetsNoAk10JetsBin()
 {
     if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200) //@MJ@ TODO corr pruned mass
-             return false;
-    } 
-
-    return boostedSearch();
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    
+    return (boostedSearch() && NoAk10());
 }
 
-bool threeJetsOneAk10JetBin()
+bool threeJetsOnePlusAk10JetBin()
 {
-    uint32_t ak10ts = 0;
     if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
+    if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
 
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
-             ak10ts++;
-         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak10ts != 1) return false;
-    return boostedSearch();
-}
-
-bool threeJetsAtLeastTwoAk10JetBin()
-{
-    uint32_t ak10ts = 0;
-    if (myEvent.ngoodjets != 3)  return false;
-    if (myEvent.MT2W < MTW2_CUT)  return false;
-    if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_250) return false;
-
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
-    {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 80 && myEvent.ak10pfjets_pt.at(idx) > 200)
-             ak10ts++;
-         if(idx == (myEvent.ak10pfjets_pruned_mass.size() -1))
-             return false;
-    }    
-
-    if (ak10ts < 2) return false;
-    return boostedSearch();
+    return (boostedSearch() && Ak10(1));
 }
 
 
@@ -2098,7 +2137,7 @@ bool Default2()
     return boostedSearch();
 }
 
-bool Default2Bin1()
+bool oDefault2Bin1()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;
@@ -2108,7 +2147,7 @@ bool Default2Bin1()
     return boostedSearch();
 }
 
-bool Default2Bin2()
+bool oDefault2Bin2()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;
@@ -2118,7 +2157,7 @@ bool Default2Bin2()
     return boostedSearch();
 }
 
-bool Default2Bin3()
+bool oDefault2Bin3()
 {
     if (myEvent.ngoodjets < NJET_CUT)  return false;
     if (myEvent.MT2W < MTW2_CUT)  return false;

@@ -179,7 +179,7 @@ void BabyScrewdriver::Init()
     AddRegion("DefaultBin3", "DefaultBin3", &DefaultBin3);
     AddRegion("DefaultBin4", "DefaultBin4", &DefaultBin4);
     AddRegion("DefaultBin5", "DefaultBin5", &DefaultBin5);
-    AddRegion("DefaultBin6", "DefaultBin6", &DefaultBin6);
+    //AddRegion("DefaultBin6", "DefaultBin6", &DefaultBin6); this one is incorrect
     AddRegion("DefaultBin7", "DefaultBin7", &DefaultBin7);
 
 
@@ -348,7 +348,7 @@ i
     //cout << "weight " << weight << endl;
     // Fill this event in the histo collections
 
-    if(chi2 < 2)
+    //if(chi2 < 2)
         AutoFillProcessClass(currentProcessClass, weight);
     //cout << "process " << currentProcessClass << " weight " << weight << endl;
     //AutoFillProcessClass(currentProcessClass, 0.001);
@@ -404,7 +404,7 @@ void BabyScrewdriver::PostProcessingStep()
     //  Tables and other stuff
     // ######################
 
-   vector<string> regionsDef = {"DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5", "DefaultBin6", "DefaultBin7"};
+   vector<string> regionsDef = {"DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5", "DefaultBin7"};
    TableBackgroundSignal(this, regionsDef,"combinedChannel" ).Print("wbkg.tab", 4);
    TableBackgroundSignal(this, regionsDef,"combinedChannel" ).PrintLatex("wbkg.tex", 4);
    TableToBackgroundRatio(this, regionsDef,"combinedChannel" ).Print("wbkgToB.tab", 4);
