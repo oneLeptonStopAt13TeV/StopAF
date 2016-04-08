@@ -70,6 +70,12 @@ float nSjak10 = -13;
 float number = 7;
 float number2[2];
 double chi2;
+double chi2_v0;
+double chi2_v1;
+double chi2_v2;
+double chi2_v3;
+double chi2_v4;
+double chi2_v5;
 map< pair<uint32_t,uint32_t>, string > scanMap;
 // ################################################################
 
@@ -81,15 +87,24 @@ void BabyScrewdriver::Init()
     //babyTuplePath = "/opt/sbg/scratch1/cms/echabert/store/babyTuples/Oct21_postpatch8";
     //babyTuplePath = "./";
     
-    totalNumberOfWorkers = 7;
+    totalNumberOfWorkers = 10;
 
 
     //AddVariable("bla", "bla",  "", 10,   0, 10,  &(number), "noUnderflowInFirstBin");
     //AddVariable("bla2", "bla2",  "", 10,   0, 10,  number2, "noUnderflowInFirstBin");
-    AddVariable("chi2", "chi2",  "", 1000,   0, 100,  &(chi2), "noUnderflowInFirstBin");
+    //AddVariable("chi2", "chi2",  "", 20,   0, 20,  &(chi2), "noUnderflowInFirstBin");
+
+    AddVariable("chi2_v0", "chi2",  "", 20,   0, 100,  &(chi2_v0), "noUnderflowInFirstBin");
+    AddVariable("chi2_v1", "chi2",  "", 20,   0, 100,  &(chi2_v1), "noUnderflowInFirstBin");
+    AddVariable("chi2_v2", "chi2",  "", 20,   0, 100,  &(chi2_v2), "noUnderflowInFirstBin");
+    AddVariable("chi2_v3", "chi2",  "", 20,   0, 100,  &(chi2_v3), "noUnderflowInFirstBin");
+    AddVariable("chi2_v4", "chi2",  "", 20,   0, 100,  &(chi2_v4), "noUnderflowInFirstBin");
+    AddVariable("chi2_v5", "chi2",  "", 20,   0, 100,  &(chi2_v5), "noUnderflowInFirstBin");
+    /*
     AddVariable("MT", "M_T [GeV]",  "", 50,   0, 300,  &(myEvent.mt_met_lep), "noUnderflowInFirstBin");
     AddVariable("MET", "MET [GeV]",  "", 50,   0, 800,  &(myEvent.pfmet), "noUnderflowInFirstBin");
     AddVariable("MT2W", "MT2W",  "", 50,   0, 300,  &(myEvent.MT2W), "noUnderflowInFirstBin");
+    */
 // ...
 
     // background
@@ -98,9 +113,10 @@ void BabyScrewdriver::Init()
 //    	AddDataset("ST_tW-top", "SingleTop", 0, 35.85 );
   //  	AddDataset("ST_s", "SingleTop", 0, 3.38 );
     
+  /*
   AddProcessClass("T2tt_600-950_1to450", "T2tt_600-950_1to450", "signal", kBlue);
     	AddDataset("600-950_1to450", "T2tt_600-950_1to450", 0, 0 );
- 
+ */
     //Process classes for all scans in one sample
     //fead all scans and create map of names
     TFile *ftmp = NULL;
@@ -123,7 +139,9 @@ void BabyScrewdriver::Init()
                 string stops = to_string(htmp->GetXaxis()->GetBinLowEdge(bx+1));
                 string neutrs = to_string( htmp->GetYaxis()->GetBinLowEdge(by+1));
                 scanMap[key] = stops+"_"+neutrs;
-                AddProcessClass( stops+"_"+neutrs, stops+"_"+neutrs, "signal", kBlue);
+                cout<<stops<<" "<<neutrs<<endl;
+		if(int(htmp->GetXaxis()->GetBinLowEdge(bx+1)) == 600 && int(htmp->GetYaxis()->GetBinLowEdge(by+1)) == 100) 
+		AddProcessClass( stops+"_"+neutrs, stops+"_"+neutrs, "signal", kBlue);
             }
         }
 
@@ -155,13 +173,14 @@ void BabyScrewdriver::Init()
   //  	AddDataset("WW_aMC", "VV", 0 , 48.4);
   //  	AddDataset("ZZ", "VV", 0, 16.523);
    // 	AddDataset("WZ", "VV", 0 , 47.13);
-  
+ */ 
    AddProcessClass("TTJets", "TT+jets - 1l", "background", kRed);
         AddDataset("TTjets_M5_1", "TTJets", 0, 831.76);
-        AddDataset("TTjets_M5_2", "TTJets", 0, 831.76);
-     // AddProcessClass("TT_2l", "TT+jets - 2l", "background", kAzure+1);
+   AddDataset("TTjets_M5_2", "TTJets", 0, 831.76);
+      AddProcessClass("TT_2l", "TT+jets - 2l", "background", kAzure+1);
      // AddProcessClass("TT_0l", "TT+jets - 0l", "background", kViolet+6);
-*/ 
+//*/ 
+   ///*
    AddProcessClass("WJets", "W+jetsNew", "background", kBlack);
     	AddDataset("WJetsToLNu_HT-100To200_1", "WJets", 0, 1345*1.21); 
     	AddDataset("WJetsToLNu_HT-100To200_2", "WJets", 0, 1345*1.21); 
@@ -171,9 +190,10 @@ void BabyScrewdriver::Init()
     	AddDataset("WJetsToLNu_HT-800To1200", "WJets", 0, 5.501*1.21 ); 
     	AddDataset("WJetsToLNu_HT-1200To2500", "WJets", 0, 1.329*1.21); 
     	AddDataset("WJetsToLNu_HT-2500ToInf", "WJets", 0, 0.03216*1.21); 
-
+//*/
   
     AddRegion("defaultSearchAllCuts", "defaultSearchAllCuts", &defaultSearchAllCuts);
+    ///*
     AddRegion("DefaultBin1", "DefaultBin1", &DefaultBin1);
     AddRegion("DefaultBin2", "DefaultBin2", &DefaultBin2);
     AddRegion("DefaultBin3", "DefaultBin3", &DefaultBin3);
@@ -181,7 +201,7 @@ void BabyScrewdriver::Init()
     AddRegion("DefaultBin5", "DefaultBin5", &DefaultBin5);
     //AddRegion("DefaultBin6", "DefaultBin6", &DefaultBin6); this one is incorrect
     AddRegion("DefaultBin7", "DefaultBin7", &DefaultBin7);
-
+    //*/
 
     
      // ...
@@ -252,8 +272,22 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         weightSignal = sigCrossSection * GetLumi() * myEvent.mc_weight / totalNrOfEvents;
         //cout << "signal CS " << sigCrossSection << " mc weight " << myEvent.mc_weight << " nr of events " << totalNrOfEvents << endl;
     }
+    
+    bool new_formula = true; 
+    int njets_max = 6;
+    //cout<<"@@@ chi2_v0"<<endl;
+    chi2_v0 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 1, njets_max, false);
+    //cout<<"@@@ chi2_v1"<<endl;
+    chi2_v1 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 1, njets_max, new_formula);
+    ///*
+    chi2_v2 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 2, njets_max, new_formula);
+    chi2_v3 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 3, njets_max, new_formula);
+    chi2_v4 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 4, njets_max, new_formula);
+    //*/
+    ////cout<<"@@@ chi2_v5"<<endl;
+    chi2_v5 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass, 5, njets_max, new_formula);
 
-    chi2 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass);
+    //chi2 = Chi2(myEvent.jet_pt, myEvent.jet_eta, myEvent.jet_phi, myEvent.jet_mass);
     //cout << "chi2: " << chi2 << endl;
 
     /*if (currentProcessClass == "TT_1l" && (myEvent.numberOfGeneratedLeptons == 2))
@@ -380,7 +414,7 @@ void BabyScrewdriver::PostProcessingStep()
     // Schedule plots
 
     SchedulePlots("1DSuperimposed");
-    SchedulePlots("1DStack");
+    //SchedulePlots("1DStack");
     //SchedulePlots("2D");
 
     // Config plots

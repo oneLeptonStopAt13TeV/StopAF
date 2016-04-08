@@ -1,5 +1,8 @@
 #include "chi2.h"
 
+bool debug = false;
+
+
 //--------------------------------------------------------------------
 double fc2 (double c1, double m12, double m22, double m02, bool verbose)
 {
@@ -65,7 +68,7 @@ double fchi2 (void *num, void* denom, uint32_t size){
 */
 
 
-vector<double> calculateChi2ForWMass(vector<TLorentzVector>& jets, vector<float>& sigma_jets)
+vector<double> calculateChi2ForWMass(vector<TLorentzVector>& jets, vector<float>& sigma_jets, int njets_max = 6, bool new_formula = false)
 {
 
   if(jets.size() != sigma_jets.size())
@@ -73,7 +76,7 @@ vector<double> calculateChi2ForWMass(vector<TLorentzVector>& jets, vector<float>
 
 	//check at most first 6 jets
 	int n_jets = jets.size();
-	if (n_jets>6) n_jets = 6;
+	if (n_jets>njets_max) n_jets = njets_max;
 	//consider at least 3 jets
 	if (n_jets<3)
         {
@@ -93,22 +96,27 @@ vector<double> calculateChi2ForWMass(vector<TLorentzVector>& jets, vector<float>
 			TLorentzVector hadW = jets[i] + jets[j];
 			double pt_w1 = jets[i].Pt();
 			double pt_w2 = jets[j].Pt();
-                        
-                        double sigma_w = sqrt(pow(pt_w1*sigma_jets[i], 2)
+                       
+                        double sigma_w = 0;
+			if(!new_formula)
+				sigma_w = sqrt(pow(pt_w1*sigma_jets[i], 2)
 				+ pow(pt_w2*sigma_jets[j], 2));
+			else		
+				//the formula above was wrong
+				sigma_w = sqrt( pow(hadW.M()/(2*pt_w1)*sigma_jets[i],2) + pow(hadW.M()/(2*pt_w2)*sigma_jets[j],2)); 
 
                         double diff = hadW.M() - PDG_W_MASS;
 
 		        //std::cout << "w mass from jets: " << hadW.M() << "PDG mass: " << PDG_W_MASS << " sigma: " << sigma_w << std::endl;
 			v_ij.push_back(diff/sigma_w);
-                        //std::cout << "calculateChi2ForWMass chi: " << diff/sigma_w << std::endl; 
+                        if(debug) std::cout << "calculateChi2ForWMass chi: " << diff/sigma_w << " = " << diff << " / " << sigma_w << std::endl; 
 		}
         }
         return v_ij;
 }
 
 
-vector<double> calculateChi2ForWdR(vector<TLorentzVector>& jets, vector<float>& sigma_jets)
+vector<double> calculateChi2ForWdR(vector<TLorentzVector>& jets, vector<float>& sigma_jets, int njets_max = 6)
 {
 
   if(jets.size() != sigma_jets.size())
@@ -116,7 +124,7 @@ vector<double> calculateChi2ForWdR(vector<TLorentzVector>& jets, vector<float>& 
 
 	//check at most first 6 jets
 	int n_jets = jets.size();
-	if (n_jets>6) n_jets = 6;
+	if (n_jets>njets_max) n_jets = njets_max;
 	//consider at least 3 jets
 	if (n_jets<3)
         {
@@ -140,20 +148,25 @@ vector<double> calculateChi2ForWdR(vector<TLorentzVector>& jets, vector<float>& 
 			double pt_w1 = jets[i].Pt();
 			double pt_w2 = jets[j].Pt();
                         
+			/*
                         double sigma_w = sqrt(pow(pt_w1*sigma_jets[i], 2)
 				+ pow(pt_w2*sigma_jets[j], 2));
+			*/
+			// the formula above was wrong
 
-                        double diff = hadWdR - ((2*PDG_W_MASS)/hadWPt);
+			float sigma_w = hadWdR* sqrt( pow(pt_w1/hadWPt*sigma_jets[i],2) + pow(pt_w2/hadWPt*sigma_jets[j],2) );
+
+                        double diff = hadWdR*hadWPt - (2*PDG_W_MASS);
 			
 			v_ij.push_back(diff/sigma_w);
-                        //std::cout << "calculateChi2FordR chi: " << diff/sigma_w << std::endl; 
+			if(debug) std::cout << "calculateChi2FordR_W chi: " << diff/sigma_w << " = " << diff << " / " << sigma_w << std::endl; 
 		}
         }
         return v_ij;
 }
 
 
-vector< vector<double> > calculateChi2ForTopMass(vector<TLorentzVector>& jets, vector<float>& sigma_jets)
+vector< vector<double> > calculateChi2ForTopMass(vector<TLorentzVector>& jets, vector<float>& sigma_jets, int njets_max = 6, bool new_formula = false)
 {
 
   if(jets.size() != sigma_jets.size())
@@ -161,7 +174,7 @@ vector< vector<double> > calculateChi2ForTopMass(vector<TLorentzVector>& jets, v
 
 	//check at most first 6 jets
 	int n_jets = jets.size();
-	if (n_jets>6) n_jets = 6;
+	if (n_jets>njets_max) n_jets = njets_max;
 	//consider at least 3 jets
 	if (n_jets<3)
         {
@@ -189,13 +202,26 @@ vector< vector<double> > calculateChi2ForTopMass(vector<TLorentzVector>& jets, v
 			double pt_w2 = jets[j].Pt();
 			double pt_w3 = jets[k].Pt();
                         
-                        double sigma_top = sqrt(pow(pt_w1*sigma_jets[i], 2)
+                        double sigma_top = 0;
+			
+			if(!new_formula){
+			   sigma_top = sqrt(pow(pt_w1*sigma_jets[i], 2)
 				+ pow(pt_w2*sigma_jets[j], 2)
 				+ pow(pt_w3*sigma_jets[k], 2));
-
-                        double diff = hadTop.M() - PDG_TOP_MASS;
+			}
+			else{ // the formula above was wrong
+			  sigma_top = pow(sigma_jets[i]*(jets[j].Pt()*(1-cos(jets[i].Theta()-jets[j].Theta()))/(sin(jets[i].Theta())*sin(jets[j].Theta()))
+				+jets[k].Pt()*(1-cos(jets[i].Theta()-jets[k].Theta())))/(sin(jets[i].Theta())*sin(jets[k].Theta())),2);
+			  sigma_top += pow(sigma_jets[j]*(jets[i].Pt()*(1-cos(jets[i].Theta()-jets[j].Theta()))/(sin(jets[i].Theta())*sin(jets[j].Theta()))
+				+jets[k].Pt()*(1-cos(jets[j].Theta()-jets[k].Theta())))/(sin(jets[j].Theta())*sin(jets[k].Theta())),2);
+			  sigma_top += pow(sigma_jets[k]*(jets[i].Pt()*(1-cos(jets[i].Theta()-jets[k].Theta()))/(sin(jets[i].Theta())*sin(jets[k].Theta()))
+				+jets[j].Pt()*(1-cos(jets[j].Theta()-jets[k].Theta())))/(sin(jets[j].Theta())*sin(jets[k].Theta())),2);
+			  sigma_top = sqrt(sigma_top/pow(hadTop.M(),2));
+			}
+			double diff = hadTop.M() - PDG_TOP_MASS;
 			
 			v_ijk.push_back(diff/sigma_top);
+			if(debug) std::cout << "calculateChi2ForMass_top chi: " << diff/sigma_top << " = " << diff << " / " << sigma_top << std::endl; 
                     }
                     v_ij.push_back(v_ijk);
 		}
@@ -203,7 +229,7 @@ vector< vector<double> > calculateChi2ForTopMass(vector<TLorentzVector>& jets, v
         return v_ij;
 }
 
-vector< vector<double> > calculateChi2ForTopdR(vector<TLorentzVector>& jets, vector<float>& sigma_jets)
+vector< vector<double> > calculateChi2ForTopdR(vector<TLorentzVector>& jets, vector<float>& sigma_jets, int njets_max = 6)
 {
 
   if(jets.size() != sigma_jets.size())
@@ -211,7 +237,7 @@ vector< vector<double> > calculateChi2ForTopdR(vector<TLorentzVector>& jets, vec
 
 	//check at most first 6 jets
 	int n_jets = jets.size();
-	if (n_jets>6) n_jets = 6;
+	if (n_jets>njets_max) n_jets = njets_max;
 	//consider at least 3 jets
 	if (n_jets<3)
         {
@@ -241,11 +267,21 @@ vector< vector<double> > calculateChi2ForTopdR(vector<TLorentzVector>& jets, vec
 			double pt_w2 = jets[j].Pt();
 			double pt_w3 = jets[k].Pt();
                         
-                        double sigma_top = sqrt(pow(pt_w1*sigma_jets[i], 2)
+                        /*
+			double sigma_top = sqrt(pow(pt_w1*sigma_jets[i], 2)
 				+ pow(pt_w2*sigma_jets[j], 2)
 				+ pow(pt_w3*sigma_jets[k], 2));
+			*/
+			//the formula above was wrong
+			double sigma_top = pow(sigma_jets[i]*(jets[i].Pt()+jets[j].Pt()*(1-cos(jets[i].Theta()-jets[j].Theta()))+jets[k].Pt()*(1-cos(jets[i].Theta()-jets[k].Theta()))),2);
+			sigma_top += pow(sigma_jets[j]*(jets[j].Pt()+jets[i].Pt()*(1-cos(jets[i].Theta()-jets[j].Theta()))+jets[k].Pt()*(1-cos(jets[j].Theta()-jets[k].Theta()))),2);
+			sigma_top += pow(sigma_jets[k]*(jets[k].Pt()+jets[i].Pt()*(1-cos(jets[k].Theta()-jets[i].Theta()))+jets[j].Pt()*(1-cos(jets[j].Theta()-jets[k].Theta()))),2);
 
-                        double diff = hadTopdR - ((2*PDG_TOP_MASS)/hadTopPt);
+			sigma_top = hadTopdR*sqrt(sigma_top/pow(hadTopPt,2));
+
+                        double diff = hadTopdR*hadTopPt - (2*PDG_TOP_MASS)/hadTopPt;
+                        
+			if(debug) std::cout << "calculateChi2FordR_top chi: " << diff/sigma_top << " = " << diff << " / " << sigma_top << std::endl; 
 			
 			v_ijk.push_back(diff/sigma_top);
                         }
@@ -417,7 +453,14 @@ double calculateChi2(vector<LorentzVector>& jets, vector<float>& sigma_jets, vec
 }
 */
 
-double Chi2(vector<float> jets_pt, vector<float> jets_eta, vector<float> jets_phi, vector<float> jets_m)
+// method:
+// 1: Wmass+top-mass
+// 2: Wmass + DRW
+// 3: DRW + DRTop
+// 4: Wmass + top-mass + DRW
+// 5: Wmass + top-mass + DRW + DRTop
+
+double Chi2(vector<float> jets_pt, vector<float> jets_eta, vector<float> jets_phi, vector<float> jets_m, int method = 1, int njets_max = 6, bool new_formula = false)
 {
 	vector<TLorentzVector> jets;
 	vector<float> sigmas;
@@ -428,17 +471,17 @@ double Chi2(vector<float> jets_pt, vector<float> jets_eta, vector<float> jets_ph
 		//fill jets
 		jets.push_back(j);
 		//fill sigmas
-		sigmas.push_back(0.1);
+		sigmas.push_back(0.1 * jets_pt.at(i));
 	}
 
         vector<double> m1;
         vector<double> m2;
         vector< vector<double> > m3;
         vector< vector<double> > m4;
-	m1 =  calculateChi2ForWMass(jets, sigmas);
-	m2 =  calculateChi2ForWdR(jets, sigmas);
-	m3 =  calculateChi2ForTopMass(jets, sigmas);
-	m4 =  calculateChi2ForTopdR(jets, sigmas);
+	m1 =  calculateChi2ForWMass(jets, sigmas, njets_max, new_formula);
+	m2 =  calculateChi2ForWdR(jets, sigmas, njets_max);
+	m3 =  calculateChi2ForTopMass(jets, sigmas, njets_max, new_formula);
+	m4 =  calculateChi2ForTopdR(jets, sigmas, njets_max);
 
         if(m1.size() != m2.size() || m3.size() != m4.size() || m1.size() != m3.size())
             throw std::runtime_error("1: sizes of chi 2 memebers are different");
@@ -446,17 +489,48 @@ double Chi2(vector<float> jets_pt, vector<float> jets_eta, vector<float> jets_ph
         vector<double> chi2s;
         for(uint32_t ch = 0; ch < m1.size(); ch++)
         {
+	    ///*
             vector<double> mm3 = m3.at(ch);
             vector<double> mm4 = m4.at(ch);
             if(mm3.size() != mm4.size())
                 throw std::runtime_error("2: sizes of chi 2 memebers are different");
             for(uint32_t h = 0; h < mm3.size(); h++)
             {
-                double arr[] = {m1.at(ch), m2.at(ch), mm3.at(h), mm4.at(h)};
+                /*
+		double arr[] = {m1.at(ch), m2.at(ch), mm3.at(h), mm4.at(h)};
                 //std::cout << "m1.at(ch) " << m1.at(ch) << " m2.at(ch) " << m2.at(ch) << "  mm3.at(h) " << mm3.at(h) << " mm4.at(h) " << mm4.at(h)<< std::endl;
                 double arrSig[] = {1,1,1,1};
                 chi2s.push_back(fchi2(arr, arrSig, sizeof(arr)/sizeof(double)));
+	        */
+		switch(method){
+	      	  case 1:{
+			double arr1[] = {m1.at(ch), mm3.at(h)};
+                	double arrSig1[] = {1,1};
+                	chi2s.push_back(fchi2(arr1, arrSig1, sizeof(arr1)/sizeof(double)));
+			}break;
+		  case 2:{  
+			double arr2[] = {m1.at(ch), m2.at(ch)};
+                	double arrSig2[] = {1,1};
+                	chi2s.push_back(fchi2(arr2, arrSig2, sizeof(arr2)/sizeof(double)));
+			}break;
+		  case 3:{
+			double arr3[] = {m2.at(ch), mm4.at(h)};
+                	double arrSig3[] = {1,1};
+                	chi2s.push_back(fchi2(arr3, arrSig3, sizeof(arr3)/sizeof(double)));
+			}break;
+		  case 4:{
+			double arr4[] = {m1.at(ch), m2.at(ch), mm3.at(h)};
+                	double arrSig4[] = {1,1,1};
+                	chi2s.push_back(fchi2(arr4, arrSig4, sizeof(arr4)/sizeof(double)));
+			}break;
+		  case 5:{
+			double arr5[] = {m1.at(ch), m2.at(ch), mm3.at(h),mm4.at(h)};
+                	double arrSig5[] = {1,1,1,1};
+                	chi2s.push_back(fchi2(arr5, arrSig5, sizeof(arr5)/sizeof(double)));
+			}break;
+	       }
             }
+	    //*/
         }
         
     
