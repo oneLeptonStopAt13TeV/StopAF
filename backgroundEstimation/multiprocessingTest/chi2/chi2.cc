@@ -37,6 +37,7 @@ double fchi2 (void *num, void* denom, uint32_t size){
 
   double numerator[size];
   double denominator[size];
+  //@MJ@ TODO fix this, this can be dangerous with other types than double
   memcpy(numerator, num, size*sizeof(double));
   memcpy(denominator, denom, size*sizeof(double));
   vector<double> members;
