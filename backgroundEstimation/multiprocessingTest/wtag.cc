@@ -346,11 +346,9 @@ i
     //count efficiency of W tagging
     countEfficiency(24);
     //cout << "W ak8 pt" << onTheFlyVariables.m_ak8recoWPt << "ake ak8 W pt" << onTheFlyVariables.m_ak8recoWFakePt << endl;
-   
-    //ak10pt = NULL;
-    //ak10prunedMass = NULL;
+*/   
     //
-    *if(myEvent.ak10pfjets_tau2.size() != myEvent.ak10pfjets_tau1.size())
+    if(myEvent.ak10pfjets_tau2.size() != myEvent.ak10pfjets_tau1.size())
         throw std::runtime_error("tau1 and tau2 vectors used to comute nsub have different leghts");
     vector<float> subjetiness;
 
@@ -358,7 +356,7 @@ i
     {
         subjetiness.push_back(myEvent.ak10pfjets_tau2.at(v)/myEvent.ak10pfjets_tau1.at(v));
     }
-*/
+
     if(myEvent.ak10pfjets_pt.size() != 0)
     {
         memcpy ( ak10pt, &myEvent.ak10pfjets_pt[0], myEvent.ak10pfjets_pt.size()*sizeof(float) );
@@ -458,7 +456,7 @@ void BabyScrewdriver::PostProcessingStep()
     //  Tables and other stuff
     // ######################
 
-/*
+
    vector<string> totYield = {"DefaultBin1", "DefaultBin2", "DefaultBin3", "DefaultBin4", "DefaultBin5", "DefaultBin6", "DefaultBin7", "NoAk8JetsBin", "OnePlusAk8JetBin", "threeJetsNoAk8JetsBin", "threeJetsOnePlusAk8JetBin", "NoAk10JetsBin", "OnePlusAk10JetBin", "threeJetsNoAk10JetsBin", "threeJetsOnePlusAk10JetBin" , "Default2Bin3", "Default2Bin4", "Default2Bin5", "Default3Bin3", "Default3Bin4", "Default3Bin5" };
    TableBackgroundSignal(this, totYield,"combinedChannel" ).Print("yield.tab", 4);
    TableBackgroundSignal(this, totYield,"combinedChannel" ).PrintLatex("yield.tex", 4);
@@ -536,6 +534,6 @@ void BabyScrewdriver::PostProcessingStep()
    //TableBackgroundSignal(this, regionslowDmAk10,"combinedChannel" ).PrintLatex("lowDmak10ToB.tex", 4);
    //TableZbi(this, regionslowDmAk10,"combinedChannel" ).Print("lowDmak10Zbi.tab", 4);
    //TableZbi(this, regionslowDmAk10,"combinedChannel" ).PrintLatex("lowDmak10Zbi.tex", 4);
-  */ 
+  
 }
 
