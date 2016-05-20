@@ -859,6 +859,33 @@ void misidentifiedLepton()
    }
 }
 
+bool evaluateLeptonAndAk10Overlap()
+{
+
+        TLorentzVector l1;
+        TLorentzVector j1;
+
+        bool overlap = false;
+
+        for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+        {
+
+            if(idx > 0 && overlap == false)
+                break;
+
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            j1.SetPtEtaPhiM(myEvent.ak10pfjets_pt.at(idx), myEvent.ak10pfjets_eta.at(idx), myEvent.ak10pfjets_phi.at(idx), myEvent.ak10pfjets_pruned_mass.at(idx));
+
+            Double_t dR = l1.DeltaR(j1);
+
+            overlap = dR < 1.0 ? true : false;
+        }
+
+        return overlap;
+
+}
+
+
 #endif
 float returnSigCS(float stopm)
 {
