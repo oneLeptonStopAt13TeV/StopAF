@@ -45,6 +45,8 @@ babyEvent myEvent;
 string sampleName;
 string sampleType;
 
+
+
 // MT cuts definitions
 // ###################
 
@@ -875,6 +877,50 @@ bool defaultSearch()
     return true;
 }
 
+bool defaultSearchSpec3()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets != 3)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchSpec4()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < 4)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
+
+bool defaultSearchSpec4250()
+{
+    if (myEvent.ngoodleps != NLEP_CUT) return false;
+    if (myEvent.ngoodjets < 4)  return false;
+    if (myEvent.ngoodbtags < NBJET_CUT)  return false;
+    if (myEvent.dphi_ak4pfjets_met < 0.8) return false;
+    if (myEvent.mt_met_lep < MT_CUT) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
+    if (myEvent.MT2W < MTW2_CUT)  return false;
+     
+    if ((!myEvent.PassTrackVeto) || (!myEvent.PassTauVeto)) return false;
+
+    return true;
+}
 bool defaultSearchMETCut()
 {
     if (myEvent.ngoodleps != NLEP_CUT) return false;
@@ -1486,7 +1532,7 @@ bool NoAk8()
 {
     for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
     {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 250 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
              return false;
     } 
     return true;
@@ -1497,7 +1543,7 @@ bool Ak8(uint8_t nr)
     uint32_t ak8ts = 0;
     for(uint32_t idx = 0; idx < myEvent.ak8pfjets_corrpruned_mass.size(); idx++)
     {
-         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 200 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
+         if(myEvent.ak8pfjets_corrpruned_mass.at(idx) > 60 && myEvent.ak8pfjets_corrpruned_mass.at(idx) < 100 && myEvent.ak8pfjets_pt.at(idx) > 250 && (myEvent.ak8pfjets_tau2.at(idx) / myEvent.ak8pfjets_tau1.at(idx)) < 0.5)
          {
              ak8ts++;
          }
@@ -1562,7 +1608,7 @@ bool threeJetsNoAk8JetsBin()
 {
     if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
     
     return (boostedSearch() && NoAk8());
 }
@@ -1572,17 +1618,37 @@ bool threeJetsOnePlusAk8JetBin()
     if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.ak8pfjets_corrpruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
 
     return (boostedSearch() && Ak8(1));
 }
 
 
+bool doLeptonAndAk10NotOverlap( float jet_pt, float jet_eta, float jet_phi, float jet_mass)
+{
+
+        TLorentzVector l1;
+        TLorentzVector j1;
+
+
+        l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+        j1.SetPtEtaPhiM(jet_pt, jet_eta, jet_phi, jet_mass);
+
+        Double_t dR = l1.DeltaR(j1);
+
+        bool result = dR > 1.0 ? true : false;
+
+        return result;
+
+}
+
+
 bool NoAk10()
 {
-    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_mass.size(); idx++)
+    for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
     {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5)
+         bool noLeptonOverlap = doLeptonAndAk10NotOverlap( myEvent.ak10pfjets_pt.at(idx), myEvent.ak10pfjets_eta.at(idx), myEvent.ak10pfjets_phi.at(idx), myEvent.ak10pfjets_pruned_mass.at(idx));
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5 && noLeptonOverlap)
              return false;
     } 
     return true;
@@ -1593,7 +1659,8 @@ bool Ak10(uint8_t nr)
     uint32_t ak10ts = 0;
     for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
     {
-         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5)
+         bool noLeptonOverlap = doLeptonAndAk10NotOverlap( myEvent.ak10pfjets_pt.at(idx), myEvent.ak10pfjets_eta.at(idx), myEvent.ak10pfjets_phi.at(idx), myEvent.ak10pfjets_pruned_mass.at(idx));
+         if(myEvent.ak10pfjets_pruned_mass.at(idx) > 60 && myEvent.ak10pfjets_pruned_mass.at(idx) < 100 && myEvent.ak10pfjets_pt.at(idx) > 200 && (myEvent.ak10pfjets_tau2.at(idx) / myEvent.ak10pfjets_tau1.at(idx)) < 0.5 && noLeptonOverlap)
          {
              ak10ts++;
          }
@@ -1659,7 +1726,7 @@ bool threeJetsNoAk10JetsBin()
 {
     if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
-    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
     
     return (boostedSearch() && NoAk10());
 }
@@ -1669,7 +1736,7 @@ bool threeJetsOnePlusAk10JetBin()
     if (myEvent.ngoodjets != 3)  return false;
     if (myEvent.MT2W <= MTW2_CUT)  return false;
     if (myEvent.ak10pfjets_pruned_mass.size() == 0) return false;
-    if (myEvent.pfmet < MET_BOUND_350) return false;
+    if (myEvent.pfmet < MET_BOUND_250) return false;
 
     return (boostedSearch() && Ak10(1));
 }

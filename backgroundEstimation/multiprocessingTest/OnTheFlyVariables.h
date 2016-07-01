@@ -114,6 +114,14 @@ public:
    Double_t m_systPt;
 
   float m_fakeLep;
+  
+  float m_ak10WPrunedMass;
+  float m_ak10FakeWPrunedMass;
+  float m_genW4Ak10;
+  float m_recW4Ak10;
+  float m_recMatchedW4Ak10;
+  float m_recMatchedFakeW4Ak10;
+  float m_subjetinessRealsAk10;
 };
 
 OnTheFlyVariables onTheFlyVariables;
@@ -153,6 +161,7 @@ void ComputeOnTheFlyVariables()
 //looking for particle which is decaying to two particles, which are not lepton
 void findMotherAndDaughters(int idx)
 {
+
     //initial clean-up
     onTheFlyVariables.m_mumIdx = -1;
     
@@ -162,7 +171,7 @@ void findMotherAndDaughters(int idx)
     {
       if(evt == 1)
       {
-         cout << "gen particle id: " << myEvent.gen_id.at(k) << ", its index: " << myEvent.gen_index.at(k) << ", mother index: " << myEvent.gen_mother_index.at(k) << ", its status: " << myEvent.gen_status.at(k) << endl;
+         //cout << "gen particle id: " << myEvent.gen_id.at(k) << ", its index: " << myEvent.gen_index.at(k) << ", mother index: " << myEvent.gen_mother_index.at(k) << ", its status: " << myEvent.gen_status.at(k) << endl;
         if(abs(myEvent.gen_id.at(k)) == 24 && myEvent.gen_daughter_index.at(k).size() == 2)
         {
            int m = myEvent.gen_index.at(k);
@@ -189,11 +198,11 @@ void findMotherAndDaughters(int idx)
        {
            int dp1  = myEvent.gen_daughter_index.at(i).at(0);
            int dp2  = myEvent.gen_daughter_index.at(i).at(1);
-           if( !( (11 <= myEvent.gen_id.at(dp1) && myEvent.gen_id.at(dp1) <= 18) || (11 <= myEvent.gen_id.at(dp2) && myEvent.gen_id.at(dp2)<= 18) ))
+           if(! ( (11 <= myEvent.gen_id.at(dp1) && myEvent.gen_id.at(dp1) <= 18) || (11 <= myEvent.gen_id.at(dp2) && myEvent.gen_id.at(dp2)<= 18) )) //@EC@ if not leptonic decay investigate other options
            {	
                 onTheFlyVariables.m_mumIdx = myEvent.gen_index.at(i);
                 onTheFlyVariables.m_daughtersIdx.push_back(dp1);
-                onTheFlyVariables.m_daughtersIdx.push_back(dp2);  
+                onTheFlyVariables.m_daughtersIdx.push_back(dp2); 
            }
        }
 
@@ -206,13 +215,14 @@ void findMotherAndDaughters(int idx)
            continue;
        }
 
+
+       //@EC@ there are the other options, I am using W->qq' now, if the mother particle, which was selected before does no fulfill any constion, the procesure is redone
        //W decaying to two quarks found
        if(idx == 24  && abs(myEvent.gen_id.at(onTheFlyVariables.m_daughtersIdx.at(0))) <= 6 && abs(myEvent.gen_id.at(onTheFlyVariables.m_daughtersIdx.at(1))) <= 6)
        {
                //cout << "W found" << endl;
                break;
        }
-       
       //t decaying to W+ and sth found 
        else if (idx == 6 && (myEvent.gen_id.at(onTheFlyVariables.m_daughtersIdx.at(0)) == 24 || myEvent.gen_id.at(onTheFlyVariables.m_daughtersIdx.at(1)) == 24))
        {
@@ -232,8 +242,8 @@ void findMotherAndDaughters(int idx)
                //cout << "mother condition not fulfilled" << endl;
 	       onTheFlyVariables.m_daughtersIdx.clear();
 	       onTheFlyVariables.m_mumIdx = -1;
+	       
        }
-
     }
 }
 #endif
@@ -329,6 +339,48 @@ void findMotherAndDaughters(int idx)
            }
        }
 
+      //ak10
+      void fillRealAndFakesAk10(float deltaR, uint32_t i)
+      {
+         
+           //initialize vars for efficiencies to zero
+           onTheFlyVariables.m_genW4Ak10 = -1;
+           onTheFlyVariables.m_recW4Ak10 = -1;
+           onTheFlyVariables.m_recMatchedW4Ak10 = -1;
+           onTheFlyVariables.m_recMatchedFakeW4Ak10 = -1;
+           onTheFlyVariables.m_subjetinessRealsAk10 = -1;
+    
+           //gen W
+           if(myEvent.gen_pt.at(onTheFlyVariables.m_mumIdx) > 250)
+           {
+               onTheFlyVariables.m_genW4Ak10 = 1;
+           }
+           
+           onTheFlyVariables.m_subjetinessRealsAk10 = myEvent.ak10pfjets_tau2.at(i) / myEvent.ak10pfjets_tau1.at(i);
+           if(myEvent.ak10pfjets_pruned_mass.at(i) > 60 && myEvent.ak10pfjets_pruned_mass.at(i) < 100 &&  myEvent.ak10pfjets_pt.at(i) > 200 && onTheFlyVariables.m_subjetinessRealsAk10 < 0.5)
+           {
+               onTheFlyVariables.m_recW4Ak10 = 1;
+               //Ws
+               if(abs(deltaR) < 0.1 && myEvent.gen_pt.at(onTheFlyVariables.m_mumIdx) > 250)
+               {
+                   //real
+                   onTheFlyVariables.m_recMatchedW4Ak10 = 1;
+                   onTheFlyVariables.m_ak10WPrunedMass = myEvent.ak10pfjets_pruned_mass.at(i);
+               }
+               else if(abs(deltaR) > 0.1 && myEvent.gen_pt.at(onTheFlyVariables.m_mumIdx) > 250)
+               {
+                   //fake
+                   onTheFlyVariables.m_recMatchedFakeW4Ak10 = 1;
+                   onTheFlyVariables.m_ak10FakeWPrunedMass = myEvent.ak10pfjets_pruned_mass.at(i);
+               }
+               
+           }
+           //nothing found
+           else
+           {
+               //cout << "W boosted jet not found" << endl;
+           }
+       }
 #ifdef USE_GEN_INFO
 
 void findGenParticleProps(int idx, float* genPt, float* gendR)
@@ -488,6 +540,48 @@ void countEfficiency(int idx, string cutName = "", float lowCut = -1, float upCu
       {
           cout << "cuts were defined in wrog way!" << endl;
       }
+  }
+  
+}
+
+//count efficiency of particle tagging AK10
+void countEffAndFRAK10(int idx)  //@EC@ this is the method  you can use for matching gen particle to jets (or at least part of it)
+{
+  //initial clean up
+  onTheFlyVariables.m_daughtersIdx.clear();
+
+  onTheFlyVariables.m_ak10WPrunedMass = -1;
+  onTheFlyVariables.m_ak10FakeWPrunedMass = -1;
+  
+   //choose on which variable cut
+  vector<float> masses = myEvent.ak10pfjets_pruned_mass;
+
+  uint32_t nrOfJets = myEvent.ak10pfjets_pruned_mass.size();
+  
+  for(uint32_t i = 0; i < nrOfJets; i++ )
+  {
+       //clear
+       onTheFlyVariables.m_mumIdx = -1;
+
+       // find mother particle
+       findMotherAndDaughters(idx); //@EC@ checks if there is generated particle with given index idx, if you look in the code of this method I also specify the decays of this particle. I do not know, what you want to check, but maybe you will have to implement your own part (I did some develpement for W and top). If it findes the particle specified, in onTheFlyVariables.m_mumIdx its index is filled
+       TLorentzVector j1;
+       TLorentzVector g2;
+       double dR = -13;
+      
+       //count dR
+       if(onTheFlyVariables.m_mumIdx != -1) //@EC@ if you found gen particle compute dR
+       {
+           j1.SetPtEtaPhiM(myEvent.ak10pfjets_pt.at(i), myEvent.ak10pfjets_eta.at(i), myEvent.ak10pfjets_phi.at(i), myEvent.ak10pfjets_pruned_mass.at(i));
+           g2.SetPtEtaPhiM(myEvent.gen_pt.at(onTheFlyVariables.m_mumIdx), myEvent.gen_eta.at(onTheFlyVariables.m_mumIdx), myEvent.gen_phi.at(onTheFlyVariables.m_mumIdx), myEvent.gen_m.at(onTheFlyVariables.m_mumIdx));
+           dR = j1.DeltaR(g2);
+       }
+       else
+          continue;
+
+       fillRealAndFakesAk10(dR, i); //@EC@ here you fill, real fakes, number of generated (for purity, efficiency, fake rate)
+       if(onTheFlyVariables.m_ak10WPrunedMass == myEvent.ak10pfjets_pruned_mass.at(i)) //@EC@ end the loop when matched W found
+           break;
   }
   
 }
@@ -765,6 +859,34 @@ void misidentifiedLepton()
    }
 }
 
+bool evaluateLeptonAndAk10Overlap()
+{
+
+        TLorentzVector l1;
+        TLorentzVector j1;
+
+        bool overlap = false;
+
+        for(uint32_t idx = 0; idx < myEvent.ak10pfjets_pruned_mass.size(); idx++)
+        {
+
+            if(idx > 0 && overlap == false)
+                break;
+
+            l1.SetPtEtaPhiM(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_phi, myEvent.lep1_mass);
+            j1.SetPtEtaPhiM(myEvent.ak10pfjets_pt.at(idx), myEvent.ak10pfjets_eta.at(idx), myEvent.ak10pfjets_phi.at(idx), myEvent.ak10pfjets_pruned_mass.at(idx));
+
+            Double_t dR = l1.DeltaR(j1);
+
+            overlap = dR < 1.0 ? true : false;
+        }
+
+        return overlap;
+
+}
+
+
+#endif
 float returnSigCS(float stopm)
 {
     if(stopm == 100 ) return 1521.11 ;
@@ -802,7 +924,6 @@ float returnSigCS(float stopm)
 
 }
 
-#endif
 
 
 #endif
