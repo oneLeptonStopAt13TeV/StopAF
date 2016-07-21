@@ -30,6 +30,12 @@ typedef struct
     Int_t                nJets;               // Number of selected jets
     Float_t MET;                                // Type-1 + phi-corrected PF MET
 
+    Int_t	ngoodleps;
+    Int_t	nvetoleps;
+    Int_t	ngoodjets;
+    bool	PassTrackVeto;
+    bool	PassTauVeto;
+
     vector<string>	trigger_name;	 	// Name of the trigger paths
     vector<bool>	trigger_pass;		// Boolean corresponding to trigger results
     
@@ -58,6 +64,11 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("pfmet",                                          &(myEvent->MET));
     theTree->SetBranchAddress("trigger_name",				      &(myEvent->pointerToTrigger_name));
     theTree->SetBranchAddress("trigger_pass",				      &(myEvent->pointerToTrigger_pass));
+    theTree->SetBranchAddress("ngoodleps", 	&myEvent->ngoodleps);
+    theTree->SetBranchAddress("nvetoleps", 	&myEvent->nvetoleps);
+    theTree->SetBranchAddress("ngoodjets", 	&myEvent->ngoodjets);
+    theTree->SetBranchAddress("PassTrackVeto", 	&myEvent->PassTrackVeto);
+    theTree->SetBranchAddress("PassTauVeto", 	&myEvent->PassTauVeto);
 }
 
 
@@ -82,7 +93,8 @@ typedef struct{
 	bool passMETTrigger;
 	bool passMETMHTTrigger;
 	bool passORTrigger;
-	
+  	bool passHTTrigger;
+
 	bool passDoubleMuTrigger;
 	bool passDoubleElTrigger;
 	bool passMuElTrigger;
@@ -97,6 +109,7 @@ typedef struct{
 		passElTrigger = false; passMuTrigger = false; passMETTrigger = false; passMETMHTTrigger = false; passORTrigger = false;
 		passDoubleMuTrigger = false; passDoubleElTrigger = false; passMuElTrigger = false;
 		passOrthogElTrigger = false; passOrthogMuTrigger = false; passOrthogORTrigger = false;
+		passHTTrigger = false;
 	}
 	void Print(){
 			cout<<"Analysis triggers :\t electron:"<<passElTrigger<<"\t muon:"<<passMuTrigger<<"\t MET:"<<passMETTrigger<<"\tMETMHT:"<<passMETMHTTrigger<<"\tOR"<<passORTrigger<<endl;
@@ -133,9 +146,12 @@ bool CheckTriggerResults(){
 		//HLT_PFMET170_NoiseCleaned_v4 HLT_PFMET170_HBHECleaned_v3 HLT_PFMET170_JetIdCleaned_v3 HLT_PFMET170_NotCleaned_v2 HLT_PFMET170_BeamHaloCleaned_v1
 		if(myEvent.trigger_name[i].find("HLT_PFMET170_")!=std::string::npos)
 			if(myEvent.trigger_pass[i]) myTrigResults.passMETTrigger = true;
-		// -- MET MET trigger
+		// -- MET MHT trigger
 		if(myEvent.trigger_name[i].find("HLT_PFMET100_PFMHT100_IDTight")!=std::string::npos)
 			if(myEvent.trigger_pass[i]) myTrigResults.passMETMHTTrigger = true;
+		// -- HT Trigger
+		if(myEvent.trigger_name[i].find("HLT_HT")!=std::string::npos)
+			if(myEvent.trigger_pass[i]) myTrigResults.passHTTrigger = true;
 		// -- Electron trigger
 		//if(myEvent.trigger_name[i].find("HLT_Ele23_WPLoose_Gsf")!=std::string::npos)		
 		if(myEvent.trigger_name[i].find("HLT_Ele25_eta2p1_WPLoose")!=std::string::npos)
@@ -258,13 +274,20 @@ bool PassMETTriggerAndMuSelection() { return myTrigResults.passMETTrigger && (ab
 bool PassMuTriggerAndMETSelection(){ return myTrigResults.passMuTrigger && (myEvent.MET>_METCUT_);}
 bool PassElTriggerAndMETSelection(){ return myTrigResults.passElTrigger && (myEvent.MET>_METCUT_);}
 
-bool PassCombinedMETElTrigger(){ return myTrigResults.passMETTrigger && myTrigResults.passElTrigger && (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
-bool PassCombinedMETMuTrigger(){ return myTrigResults.passMETTrigger && myTrigResults.passMuTrigger && (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
-bool PassCombinedMETMHTElTrigger(){ return myTrigResults.passMETMHTTrigger && myTrigResults.passElTrigger && (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
-bool PassCombinedMETMHTMuTrigger(){ return myTrigResults.passMETMHTTrigger && myTrigResults.passMuTrigger && (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+bool PassCombinedMETTrigger(){ return (myTrigResults.passMETTrigger || myTrigResults.passElTrigger || myTrigResults.passMuTrigger) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+bool PassCombinedMETElTrigger(){ return (myTrigResults.passMETTrigger || myTrigResults.passElTrigger) && (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+bool PassCombinedMETMuTrigger(){ return (myTrigResults.passMETTrigger || myTrigResults.passMuTrigger) && (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+//bool PassCombinedMETMuTrigger(){ return (myTrigResults.passMETTrigger && myTrigResults.passMuTrigger) && (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+bool PassCombinedMETMHTElTrigger(){ return (myTrigResults.passMETMHTTrigger || myTrigResults.passElTrigger) && (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+bool PassCombinedMETMHTMuTrigger(){ return (myTrigResults.passMETMHTTrigger || myTrigResults.passMuTrigger) && (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
 
-bool ElChannel(){ return (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
-bool MuChannel(){ return (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_);}
+//bool ElChannel(){ return (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_) && myEvent.nJets>=3;}
+//bool MuChannel(){ return (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_) && myEvent.nJets>=3;}
+
+bool BaselineSel(){ return myEvent.ngoodleps==1 && myEvent.nvetoleps==0 && myEvent.PassTauVeto && myEvent.PassTrackVeto && myEvent.ngoodjets>1;}
+bool ElChannel(){ return (abs(myEvent.leadingLeptonId) == 11) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_) && BaselineSel() && myTrigResults.passHTTrigger;}
+bool MuChannel(){ return (abs(myEvent.leadingLeptonId) == 13) && (myEvent.leadingLeptonPt > _LEPTONPTCUT_) && BaselineSel() && myTrigResults.passHTTrigger;}
+bool LepChannel(){ return (myEvent.leadingLeptonPt > _LEPTONPTCUT_) && BaselineSel() && myTrigResults.passHTTrigger;}
 
 bool all(){return true;}
 
@@ -336,12 +359,11 @@ void BabyScrewdriver::Init()
     AddRegion("ElTrigger","Electron Trigger", &PassElTrigger);
     AddRegion("MuTrigger","Muon Trigger", &PassMuTrigger);
     AddRegion("ORTrigger","ORTrigger", &PassORTrigger);
+    AddRegion("CombinedMET","CombinedMETTrigger", & PassCombinedMETTrigger);
     AddRegion("CombinedMETMu","CombinedMETMuTrigger", & PassCombinedMETMuTrigger);
     AddRegion("CombinedMETEl","CombinedMETElTrigger", & PassCombinedMETElTrigger);
     AddRegion("CombinedMETMHTMu","CombinedMETMHTMuTrigger", & PassCombinedMETMHTMuTrigger);
     AddRegion("CombinedMETMHTEl","CombinedMETMHTElTrigger", & PassCombinedMETMHTElTrigger);
-    AddRegion("ElChannel","ElChannel", &ElChannel);
-    AddRegion("MuChannel","MuChannel", &MuChannel);
 
 
     // ------------------
@@ -363,6 +385,10 @@ void BabyScrewdriver::Init()
     AddChannel("MuTrigger","MuonTrigger",&PassMuTrigger);
     //AddChannel("inclusive","inclusive",&all);
     AddChannel("All","All",&all);
+    
+    AddChannel("ElChannel","ElChannel", &ElChannel);
+    AddChannel("MuChannel","MuChannel", &MuChannel);
+    AddChannel("LepChannel","MuChannel", &MuChannel);
     // ...
     AddChannel("DoubleMuTrigger","DoubleMuTrigger",&PassDoubleMuTrigger);
     AddChannel("DoubleElTrigger","DoubleElTrigger",&PassDoubleElTrigger);
@@ -381,6 +407,8 @@ void BabyScrewdriver::Init()
     Create1DHistos();
     Add2DHisto("LeptonPT","MET");
     Add2DHisto("nJets","MET");
+
+    WriteXMLConfig(); 
 }
 
 void BabyScrewdriver::ActionForEachEvent(string currentDataset)

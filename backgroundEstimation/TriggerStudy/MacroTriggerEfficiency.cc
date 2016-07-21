@@ -93,9 +93,9 @@ int main(){
         vector<float> LepPtBins = {20,25,30,35,40,50,80,100,125,150,200,300};
 	float dummy;
 	//sonic.AddVariable("MET", "MET",  "MET", 20,   20, 500,  &(dummy), "noUnderflowInFirstBin");
-        //sonic.AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", 20,   0, 200,  &(dummy), "noUnderflowInFirstBin");
+        sonic.AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", 20,   0, 200,  &(dummy), "noUnderflowInFirstBin");
         //sonic.AddVariable("MET", "MET",  "MET", (int) (METBins.size()-1), METBins.data(),  &(dummy), "");
-        //sonic.AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", (int) (LepPtBins.size()-1), LepPtBins.data(), &(dummy), "");
+        sonic.AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", (int) (LepPtBins.size()-1), LepPtBins.data(), &(dummy), "");
         sonic.AddVariable("MET", "MET",  "MET", 4 ,150,550,  &(dummy), "");
         sonic.AddVariable("nJets","nJets","nJets",5,1,5,&(dummy),"");
     
@@ -109,19 +109,10 @@ int main(){
 	sonic.AddChannel("ElTriggerAndMETSel","",&f,"");
 	sonic.AddChannel("METTrigger","",&f,"");
 	sonic.AddChannel("All","",&f,"");
+        sonic.AddChannel("ElChannel","ElChannel", &f, "");
+        sonic.AddChannel("MuChannel","MuChannel", &f, "");
+        sonic.AddChannel("LepChannel","MuChannel", &f, "");
 
-
-        sonic.AddRegion("all","all",&f,"");
-        sonic.AddRegion("METTrigger","MET Trigger",&f,"");
-        sonic.AddRegion("METMHTTrigger","MET Trigger",&f,"");
-        sonic.AddRegion("ElTrigger","Electron Trigger",&f,"");
-        sonic.AddRegion("MuTrigger","Muon Trigger",&f,"");
-        sonic.AddRegion("ORTrigger","ORTrigger",&f,"");
-        sonic.AddRegion("CombinedMETMu","CombinedMETMuTrigger", &f,"");
-        sonic.AddRegion("CombinedMETEl","CombinedMETElTrigger", &f, "");
-        sonic.AddRegion("CombinedMETMHTMu","CombinedMETMHTMuTrigger", &f, "");
-        sonic.AddRegion("CombinedMETMHTEl","CombinedMETMHTElTrigger", &f, "");
-    
         sonic.AddChannel("DoubleMuTrigger","DoubleMuTrigger",&f,"");
         sonic.AddChannel("DoubleElTrigger","DoubleElTrigger",&f,"");
         sonic.AddChannel("MuElTrigger","MuElTrigger",&f,"");
@@ -132,6 +123,20 @@ int main(){
         sonic.AddChannel("DoubleElTriggerAndDiElSel","PassDoubleElTriggerAndDiElSel",&f);
         sonic.AddChannel("DoubleMuTriggerAndDiMuSelBaseline","PassDoubleMuTriggerAndDiMuSelBaseline",&f);
         sonic.AddChannel("DoubleElTriggerAndDiElSelBaseline","PassDoubleElTriggerAndDiElSelBaseline",&f);
+
+
+        sonic.AddRegion("all","all",&f,"");
+        sonic.AddRegion("METTrigger","MET Trigger",&f,"");
+        sonic.AddRegion("METMHTTrigger","MET Trigger",&f,"");
+        sonic.AddRegion("ElTrigger","Electron Trigger",&f,"");
+        sonic.AddRegion("MuTrigger","Muon Trigger",&f,"");
+        sonic.AddRegion("ORTrigger","ORTrigger",&f,"");
+        sonic.AddRegion("CombinedMET","CombinedMETTrigger", &f,"");
+        sonic.AddRegion("CombinedMETMu","CombinedMETMuTrigger", &f,"");
+        sonic.AddRegion("CombinedMETEl","CombinedMETElTrigger", &f, "");
+        sonic.AddRegion("CombinedMETMHTMu","CombinedMETMHTMuTrigger", &f, "");
+        sonic.AddRegion("CombinedMETMHTEl","CombinedMETMHTElTrigger", &f, "");
+    
     
 	sonic.Create1DHistos();
 
@@ -289,6 +294,10 @@ int main(){
 	AddEfficiency(fout,sonic,"MET", processClass,  "CombinedMETMHTMu","DoubleMuTriggerAndDiMuSelBaseline");
 	AddEfficiency(fout,sonic,"nJets", processClass,  "CombinedMETMu","DoubleMuTriggerAndDiMuSelBaseline");
 	AddEfficiency(fout,sonic,"nJets", processClass,  "CombinedMETMHTMu","DoubleMuTriggerAndDiMuSelBaseline");	
+
+	AddEfficiency(fout,sonic,"MET", processClass,  "CombinedMETMHTEl","ElChannel");
+	AddEfficiency(fout,sonic,"MET", processClass,  "CombinedMETMHTMu","MuChannel");
+
 
 
 	//Superpose graph

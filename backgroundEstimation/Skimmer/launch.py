@@ -9,8 +9,9 @@ executable = "./a.out "
 ifilename = "/opt/sbg/scratch1/cms/echabert/store/tmp/tmp/JetHT/PBSjob"
 ofilename = "output_"
 treename  = "babyTuple"
+#selection = "lep1_pt>20&&pfmet>150"
 selection = "lep1_pt>20"
-njobs = 530
+njobs = 550
 
 	#let number=$number+1 ;./a.out ${ifilename}_${number}_${number}.root ${treename} ${ofilename}_${number}.root ${selection} &
 

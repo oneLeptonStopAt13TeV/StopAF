@@ -46,8 +46,9 @@ int main(){
 	
 	//string region = "CombinedMETEl";
 	//string region = "METTrigger";
-	string region = "CombinedMETMHTMu";
-	//string region = "CombinedMETMu";
+	//string region = "CombinedMETMHTMu";
+	//string region = "CombinedMET";
+	string region = "CombinedMETMu";
 	//string region = "CombinedMETMHTEl";
 	//string region = "CombinedMETEl";
 	//string channel = "All";
@@ -56,11 +57,14 @@ int main(){
 	//string channel = "DoubleElTriggerAndElSel";
 	//string channel = "DoubleMuTriggerAndDiMuSel";
 	//string channel = "DoubleElTriggerAndDiElSel";
-	string channel = "DoubleMuTriggerAndDiMuSelBaseline";
+	//string channel = "DoubleMuTriggerAndDiMuSelBaseline";
 	//string channel = "DoubleElTriggerAndDiElSelBaseline";
-	//string variables = "LeptonPT[vs]MET";
-	string variables = "nJets[vs]MET";
-	string var_plotlabel = "vX:nJets|vY:MET";
+	string channel = "MuChannel";
+	//string channel = "LepChannel";
+	string variables = "LeptonPT[vs]MET";
+	//string variables = "nJets[vs]MET";
+	//string var_plotlabel = "vX:nJets|vY:MET";
+	string var_plotlabel = "vX:LeptonPT|vY:MET";
 	//string title = string("; Lepton PT [GeV]; MET [GeV]");
 	string title = string("; nJets; MET [GeV]");
 	string pname = "test";
