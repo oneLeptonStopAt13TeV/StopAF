@@ -35,6 +35,8 @@ typedef struct
     vector<float> jet_puid;
     vector<float> jet_CSV;
     vector<bool>  jet_loose_pfid;
+    vector<string> trigger_name;
+    vector<bool>   trigger_pass;
     float         dphi_Wlep;
     float         ak4_htssm;
     float         lep1_d0;
@@ -111,7 +113,7 @@ typedef struct
     vector<bool>  ak4pfjets_loose_pfid;
     int           ngoodjets;
     float         lep1_passVeto;
-    float         pfmet;
+    float         pfmet = -13;
     float         lep1_MiniIso;
     int           lumiId;
     float         lep1_phi;
@@ -139,6 +141,7 @@ typedef struct
     float         secondLeptonIso;
     int           numberOfSelectedElectrons;
     bool          HLT_SingleMu;
+    bool          HLT_PFMET;
     vector<float> ak4pfjets_CSV;
     vector<float> ak4pfjets_qgtag;
     int           ngoodleps;
@@ -261,6 +264,9 @@ typedef struct
     vector<int>* pointerForak4pfjets_partonFlavour;
     vector<float>* pointerForak4pfjets_qgtag;
 
+    vector<string>* pointerForTriggerName;
+    vector<bool>* pointerForTriggerPass;
+
    //Add content
    TLorentzVector leadingLepton;
    TLorentzVector secondLepton;
@@ -275,6 +281,9 @@ babyEvent;
 void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
 {
     myEvent->hasGenInfo = false;
+
+    myEvent->pointerForTriggerName = NULL;
+    myEvent->pointerForTriggerPass = NULL;
 
     #ifdef USE_JETS
     myEvent->pointerForak4pfjets_pt = 0;
@@ -355,13 +364,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     //trigger
     theTree->SetBranchAddress("HLT_SingleMu",            &(myEvent->HLT_SingleMu));
     theTree->SetBranchAddress("HLT_SingleE",             &(myEvent->HLT_SingleE));
+    theTree->SetBranchAddress("HLT_PFMET",               &(myEvent->HLT_PFMET));
+    theTree->SetBranchAddress("trigger_name",            &(myEvent->pointerForTriggerName));
+    theTree->SetBranchAddress("trigger_pass",            &(myEvent->pointerForTriggerPass));
     
     //vetos
     theTree->SetBranchAddress("PassTrackVeto",            &(myEvent->PassTrackVeto));
     theTree->SetBranchAddress("PassTauVeto",             &(myEvent->PassTauVeto));
     
     //gen met
-    theTree->SetBranchAddress("metGen_pt",            &(myEvent->metGen_pt));
+    theTree->SetBranchAddress("metGen_pt",              &(myEvent->metGen_pt));
     theTree->SetBranchAddress("metGen_phi",             &(myEvent->metGen_phi));
     
     //needed to define the channel !
@@ -603,13 +615,16 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     //myEvent->ak4pfjets_pt.clear();
     //myEvent->ak4pfjets_pt = pts;
     //myEvent->ak4pfjets_phi              = *(myEvent->pointerForak4pfjets_pt);
-    myEvent->ak4pfjets_phi             = *(myEvent->pointerForak4pfjets_phi);
-    myEvent->ak4pfjets_eta             = *(myEvent->pointerForak4pfjets_eta);
+    //myEvent->ak4pfjets_phi             = *(myEvent->pointerForak4pfjets_phi);
+    //myEvent->ak4pfjets_eta             = *(myEvent->pointerForak4pfjets_eta);
     //myEvent->ak4pfjets_mass            = *(myEvent->pointerForak4pfjets_mass);
     //myEvent->ak4pfjets_loose_pfid      = *(myEvent->pointerForak4pfjets_loose_pfid);
     //myEvent->ak4pfjets_CSV             = *(myEvent->pointerForak4pfjets_CSV);
    
     //
+
+    myEvent->trigger_name        = *(myEvent->pointerForTriggerName);
+    myEvent->trigger_pass        = *(myEvent->pointerForTriggerPass);
     #ifdef USE_JETS
     //std::cout << "setting jet info" << std::endl;
     myEvent->jet_pt              = *(myEvent->pointerForak4pfjets_pt);
@@ -619,6 +634,8 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->jet_CSV             = *(myEvent->pointerForak4pfjets_CSV);
     myEvent->ak4pfjets_partonFlavour = *(myEvent->pointerForak4pfjets_partonFlavour);
     myEvent->ak4pfjets_qgtag     = *(myEvent->pointerForak4pfjets_qgtag);
+    myEvent->ak4pfjets_pt              = *(myEvent->pointerForak4pfjets_pt);
+    myEvent->ak4pfjets_phi             = *(myEvent->pointerForak4pfjets_phi);
     #endif
     #ifdef USE_JETS_EXT
     myEvent->jet_puid      	= *(myEvent->pointerForak4pfjets_puid);
