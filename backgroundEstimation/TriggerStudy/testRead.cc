@@ -5,22 +5,27 @@
 using namespace std;
 
 int main(){
+	//One need to follow the sequence of methods in order to properly load the histograms
 
         vector<string> processes;
-	theDoctor::SonicScrewdriver sonic;
+	cout<<" - Create an instance of SonicScrewdriver with a parameter = false in order to not create default yield plots"<<endl;
+	theDoctor::SonicScrewdriver sonic(false);
+	cout<<" - Load XML file "<<endl;
 	sonic.LoadXMLConfig("config.xml");
-        //sonic.GetProcessClassTagList(&label);
-        //for(uint32_t i = 0; i< label.size(); i++)
-        //{cout << label.at(i) << endl;}
-	//sonic.SchedulePlots("1DSuperimposed");
-        //sonic.WritePlots("./plotsTest2/");
-        sonic.GetProcessClassTagList(&processes);
-        vector<TH1D*> h;
-        h =  sonic.Get1DHistoCloneFromFile("plotsTest", "1DSuperimposed","MET",processes,"CR1l","lepChannel");
-	//sonic.ImportHistosFromFile("plotsTest/1DSuperimposed.root");		
-	//sonic.MakePlots();
-	///TH1D* h = sonic.Get1DHistoClone();
-	cout<<"size of histos: " <<h.size()<<endl;
-	//cout<< h->GetBinContent(1)<<endl;
-	std::cout<<h.at(0)->GetEntries()<<std::endl;
+	cout<<" - Create the Histos (here 1D)"<<endl;
+    	sonic.Create1DHistos();
+	cout<<" - Schedule plots"<<endl;
+	sonic.SchedulePlots("1DSuperimposed");
+	cout<<" - Import histos from the root-file"<<endl;
+	sonic.ImportHistosFromFile("plotsTest/1DSuperimposed.root");		
+	cout<<" - Here we could access the plots and change them ... "<<endl;
+	//
+	//
+	// to be filled in needed
+	//
+	//
+	cout<<" - Make plot " <<endl;
+	cout<<" - Write plots" <<endl;
+	sonic.MakePlots();
+	sonic.WritePlots("plotsTest/new");
 }
