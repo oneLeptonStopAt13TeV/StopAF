@@ -8,7 +8,7 @@ using namespace std;
 int main(){
 
         vector<string> processes;
-	theDoctor::SonicScrewdriver sonic;
+	theDoctor::SonicScrewdriver sonic(false);
         sonic.LoadXMLConfig("config.xml");
         sonic.GetProcessClassTagList(&processes);
         vector<TH1D*> h;

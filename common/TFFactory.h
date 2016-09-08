@@ -57,94 +57,22 @@ TFFactory(string inputTable, string region = "standard", double error = 0)
     TFRegion = region;
 }
 
-void defineFactors()
+void defineFactors(string CRtype)
 {
     if(TFRegion == "standard")
         return;
-    else if(TFRegion == "2jMET250to350")
-    {
-        TFmem.CR = "CR2l2jMET250to350";
-        TFmem.SR = "SR1l2jMET250to350";
-    }
-    else if(TFRegion == "2jMET350to450")
-    {
-        TFmem.CR = "CR2l2jMET350to450";
-        TFmem.SR = "SR1l2jMET350to450";
-    }
-    else if(TFRegion == "2jMET450toInf")
-    {
-        TFmem.CR = "CR2l2jMET450toInf";
-        TFmem.SR = "SR1l2jMET450toInf";
-    }
-    else if(TFRegion == "3jMET250to350")
-    {
-        TFmem.CR = "CR2l3jMET250to350";
-        TFmem.SR = "SR1l3jMET250to350";
-    }
-    else if(TFRegion == "3jMET350to450")
-    {
-        TFmem.CR = "CR2l3jMET350to450";
-        TFmem.SR = "SR1l3jMET350to450";
-    }
-    else if(TFRegion == "3jMET450to550")
-    {
-        TFmem.CR = "CR2l3jMET450to550";
-        TFmem.SR = "SR1l3jMET450to550";
-    }
-    else if(TFRegion == "3jMET550toInf")
-    {
-        TFmem.CR = "CR2l3jMET550toInf";
-        TFmem.SR = "SR1l3jMET550toInf";
-    }
-    else if(TFRegion == "4jMET250to350lowMT2W")
-    {
-        TFmem.CR = "CR2l4jMET250to350lowMT2W";
-        TFmem.SR = "SR1l4jMET250to350lowMT2W";
-    }
-    else if(TFRegion == "4jMET350to450lowMT2W")
-    {
-        TFmem.CR = "CR2l4jMET350to450lowMT2W";
-        TFmem.SR = "SR1l4jMET350to450lowMT2W";
-    }
-    else if(TFRegion == "4jMET450toInflowMT2W")
-    {
-        TFmem.CR = "CR2l4jMET450toInflowMT2W";
-        TFmem.SR = "SR1l4jMET450toInflowMT2W";
-    }
-    else if(TFRegion == "4jMET250to350highMT2W")
-    {
-        TFmem.CR = "CR2l4jMET250to350highMT2W";
-        TFmem.SR = "SR1l4jMET250to350highMT2W";
-    }
-    else if(TFRegion == "4jMET350to450highMT2W")
-    {
-        TFmem.CR = "CR2l4jMET350to450highMT2W";
-        TFmem.SR = "SR1l4jMET350to450highMT2W";
-    }
-    else if(TFRegion == "4jMET450to550highMT2W")
-    {
-        TFmem.CR = "CR2l4jMET450to550highMT2W";
-        TFmem.SR = "SR1l4jMET450to550highMT2W";
-    }
-    else if(TFRegion == "4jMET550to650highMT2W")
-    {
-        TFmem.CR = "CR2l4jMET550to650highMT2W";
-        TFmem.SR = "SR1l4jMET550to650highMT2W";
-    }
-    else if(TFRegion == "4jMET650toInfhighMT2W")
-    {
-        TFmem.CR = "CR2l4jMET650toInfhighMT2W";
-        TFmem.SR = "SR1l4jMET650toInfhighMT2W";
-    }
     else
-        throw std::runtime_error("region not known");
+    {
+        TFmem.CR = CRtype + TFRegion;
+        TFmem.SR = "SR1l" + TFRegion;
+    }
 
 }
 
-void readFactors()
+void readFactors(string CRtype)
 {
 
-    defineFactors();
+    defineFactors(CRtype);
 
     dataCR = tab.Get(TFmem.CR,TFmem.data);
     MCSR = tab.Get(TFmem.SR,TFmem.MC);
@@ -154,11 +82,23 @@ void readFactors()
 
 Figure returnTF()
 {
-    readFactors();
+    if(MCCR.value() != 0)
+        return MCSR/MCCR;
+    else 
+        return Figure(-1,0);
+}
+
+Figure returnEstimate()
+{
     if(MCCR.value() != 0)
         return dataCR*(MCSR/MCCR);
     else 
         return Figure(-1,0);
+}
+
+Figure returnCRdata()
+{
+    return dataCR;
 }
 //return TF
 };
@@ -169,31 +109,42 @@ public:
 
 vector<string> TFRegions;
 string TFBkg;
+string controlReg;
 
 public:
 
-TFProducer(vector<string> regions, string bkgType)
+TFProducer(vector<string> regions, string bkgType, string CRtype)
 {
     TFRegions.clear();
     TFRegions = regions;
     TFBkg = bkgType;
+    controlReg = CRtype;
 }
 
 void produceTFTable(string inputName, string outputName)
 {
     vector<string> colId;
+    colId.push_back("CR data");
     colId.push_back("TF");
+    colId.push_back(TFBkg);
 
     vector<string> rowId;
-    vector<Figure> value;
+    vector<Figure> valueCRdata;
+    vector<Figure> valueTF;
+    vector<Figure> valueEst;
 
     for(uint32_t i=0; i<TFRegions.size(); i++)
     {
         TFFactory fact(inputName, TFRegions.at(i));
         fact.TFmem.MC = TFBkg;
-        Figure res = fact.returnTF();
+        fact.readFactors(controlReg);
+        Figure resCRdata = fact.returnCRdata();
+        Figure resTF = fact.returnTF();
+        Figure resEst = fact.returnEstimate();
 
-        value.push_back(res);
+        valueCRdata.push_back(resCRdata);
+        valueTF.push_back(resTF);
+        valueEst.push_back(resEst);
         rowId.push_back(TFRegions.at(i));
     }
 
@@ -201,7 +152,9 @@ void produceTFTable(string inputName, string outputName)
 
     for(uint32_t j=0; j<rowId.size(); j++)
     {
-        outTab.Set(colId.at(0), rowId.at(j), value.at(j));
+        outTab.Set(colId.at(0), rowId.at(j), valueCRdata.at(j));
+        outTab.Set(colId.at(1), rowId.at(j), valueTF.at(j));
+        outTab.Set(colId.at(2), rowId.at(j), valueEst.at(j));
     }
 
     outTab.Print(outputName + ".txt");

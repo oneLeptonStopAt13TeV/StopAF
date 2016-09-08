@@ -35,8 +35,8 @@ typedef struct
     vector<float> jet_puid;
     vector<float> jet_CSV;
     vector<bool>  jet_loose_pfid;
-    vector<string> trigger_name;
-    vector<bool>   trigger_pass;
+    //vector<string> trigger_name;
+    //vector<bool>   trigger_pass;
     float         dphi_Wlep;
     float         ak4_htssm;
     float         lep1_d0;
@@ -50,7 +50,12 @@ typedef struct
     vector<float> ak4pfjets_pt;
     vector<float> ak8pfjets_pt;
     vector<float> ak10pfjets_pt;
-    bool          HLT_SingleE;
+    bool          HLT_Ele25_eta2p1_WPLoose;
+    bool          HLT_Ele27_eta2p1_WPLoose;
+    bool          HLT_IsoMu20;
+    bool          HLT_IsoMu22;
+    bool          HLT_PFMET170;
+    bool          HLT_PFMET100_PFMHT100_IDTight;
     float         ak4_htosm;
     float         ak4_HT;
     vector<float> ak4pfjets_phi;
@@ -140,8 +145,6 @@ typedef struct
     float         ETmiss;
     float         secondLeptonIso;
     int           numberOfSelectedElectrons;
-    bool          HLT_SingleMu;
-    bool          HLT_PFMET;
     vector<float> ak4pfjets_CSV;
     vector<float> ak4pfjets_qgtag;
     int           ngoodleps;
@@ -149,7 +152,7 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    uint32_t      totalNumberOfInitialEvent = -13;
+    int64_t      totalNumberOfInitialEvent = -13;
     //double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
@@ -160,6 +163,10 @@ typedef struct
     int           puIntime = -13;
     int           puTrue = -13;
    
+    vector<float> gen_neutralino_m;
+    vector<float> gen_stop_m;
+    vector<float>* pointerForgen_neutralino_m;
+    vector<float>* pointerForgen_stop_m;
 
     bool PassTrackVeto;
     bool PassTauVeto;
@@ -177,8 +184,6 @@ typedef struct
     vector<float> gen_eta;
     vector<float> gen_phi;
     vector<float> gen_m;
-    vector<float> gen_neutralino_m;
-    vector<float> gen_stop_m;
     vector<int> gen_status;
     vector<int> gen_id;
     vector<int> gen_daughter_n;
@@ -188,8 +193,6 @@ typedef struct
     vector<float>* pointerForgen_eta;
     vector<float>* pointerForgen_phi;
     vector<float>* pointerForgen_m;
-    vector<float>* pointerForgen_neutralino_m;
-    vector<float>* pointerForgen_stop_m;
     vector<int>* pointerForgen_status;
     vector<int>* pointerForgen_id;
     vector<int>* pointerForgen_daughter_n;
@@ -284,6 +287,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
 
     myEvent->pointerForTriggerName = NULL;
     myEvent->pointerForTriggerPass = NULL;
+    myEvent->pointerForgen_neutralino_m = 0;
+    myEvent->pointerForgen_stop_m = 0;
 
     #ifdef USE_JETS
     myEvent->pointerForak4pfjets_pt = 0;
@@ -329,8 +334,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForgen_eta = 0;
     myEvent->pointerForgen_phi = 0;
     myEvent->pointerForgen_m = 0;
-    myEvent->pointerForgen_neutralino_m = 0;
-    myEvent->pointerForgen_stop_m = 0;
     myEvent->pointerForgen_status = 0;
     myEvent->pointerForgen_id = 0;
     myEvent->pointerForgen_daughter_n = 0;
@@ -362,11 +365,18 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("genlepsfromtop",          &(myEvent->genlepsfromtop));
     
     //trigger
-    theTree->SetBranchAddress("HLT_SingleMu",            &(myEvent->HLT_SingleMu));
-    theTree->SetBranchAddress("HLT_SingleE",             &(myEvent->HLT_SingleE));
-    theTree->SetBranchAddress("HLT_PFMET",               &(myEvent->HLT_PFMET));
-    theTree->SetBranchAddress("trigger_name",            &(myEvent->pointerForTriggerName));
-    theTree->SetBranchAddress("trigger_pass",            &(myEvent->pointerForTriggerPass));
+    theTree->SetBranchAddress("HLT_Ele25_eta2p1_WPLoose",            &(myEvent->HLT_Ele25_eta2p1_WPLoose));
+    theTree->SetBranchAddress("HLT_Ele27_eta2p1_WPLoose",            &(myEvent->HLT_Ele27_eta2p1_WPLoose));
+    theTree->SetBranchAddress("HLT_IsoMu20",            &(myEvent->HLT_IsoMu20));
+    theTree->SetBranchAddress("HLT_IsoMu22",            &(myEvent->HLT_IsoMu22));
+    theTree->SetBranchAddress("HLT_PFMET170",            &(myEvent->HLT_PFMET170));
+    theTree->SetBranchAddress("HLT_PFMET100_PFMHT100_IDTight",            &(myEvent->HLT_PFMET100_PFMHT100_IDTight));
+    //theTree->SetBranchAddress("trigger_name",            &(myEvent->pointerForTriggerName));
+    //theTree->SetBranchAddress("trigger_pass",            &(myEvent->pointerForTriggerPass));
+    //
+    //signal related
+    theTree->SetBranchAddress("gen_neutralino_m", &(myEvent->pointerForgen_neutralino_m));
+    theTree->SetBranchAddress("gen_stop_m", &(myEvent->pointerForgen_stop_m));
     
     //vetos
     theTree->SetBranchAddress("PassTrackVeto",            &(myEvent->PassTrackVeto));
@@ -553,8 +563,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("gen_eta",  &(myEvent->pointerForgen_eta));
     theTree->SetBranchAddress("gen_phi",  &(myEvent->pointerForgen_phi));
     theTree->SetBranchAddress("gen_m", &(myEvent->pointerForgen_m));
-    theTree->SetBranchAddress("gen_neutralino_m", &(myEvent->pointerForgen_neutralino_m));
-    theTree->SetBranchAddress("gen_stop_m", &(myEvent->pointerForgen_stop_m));
     theTree->SetBranchAddress("gen_status", &(myEvent->pointerForgen_status));
     theTree->SetBranchAddress("gen_id",  &(myEvent->pointerForgen_id));
     theTree->SetBranchAddress("gen_daughter_n",  &(myEvent->pointerForgen_daughter_n));
@@ -623,8 +631,10 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
    
     //
 
-    myEvent->trigger_name        = *(myEvent->pointerForTriggerName);
-    myEvent->trigger_pass        = *(myEvent->pointerForTriggerPass);
+    //myEvent->trigger_name        = *(myEvent->pointerForTriggerName);
+    //myEvent->trigger_pass        = *(myEvent->pointerForTriggerPass);
+    myEvent->gen_neutralino_m	         =                      *(myEvent->pointerForgen_neutralino_m);
+    myEvent->gen_stop_m			 =                      *(myEvent->pointerForgen_stop_m);
     #ifdef USE_JETS
     //std::cout << "setting jet info" << std::endl;
     myEvent->jet_pt              = *(myEvent->pointerForak4pfjets_pt);
@@ -677,8 +687,6 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->gen_eta			 =                      *(myEvent->pointerForgen_eta);
     myEvent->gen_phi			 =                      *(myEvent->pointerForgen_phi);
     myEvent->gen_m			 =                      *(myEvent->pointerForgen_m);
-    myEvent->gen_neutralino_m	         =                      *(myEvent->pointerForgen_neutralino_m);
-    myEvent->gen_stop_m			 =                      *(myEvent->pointerForgen_stop_m);
     myEvent->gen_status			 =                      *(myEvent->pointerForgen_status);
     myEvent->gen_id			 =                      *(myEvent->pointerForgen_id);
     myEvent->gen_daughter_n			 =              *(myEvent->pointerForgen_daughter_n);

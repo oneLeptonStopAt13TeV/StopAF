@@ -57,7 +57,7 @@ struct EventCategory{
 
 
 	void Reset();
-	void Update(bool data);
+	void Update(bool data, string dataset);
 
     private:
         bool passMETMHTTrigger;
@@ -109,7 +109,9 @@ void EventCategory::Reset(){
 	 FourJets_highMT2W_MET_650 = false;
 }
 
-void EventCategory::Update(bool data){
+void EventCategory::Update(bool data, string dataset){
+        if(dataset == "")
+            throw std::runtime_error("dataset for using the trigger info not specified");
 	// One lepton events (CR or CR1l) - includes the vetoes
 	if(myEvent.ngoodleps == 1 && myEvent.PassTrackVeto && myEvent.PassTauVeto){
 		OneLep = true;
@@ -131,25 +133,25 @@ void EventCategory::Update(bool data){
         if(data)
         {
 		// METMH, electron or muon trigger 
-		for(unsigned int i=0; i<myEvent.trigger_name.size();i++)
-		{
+		//for(unsigned int i=0; i<myEvent.trigger_name.size();i++)
+		//{
 			// -- MET MHT trigger
-			if(myEvent.trigger_name[i].find("HLT_PFMET170_")!=std::string::npos)
-                                if(myEvent.trigger_pass[i]) passMETMHTTrigger = true;
-			if(myEvent.trigger_name[i].find("HLT_PFMET100_PFMHT100_IDTight")!=std::string::npos)
-				if(myEvent.trigger_pass[i]) passMETMHTTrigger = true;
+			if(myEvent.HLT_PFMET170 == true && dataset.find("MET")!=std::string::npos)
+                                passMETMHTTrigger = true;
+			if(myEvent.HLT_PFMET100_PFMHT100_IDTight  == true && dataset.find("MET")!=std::string::npos)
+				passMETMHTTrigger = true;
 			// -- Electron trigger
-			if(myEvent.trigger_name[i].find("HLT_Ele25_eta2p1_WPLoose")!=std::string::npos)
-				if(myEvent.trigger_pass[i] && abs(myEvent.lep1_pdgid) == 11) passElTrigger = true;
-			if(myEvent.trigger_name[i].find("HLT_Ele27_eta2p1_WPLoose")!=std::string::npos )		
-				if(myEvent.trigger_pass[i] && abs(myEvent.lep1_pdgid) == 11) passElTrigger = true;
+			if(myEvent.HLT_Ele25_eta2p1_WPLoose  == true && dataset.find("SE")!=std::string::npos)
+			        if(abs(myEvent.lep1_pdgid) == 11) passElTrigger = true;
+			if(myEvent.HLT_Ele27_eta2p1_WPLoose  == true && dataset.find("SE")!=std::string::npos )		
+				if(abs(myEvent.lep1_pdgid) == 11) passElTrigger = true;
 			
 			// -- Muon trigger
-			if(myEvent.trigger_name[i].find("HLT_IsoMu20_")!=std::string::npos)
-				if(myEvent.trigger_pass[i] && abs(myEvent.lep1_pdgid) == 13) passMuTrigger = true;
-			if(myEvent.trigger_name[i].find("HLT_IsoMu22_")!=std::string::npos)
-				if(myEvent.trigger_pass[i] && abs(myEvent.lep1_pdgid) == 13) passMuTrigger = true;
-		 }
+			if(myEvent.HLT_IsoMu20 == true && dataset.find("SM")!=std::string::npos)
+				if(abs(myEvent.lep1_pdgid) == 13) passMuTrigger = true;
+			if(myEvent.HLT_IsoMu22  == true && dataset.find("SM")!=std::string::npos)
+				if(abs(myEvent.lep1_pdgid) == 13) passMuTrigger = true; //string in recompute that I have the right dataset name
+		 //}
 
 		 if(passMETMHTTrigger == true || passElTrigger == true || passMuTrigger == true) trigged = true;
          }
@@ -189,8 +191,8 @@ void EventCategory::Update(bool data){
 			if(myEvent.pfmet >= 250 && myEvent.pfmet <350) FourJets_highMT2W_MET_250 = true;
 			if(myEvent.pfmet >= 350 && myEvent.pfmet <450) FourJets_highMT2W_MET_350 = true;
 			if(myEvent.pfmet >= 450 && myEvent.pfmet <550) FourJets_highMT2W_MET_450 = true;
-			if(myEvent.pfmet >= 550 && myEvent.pfmet <550) FourJets_highMT2W_MET_450 = true;
-			if(myEvent.pfmet >= 650) FourJets_highMT2W_MET_450 = true;
+			if(myEvent.pfmet >= 550 && myEvent.pfmet <650) FourJets_highMT2W_MET_550 = true;
+			if(myEvent.pfmet >= 650) FourJets_highMT2W_MET_650 = true;
 		}
 	}
 	
@@ -202,10 +204,10 @@ void EventCategory::Update(bool data){
 void RecomputeMETAndDerivedQuantities(){
 }
 
-void recompute(bool dataIn = false)
+void recompute(bool dataIn = false, string dataset = "")
 {
     eventCat.Reset();
-    eventCat.Update(dataIn);
+    eventCat.Update(dataIn, dataset);
 }
 
 //--------------
@@ -271,7 +273,7 @@ bool FourJets_highMT2W_MET_650(){ return eventCat.FourJets_highMT2W_MET_650;}
 
 //SR1l
 // 2 jets bins (include mod_top>6.4)
-bool SR1l2jMET250to350(){ return eventCat.TwoJets_MET_350 && SR1l();}
+bool SR1l2jMET250to350(){ return eventCat.TwoJets_MET_250 && SR1l();}
 bool SR1l2jMET350to450(){ return eventCat.TwoJets_MET_350 && SR1l();}
 bool SR1l2jMET450toInf(){ return eventCat.TwoJets_MET_450 && SR1l();}
 
@@ -286,7 +288,7 @@ bool SR1l3jMET550toInf(){ return eventCat.ThreeJets_hightMT2W_MET_550 && SR1l();
 // low MT2W
 bool SR1l4jMET250to350lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_250 && SR1l();}
 bool SR1l4jMET350to450lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_350 && SR1l();}
-bool SR1l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450;}
+bool SR1l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450&& SR1l();}
 
 //- high MT2W
 bool SR1l4jMET250to350highMT2W(){ return eventCat.FourJets_highMT2W_MET_250 && SR1l();}
@@ -297,7 +299,7 @@ bool SR1l4jMET650toInfhighMT2W(){ return eventCat.FourJets_highMT2W_MET_650 && S
 
 /////CR2l
 // 2 jets bins (include mod_top>6.4)
-bool CR2l2jMET250to350(){ return eventCat.TwoJets_MET_350 && CR2l();}
+bool CR2l2jMET250to350(){ return eventCat.TwoJets_MET_250 && CR2l();}
 bool CR2l2jMET350to450(){ return eventCat.TwoJets_MET_350 && CR2l();}
 bool CR2l2jMET450toInf(){ return eventCat.TwoJets_MET_450 && CR2l();}
 
@@ -312,7 +314,7 @@ bool CR2l3jMET550toInf(){ return eventCat.ThreeJets_hightMT2W_MET_550 && CR2l();
 // low MT2W
 bool CR2l4jMET250to350lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_250 && CR2l();}
 bool CR2l4jMET350to450lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_350 && CR2l();}
-bool CR2l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450;}
+bool CR2l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450&& CR2l();}
 
 //- high MT2W
 bool CR2l4jMET250to350highMT2W(){ return eventCat.FourJets_highMT2W_MET_250 && CR2l();}
@@ -323,7 +325,7 @@ bool CR2l4jMET650toInfhighMT2W(){ return eventCat.FourJets_highMT2W_MET_650 && C
 
 /////CR1l
 // 2 jets bins (include mod_top>6.4)
-bool CR1l2jMET250to350(){ return eventCat.TwoJets_MET_350 && CR1l();}
+bool CR1l2jMET250to350(){ return eventCat.TwoJets_MET_250 && CR1l();}
 bool CR1l2jMET350to450(){ return eventCat.TwoJets_MET_350 && CR1l();}
 bool CR1l2jMET450toInf(){ return eventCat.TwoJets_MET_450 && CR1l();}
 
@@ -338,7 +340,7 @@ bool CR1l3jMET550toInf(){ return eventCat.ThreeJets_hightMT2W_MET_550 && CR1l();
 // low MT2W
 bool CR1l4jMET250to350lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_250 && CR1l();}
 bool CR1l4jMET350to450lowMT2W(){ return eventCat.FourJets_lowMT2W_MET_350 && CR1l();}
-bool CR1l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450;}
+bool CR1l4jMET450toInflowMT2W(){ return eventCat.FourJets_lowMT2W_MET_450 && CR1l();}
 
 //- high MT2W
 bool CR1l4jMET250to350highMT2W(){ return eventCat.FourJets_highMT2W_MET_250 && CR1l();}

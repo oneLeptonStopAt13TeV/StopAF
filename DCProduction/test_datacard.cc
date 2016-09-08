@@ -37,7 +37,8 @@ int main(int argc, char *argv[]){
             mydata.push_back(mylineData);
         }
 
-        if(mydata.size() != 5)
+        cout << "#processes: " << mydata.size() << endl; 
+        if(mydata.size() > 5)
             throw std::runtime_error("more datasets than expected");
         if(mydata.at(0).size() != 4)
             throw std::runtime_error("more parameters than expected");
@@ -88,6 +89,6 @@ int main(int argc, char *argv[]){
             combineStr += outStr + ".txt ";
         }
 
-        cout << "output string: " << combineStr << endl; 
+        cout << "output string: " << combineStr << " > " <<  mydata.at(0).at(1) << ".log" << endl; 
 
 }

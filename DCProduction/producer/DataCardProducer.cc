@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <sstream> 
 
-
+using namespace theDoctor;
 
 void DataCardProducer::ReadTable(const string& table_name){
 	table = Table(table_name);
@@ -59,8 +59,8 @@ void DataCardProducer::WriteBinCard(const string& ofilename, int iBin){
 	ofile<<"bin\t\t"<<iBin<<endl;
 	float n_data = 0;
 	//retrieve n_data
-	//n_data = table.Get(bins_table_names[iBin], proc_table_names[sigBin]).value(); //@MJ@ TODO, what should this be? // now it will be signal
-	n_data = 0;
+	n_data = table.Get(bins_table_names[iBin], "data").value(); //@MJ@ TODO, what should this be? // now it will be signal
+        n_data = n_data == -1 ? 0 : n_data;
         ofile<<"observation\t\t"<<n_data<<endl;
 	
 	// Processes and rate
