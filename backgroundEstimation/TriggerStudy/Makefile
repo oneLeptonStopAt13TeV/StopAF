@@ -22,6 +22,7 @@ LDFLAGS      += $(ROOTLIBS)  -lEG -lTMVA
 #LDFLAGS      += -l:`pwd`/../../sonicScrewdriver/libSonicScrewdriver.so
 #LDFLAGS      += -l:`pwd`/chi2/libChi2.so
 LDFLAGS      += ../../sonicScrewdriver/libSonicScrewdriver.so
+LDFLAGS	     += ../../Tools/Weighting/libToolsWeighting.so
 SOFLAGS       = -shared
 LIBS          = -lm 
 
