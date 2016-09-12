@@ -24,7 +24,7 @@ LDFLAGS      += $(ROOTLIBS)  -lEG -lTMVA
 LDFLAGS      += ../../sonicScrewdriver/libSonicScrewdriver.so
 SOFLAGS       = -shared
 LIBS          = -lm 
-
+DEFINES	      = -DPATH=\"`pwd`\"
 # Uncomment this line if you want to use a script to parse & colorize gcc output
 # (You can also export this variable from your bashrc)
 #GCCPARSER     = 2>&1 | python ~/littleScripts/colorGcc.py
@@ -64,7 +64,7 @@ clean:
 #------------------------------------------------------------------------------
 
 %.o: %.cc
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LIBS) $(GCCPARSER)
+	$(CXX) $(CXXFLAGS) $(DEFINES) -c -o $@ $< $(LIBS) $(GCCPARSER)
 
 %.$(ExeSuf): %.$(SrcSuf)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS) $(GCCPARSER)
+	$(CXX) $(CXXFLAGS) $(DEFINES) $(LDFLAGS) -o $@ $< $(LIBS) $(GCCPARSER)
