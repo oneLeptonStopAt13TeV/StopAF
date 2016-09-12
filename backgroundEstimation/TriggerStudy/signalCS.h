@@ -30,6 +30,12 @@ float returnSigCS(float stopm)
     else if(stopm == 850) return 0.0189612;
     else if(stopm == 900) return 0.0128895;
     else if(stopm == 950) return 0.00883465;
+    else if(stopm == 1000) return 0.00615134;
+    else if(stopm == 1050) return 0.00432261;
+    else if(stopm == 1100) return 0.00307413;
+    else if(stopm == 1150) return 0.00221047;
+    else if(stopm == 1200) return 0.00159844;
+    else if(stopm == 1250) return 0.0011583;
     else 
     {
         std::cout << "stop mass: " << stopm << std::endl;
