@@ -22,7 +22,6 @@ LDFLAGS      += $(ROOTLIBS)  -lEG -lTMVA
 #LDFLAGS      += -l:`pwd`/../../sonicScrewdriver/libSonicScrewdriver.so
 #LDFLAGS      += -l:`pwd`/chi2/libChi2.so
 LDFLAGS      += ../../sonicScrewdriver/libSonicScrewdriver.so
-LDFLAGS	     += ../../Tools/Weighting/libToolsWeighting.so
 SOFLAGS       = -shared
 LIBS          = -lm 
 
@@ -38,6 +37,14 @@ EXECUTABLES   = $(SOURCES:.$(SrcSuf)=.$(ExeSuf))
 LOGS          = $(SOURCES:.$(SrcSuf)=.$(LogSuf))
 
 #------------------------------------------------------------------------------
+
+
+
+lib:  libToolsWeighting.so
+
+libToolsWeighting.so: $(OBJECTS) 
+	@echo "Building libSonicScrewdriver..."
+	$(LD) -L${ROOTSYS}/lib $+ -o $@ $(LIBS) $(SOFLAGS) $(LDFLAGS)
 
 #TARGET = ttMarketaStudy
 TARGET = TriggerEfficiency
@@ -55,6 +62,9 @@ clean:
 	@rm -f *.$(ObjSuf) *.$(ExeSuf) *.$(LogSuf)
 
 #------------------------------------------------------------------------------
+
+%.o: %.cc
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LIBS) $(GCCPARSER)
 
 %.$(ExeSuf): %.$(SrcSuf)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS) $(GCCPARSER)
