@@ -87,12 +87,13 @@ void BabyScrewdriver::Init()
     //AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", 20,   0, 200,  &(myEvent.leadingLeptonPt), "");
     // defined binning
     //AddVariable("MET", "MET",  "MET", (int) (METBins.size()-1), METBins.data(),  &(myEvent.MET), "");
-    AddVariable("MET", "MET",  "MET", 20 ,200,1000,  &(myEvent.pfmet), "");
-    AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,1000,  &(myEvent.MT2W), "");
+    AddVariable("MET", "MET",  "MET", 100 ,200,1000,  &(myEvent.pfmet), "");
+    AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,500,  &(myEvent.MT2W), "");
     AddVariable("MT", "MT",  "MT", 100 ,100,1000,  &(myEvent.mt_met_lep), "");
-    AddVariable("topness","topness","topness",20,0,20,&(myEvent.topness),"");
+    AddVariable("topness","topness","topness",100,-20,20,&(myEvent.topness),"");
     AddVariable("nJets","nJets","nJets",5,1,5,&(myEvent.ngoodjets),"");
-    AddVariable("dphi","dphi","dphi",50,0,5,&(myEvent.ngoodjets),"");
+    AddVariable("dphi","dphi","dphi", 100,0,3.5,&(myEvent.dphi_ak4pfjets_met),"");
+    AddVariable("nvertex","nvertex","nvertex",50,0,50,&(myEvent.nvertex),"");
 
     // ------------------
     // Datasets
@@ -236,11 +237,72 @@ void BabyScrewdriver::Init()
     AddRegion("CR1l4jMET550to650highMT2W","CR1l4jMET550to650highMT2W", &CR1l4jMET550to650highMT2W);
     AddRegion("CR1l4jMET650toInfhighMT2W","CR1l4jMET650toInfhighMT2W", &CR1l4jMET650toInfhighMT2W);
 
+
     AddRegion("SR1lTwoJets","SR1lTwoJets", &SR1lTwoJets);
     AddRegion("SR1lThreeJetsHighMT2W","SR1lThreeJetsHighMT2W", &SR1lThreeJetsHighMT2W);
     AddRegion("SR1lFourJetsHighMT2W","SR1lFourJetsHighMT2W", &SR1lFourJetsHighMT2W);
     AddRegion("SR1lFourJetsLowMT2W","SR1lFourJetsLowMT2W", &SR1lFourJetsLowMT2W);
 
+    vector<Cut> lowPU;
+    lowPU.push_back(Cut("nvertex", '<', 20));
+    vector<Cut> highPU;
+    highPU.push_back(Cut("nvertex", '>', 20));
+
+    /*AddRegion("SR1lTwoJetsLowPU","SR1lTwoJetsLowPU", lowPU);
+    AddRegion("SR1lThreeJetsHighMT2WLowPU","SR1lThreeJetsHighMT2WLowPU", lowPU);
+    AddRegion("SR1lFourJetsHighMT2WLowPU","SR1lFourJetsHighMT2WLowPU", lowPU);
+    AddRegion("SR1lFourJetsLowMT2WLowPU","SR1lFourJetsLowMT2WLowPU", lowPU);
+
+    AddRegion("SR1lTwoJetsHighPU","SR1lTwoJetsHighPU", highPU);
+    AddRegion("SR1lThreeJetsHighMT2WHighPU","SR1lThreeJetsHighMT2WHighPU", highPU);
+    AddRegion("SR1lFourJetsHighMT2WHighPU","SR1lFourJetsHighMT2WHighPU", highPU);
+    AddRegion("SR1lFourJetsLowMT2WHighPU","SR1lFourJetsLowMT2WHighPU", highPU);*/
+
+    //low PU //@MJ@ TODO other cuts
+
+    AddRegion("SR1l2jMET250to350LowPU","SR1l2jMET250to350LowPU","SR1l2jMET250to350",lowPU); //@MJ@ TODO thing in time about more flexible naming/regions
+    AddRegion("SR1l2jMET350to450LowPU","SR1l2jMET350to450LowPU","SR1l2jMET350to450",lowPU);
+    AddRegion("SR1l2jMET450toInfLowPU","SR1l2jMET450toInfLowPU","SR1l2jMET450toInf",lowPU);
+    
+    AddRegion("SR1l3jMET250to350LowPU","SR1l3jMET250to350LowPU", "SR1l3jMET250to350",lowPU);
+    AddRegion("SR1l3jMET350to450LowPU","SR1l3jMET350to450LowPU", "SR1l3jMET350to450",lowPU);
+    AddRegion("SR1l3jMET450to550LowPU","SR1l3jMET450to550LowPU", "SR1l3jMET450to550",lowPU);
+    AddRegion("SR1l3jMET550toInfLowPU","SR1l3jMET550toInfLowPU", "SR1l3jMET550toInf",lowPU);
+
+    AddRegion("SR1l4jMET250to350lowMT2WLowPU","SR1l4jMET250to350lowMT2WLowPU", "SR1l4jMET250to350lowMT2W",lowPU);
+    AddRegion("SR1l4jMET350to450lowMT2WLowPU","SR1l4jMET350to450lowMT2WLowPU", "SR1l4jMET350to450lowMT2W",lowPU);
+    AddRegion("SR1l4jMET450toInflowMT2WLowPU","SR1l4jMET450toInflowMT2WLowPU", "SR1l4jMET450toInflowMT2W",lowPU);
+
+    AddRegion("SR1l4jMET250to350highMT2WLowPU","SR1l4jMET250to350highMT2WLowPU", "SR1l4jMET250to350highMT2W",lowPU);
+    AddRegion("SR1l4jMET350to450highMT2WLowPU","SR1l4jMET350to450highMT2WLowPU", "SR1l4jMET350to450highMT2W",lowPU);
+    AddRegion("SR1l4jMET450to550highMT2WLowPU","SR1l4jMET450to550highMT2WLowPU", "SR1l4jMET450to550highMT2W",lowPU);
+    AddRegion("SR1l4jMET550to650highMT2WLowPU","SR1l4jMET550to650highMT2WLowPU", "SR1l4jMET550to650highMT2W",lowPU);
+    AddRegion("SR1l4jMET650toInfhighMT2WLowPU","SR1l4jMET650toInfhighMT2WLowPU", "SR1l4jMET650toInfhighMT2W",lowPU);
+
+    //high PU
+
+    AddRegion("SR1l2jMET250to350HighPU","SR1l2jMET250to350HighPU","SR1l2jMET250to350",highPU); //@MJ@ TODO thing in time about more flexible naming/regions
+    AddRegion("SR1l2jMET350to450HighPU","SR1l2jMET350to450HighPU","SR1l2jMET350to450",highPU);
+    AddRegion("SR1l2jMET450toInfHighPU","SR1l2jMET450toInfHighPU","SR1l2jMET450toInf",highPU);
+    
+    AddRegion("SR1l3jMET250to350HighPU","SR1l3jMET250to350HighPU", "SR1l3jMET250to350",highPU);
+    AddRegion("SR1l3jMET350to450HighPU","SR1l3jMET350to450HighPU", "SR1l3jMET350to450",highPU);
+    AddRegion("SR1l3jMET450to550HighPU","SR1l3jMET450to550HighPU", "SR1l3jMET450to550",highPU);
+    AddRegion("SR1l3jMET550toInfHighPU","SR1l3jMET550toInfHighPU", "SR1l3jMET550toInf",highPU);
+
+    AddRegion("SR1l4jMET250to350lowMT2WHighPU","SR1l4jMET250to350lowMT2WHighPU", "SR1l4jMET250to350lowMT2W",highPU);
+    AddRegion("SR1l4jMET350to450lowMT2WHighPU","SR1l4jMET350to450lowMT2WHighPU", "SR1l4jMET350to450lowMT2W",highPU);
+    AddRegion("SR1l4jMET450toInflowMT2WHighPU","SR1l4jMET450toInflowMT2WHighPU", "SR1l4jMET450toInflowMT2W",highPU);
+
+    AddRegion("SR1l4jMET250to350highMT2WHighPU","SR1l4jMET250to350highMT2WHighPU", "SR1l4jMET250to350highMT2W",highPU);
+    AddRegion("SR1l4jMET350to450highMT2WHighPU","SR1l4jMET350to450highMT2WHighPU", "SR1l4jMET350to450highMT2W",highPU);
+    AddRegion("SR1l4jMET450to550highMT2WHighPU","SR1l4jMET450to550highMT2WHighPU", "SR1l4jMET450to550highMT2W",highPU);
+    AddRegion("SR1l4jMET550to650highMT2WHighPU","SR1l4jMET550to650highMT2WHighPU", "SR1l4jMET550to650highMT2W",highPU);
+    AddRegion("SR1l4jMET650toInfhighMT2WHighPU","SR1l4jMET650toInfhighMT2WHighPU", "SR1l4jMET650toInfhighMT2W",highPU);
+
+    AddRegion("Baseline","Baseline", &Baseline);
+    AddRegion("BaselineHighPU","BaselineHighPU","Baseline",highPU);
+    AddRegion("BaselineLowPU","BaselineLowPU","Baseline",lowPU);
     // ------------------
     // Channels
     // ------------------
@@ -315,6 +377,11 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     else if (currentProcessClass == "test" && (myEvent.numberOfGeneratedLeptons < 2))
     {
         currentProcessClass = "singleLepton";
+    }
+    else if(currentProcessClass == "test") 
+    {
+        cout << "nr of leptons " << myEvent.numberOfGeneratedLeptons <<endl;
+        throw std::runtime_error("This should not happen");
     }
     else
     {}
@@ -401,6 +468,7 @@ void BabyScrewdriver::PostProcessingStep()
     //
 
     SchedulePlots("1DSuperimposed");
+    SchedulePlots("1DSuperimposedNoNorm");
     SchedulePlots("1DStack");
     //SchedulePlots("2D");
 
@@ -472,10 +540,28 @@ void BabyScrewdriver::PostProcessingStep()
         }
         sigfile.close();
     }
+
+
+    vector<string> signalRegPU = {"SR1l2jMET250to350LowPU","SR1l2jMET350to450LowPU","SR1l2jMET450toInfLowPU","SR1l3jMET250to350LowPU","SR1l3jMET350to450LowPU","SR1l3jMET450to550LowPU","SR1l3jMET550toInfLowPU","SR1l4jMET250to350lowMT2WLowPU","SR1l4jMET350to450lowMT2WLowPU","SR1l4jMET450toInflowMT2WLowPU","SR1l4jMET250to350highMT2WLowPU","SR1l4jMET350to450highMT2WLowPU","SR1l4jMET450to550highMT2WLowPU","SR1l4jMET550to650highMT2WLowPU","SR1l4jMET650toInfhighMT2WLowPU", "SR1l2jMET250to350HighPU","SR1l2jMET350to450HighPU","SR1l2jMET450toInfHighPU","SR1l3jMET250to350HighPU","SR1l3jMET350to450HighPU","SR1l3jMET450to550HighPU","SR1l3jMET550toInfHighPU","SR1l4jMET250to350lowMT2WHighPU","SR1l4jMET350to450lowMT2WHighPU","SR1l4jMET450toInflowMT2WHighPU","SR1l4jMET250to350highMT2WHighPU","SR1l4jMET350to450highMT2WHighPU","SR1l4jMET450to550highMT2WHighPU","SR1l4jMET550to650highMT2WHighPU","SR1l4jMET650toInfhighMT2WHighPU"};
+    TableDataMC(this, signalRegPU,"lepChannel", "includeSignal" ).Print("signalRegPU.tab", 4);
+    TableDataMC(this, signalRegPU,"lepChannel", "includeSignal" ).PrintLatex("signalRegPU.tex", 4);
+    
+    vector<string> signalRegBlPU = { "BaselineHighPU" ,"BaselineLowPU" };
+    TableDataMC(this, signalRegBlPU,"lepChannel", "includeSignal" ).Print("signalRegBlPU.tab", 4);
+    TableDataMC(this, signalRegBlPU,"lepChannel", "includeSignal" ).PrintLatex("signalRegBlPU.tex", 4);
     
     vector<string> totYield = {"SR1l", "CR1l", "CR2l", "SR1l2jMET250to350","SR1l2jMET350to450","SR1l2jMET450toInf","SR1l3jMET250to350","SR1l3jMET350to450","SR1l3jMET450to550","SR1l3jMET550toInf","SR1l4jMET250to350lowMT2W","SR1l4jMET350to450lowMT2W","SR1l4jMET450toInflowMT2W","SR1l4jMET250to350highMT2W","SR1l4jMET350to450highMT2W","SR1l4jMET450to550highMT2W","SR1l4jMET550to650highMT2W","SR1l4jMET650toInfhighMT2W" , "CR2l2jMET250to350","CR2l2jMET350to450","CR2l2jMET450toInf","CR2l3jMET250to350","CR2l3jMET350to450","CR2l3jMET450to550","CR2l3jMET550toInf","CR2l4jMET250to350lowMT2W","CR2l4jMET350to450lowMT2W","CR2l4jMET450toInflowMT2W","CR2l4jMET250to350highMT2W","CR2l4jMET350to450highMT2W","CR2l4jMET450to550highMT2W","CR2l4jMET550to650highMT2W","CR2l4jMET650toInfhighMT2W" , "CR1l2jMET250to350","CR1l2jMET350to450","CR1l2jMET450toInf","CR1l3jMET250to350","CR1l3jMET350to450","CR1l3jMET450to550","CR1l3jMET550toInf","CR1l4jMET250to350lowMT2W","CR1l4jMET350to450lowMT2W","CR1l4jMET450toInflowMT2W","CR1l4jMET250to350highMT2W","CR1l4jMET350to450highMT2W","CR1l4jMET450to550highMT2W","CR1l4jMET550to650highMT2W","CR1l4jMET650toInfhighMT2W", "SR1lTwoJets","SR1lThreeJetsHighMT2W","SR1lFourJetsHighMT2W","SR1lFourJetsLowMT2W"};
     TableDataMC(this, totYield,"lepChannel" ).Print("yield.tab", 4);
     TableDataMC(this, totYield,"lepChannel" ).PrintLatex("yield.tex", 4);
+
+
+    vector<string> yieldCR1l = {"CR1l", "CR1l2jMET250to350","CR1l2jMET350to450","CR1l2jMET450toInf","CR1l3jMET250to350","CR1l3jMET350to450","CR1l3jMET450to550","CR1l3jMET550toInf","CR1l4jMET250to350lowMT2W","CR1l4jMET350to450lowMT2W","CR1l4jMET450toInflowMT2W","CR1l4jMET250to350highMT2W","CR1l4jMET350to450highMT2W","CR1l4jMET450to550highMT2W","CR1l4jMET550to650highMT2W","CR1l4jMET650toInfhighMT2W"};
+    TableDataMC(this, yieldCR1l,"lepChannel", "includeSignal" ).Print("yieldCR1l.tab", 4);
+    TableDataMC(this, yieldCR1l,"lepChannel", "includeSignal" ).PrintLatex("yieldCR1l.tex", 4);
+    
+    vector<string> yieldCR2l = {"CR2l", "CR2l2jMET250to350","CR2l2jMET350to450","CR2l2jMET450toInf","CR2l3jMET250to350","CR2l3jMET350to450","CR2l3jMET450to550","CR2l3jMET550toInf","CR2l4jMET250to350lowMT2W","CR2l4jMET350to450lowMT2W","CR2l4jMET450toInflowMT2W","CR2l4jMET250to350highMT2W","CR2l4jMET350to450highMT2W","CR2l4jMET450to550highMT2W","CR2l4jMET550to650highMT2W","CR2l4jMET650toInfhighMT2W"};
+    TableDataMC(this, yieldCR2l,"lepChannel", "includeSignal" ).Print("yieldCR2l.tab", 4);
+    TableDataMC(this, yieldCR2l,"lepChannel", "includeSignal" ).PrintLatex("yieldCR2l.tex", 4);
     
     vector<string> tfreg = {"2jMET250to350","2jMET350to450","2jMET450toInf","3jMET250to350","3jMET350to450","3jMET450to550","3jMET550toInf","4jMET250to350lowMT2W","4jMET350to450lowMT2W","4jMET450toInflowMT2W","4jMET250to350highMT2W","4jMET350to450highMT2W","4jMET450to550highMT2W","4jMET550to650highMT2W","4jMET650toInfhighMT2W"};
 

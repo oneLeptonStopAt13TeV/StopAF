@@ -237,7 +237,9 @@ void recompute(bool dataIn = false, string dataset = "")
 //--------------
 //   Channels 
 //--------------
-
+//
+bool Baseline()
+{return eventCat.PassBaselineCuts;}
 //-- Signal regions
 bool SR1l() {
 //cout << "SR1l; one lep: " << eventCat.OneLep << " pass bl: " << eventCat.PassBaselineCuts << " oneB: " << eventCat.OneBtag << endl;
