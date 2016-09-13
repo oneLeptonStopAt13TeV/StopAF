@@ -23,6 +23,7 @@
 //#include "../../common/common.h"
 #include "../../common/TFFactory.h"
 #include "../../common/selection2016.h"
+#include "../../Tools/Weighting/WeightFactory.h"
 #define _METCUT_ 50
 #define _LEPTONPTCUT_ 40
 
@@ -58,6 +59,9 @@ bool lepChannel()
 { 
     return true; 
 }
+    
+//Add this as a global variable 
+WeightFactory WFact;
 
 void BabyScrewdriver::Init()
 {
@@ -67,6 +71,18 @@ void BabyScrewdriver::Init()
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop2016/Synchro/CMSSW_8_0_5/src/store/babyTuples/TriggerStudy/";
     totalNumberOfWorkers = 10;
 
+
+    //@EC@: to be done: put default files in the code itself or load info from a external config file
+    string WPath = "../../Tools/Weighting/files/";
+    //string WPath = "files/";
+    //string CSVfileFullSim = WPath+"CSVv2_ichep_slimmed.csv";
+    string CSVfileFullSim = WPath+"CSVv2_ichep.csv";
+    string CSVfileFastSim = WPath+"CSV_13TEV_Combined_14_7_2016.csv";
+    string BtagEffFullSimFilename = WPath+"btageff__ttbar_powheg_pythia8_25ns.root";
+    string BtagEffFastSimFilename = WPath+"btageff__SMS-T1bbbb-T1qqqq_fastsim.root";
+    WFact.InitializeBtagSFTool( CSVfileFullSim,  CSVfileFastSim,  BtagEffFullSimFilename,  BtagEffFastSimFilename);
+    WFact.InitializeLeptonSFTool();
+    PrintBoxedMessage("Weighting:Initialization ended");
 
     // ------------------
     // Histograms 
@@ -329,6 +345,12 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     //cout << "cross section: " << myEvent.crossSection << endl;
 
 
+    //--- Info about the type of dataset is transmitted to the WeightfFactory
+    currentProcessType == "data" ? WFact.SetIsData(true): WFact.SetIsData(false);
+    currentProcessType == "signal" ? WFact.SetIsFastSim(true): WFact.SetIsFastSim(false);
+    //---------------------
+
+
     TFile *fle = NULL;
     float weightSignal = -13;
     if (currentProcessType == "signal" && (myEvent.gen_stop_m.at(0) == 500 || myEvent.gen_stop_m.at(0) == 1000))
@@ -389,6 +411,13 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     recompute(useTriggerInfo, currentDataset);
 
     float weightLumi = myEvent.crossSection * GetLumi() * myEvent.mc_weight / myEvent.totalNumberOfInitialEvent; //@MJ@ TODO cross section form file?!
+
+    //--- Compute Weights  ---//
+    //we should use hadronFlavour and not partonFlavour but it is not available yet
+    //WFact.BtagWeighComputor (myEvent.ak4pfjets_pt, myEvent.ak4pfjets_eta, myEvent.ak4pfjets_hadronFlavour, myEvent.ak4pfjets_CSV);// should be called once per event
+    WFact.BtagWeighComputor (myEvent.ak4pfjets_pt, myEvent.ak4pfjets_eta, myEvent.ak4pfjets_partonFlavour, myEvent.ak4pfjets_CSV);// should be called once per event
+    double btagWeight = WFact.GetBtagW();
+    //cout<<"btagWeight = "<<btagWeight<<endl;
 
     //if(currentDataset.find("WJets")!=std::string::npos || currentDataset.find("W1Jets")!=std::string::npos || currentDataset.find("W2Jets")!=std::string::npos || currentDataset.find("W3Jets")!=std::string::npos || currentDataset.find("W4Jets")!=std::string::npos)
     //{
