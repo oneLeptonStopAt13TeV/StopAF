@@ -37,10 +37,7 @@ typedef struct
     vector<bool>  jet_loose_pfid;
     //vector<string> trigger_name;
     //vector<bool>   trigger_pass;
-    float         dphi_Wlep;
-    float         ak4_htssm;
     float         lep1_d0;
-    float         dR_lep_leadb;
     int           numberOfSelectedLeptons;
     float         lep2_d0;
     vector<float> ak4pfjets_puid;
@@ -56,8 +53,6 @@ typedef struct
     bool          HLT_IsoMu22;
     bool          HLT_PFMET170;
     bool          HLT_PFMET100_PFMHT100_IDTight;
-    float         ak4_htosm;
-    float         ak4_HT;
     vector<float> ak4pfjets_phi;
     vector<float> ak8pfjets_phi;
     vector<float> ak10pfjets_phi;
@@ -152,7 +147,8 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    int64_t      totalNumberOfInitialEvent = -13;
+    Int_t      totalNumberOfInitialEvent = -13;
+    //int64_t      totalNumberOfInitialEvent = -13;
     //double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
@@ -184,6 +180,11 @@ typedef struct
     float Meff;
     float MTdeco_Q;
     float DeltaPtbb;
+    float dphi_Wlep;
+    float dR_lep_leadb;
+    float ak4_HT;
+    float ak4_htssm;
+    float ak4_htosm;
     #endif
 
     #ifdef USE_GEN_LOSTLEPTON
@@ -512,21 +513,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("nvertex",                 &(myEvent->nvertex));
     theTree->SetBranchAddress("puIntime",                &(myEvent->puIntime));
     theTree->SetBranchAddress("puTrue",                  &(myEvent->puTrue));
-    theTree->SetBranchAddress("dphi_Wlep",               &(myEvent->dphi_Wlep));
     #endif
 
     #ifdef USE_GLOBAL_VAR
-    theTree->SetBranchAddress("ak4_htssm",               &(myEvent->ak4_htssm));
-    theTree->SetBranchAddress("ak4_htosm",               &(myEvent->ak4_htosm));
-    theTree->SetBranchAddress("ak4_HT",                  &(myEvent->ak4_HT));
-    theTree->SetBranchAddress("dR_lep_leadb",            &(myEvent->dR_lep_leadb));
     theTree->SetBranchAddress("Mjjj",                    &(myEvent->Mjjj));
     theTree->SetBranchAddress("Mlb",                     &(myEvent->Mlb));
     theTree->SetBranchAddress("Mlb_leadb",               &(myEvent->Mlb_leadb));
     theTree->SetBranchAddress("topness",                 &(myEvent->topness));
     theTree->SetBranchAddress("leadingLeptonId",         &(myEvent->leadingLeptonId));
     theTree->SetBranchAddress("numberOfGeneratedLeptons",&(myEvent->numberOfGeneratedLeptons));
-    endif
+    #endif
     
     #ifdef USE_NEW_VAR
     theTree->SetBranchAddress("ST"		,&(myEvent->ST));
@@ -534,6 +530,11 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("Meff"		,&(myEvent->Meff));
     theTree->SetBranchAddress("MTdeco_Q"	,&(myEvent->MTdeco_Q));
     theTree->SetBranchAddress("DeltaPtbb"	,&(myEvent->DeltaPtbb));
+    theTree->SetBranchAddress("dphi_Wlep",	&(myEvent->dphi_Wlep));
+    theTree->SetBranchAddress("dR_lep_leadb",	&(myEvent->dR_lep_leadb));
+    theTree->SetBranchAddress("ak4_HT",		&(myEvent->ak4_HT));
+    theTree->SetBranchAddress("ak4_htssm",	&(myEvent->ak4_htssm));
+    theTree->SetBranchAddress("ak4_htosm",	&(myEvent->ak4_htosm));
     #endif
 
     #ifdef USE_GEN_LOSTLEPTON
