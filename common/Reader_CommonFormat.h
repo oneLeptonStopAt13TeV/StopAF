@@ -178,6 +178,24 @@ typedef struct
     vector<float> ak8pfjets_nsubjettines; //WARNING! this is empty now
     vector<float> ak10pfjets_nsubjettines; //WARNING! this is empty now
 
+    #ifdef USE_NEW_VAR
+    float ST;
+    float LP;
+    float Meff;
+    float MTdeco_Q;
+    float DeltaPtbb;
+    #endif
+
+    #ifdef USE_GEN_LOSTLEPTON
+    vector<float>* pointerForGenLostLeptons_pt;
+    vector<float>* pointerForGenLostLeptons_eta;
+    vector<float>* pointerForGenLostLeptons_pdgid;
+    
+    vector<float> genLostLeptons_pt;
+    vector<float> genLostLeptons_eta;
+    vector<float> genLostLeptons_pdgid;
+    #endif
+
     #ifdef USE_GEN_INFO
     int gen_n;
     vector<float> gen_pt;
@@ -345,6 +363,12 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForgen_mother_index = 0;
     #endif 
     
+    #ifdef USE_GEN_LOSTLEPTON
+    myEvent->pointerForGenLostLeptons_pt = 0;
+    myEvent->pointerForGenLostLeptons_eta = 0;
+    myEvent->pointerForGenLostLeptons_pdgid = 0;
+    #endif
+
     //not in the common format but needed
     //theTree->SetBranchAddress("scale1fb",                &(myEvent->scale1fb));
     //theTree->SetBranchAddress("crossSection",            &(myEvent->crossSection));
@@ -502,6 +526,20 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("topness",                 &(myEvent->topness));
     theTree->SetBranchAddress("leadingLeptonId",         &(myEvent->leadingLeptonId));
     theTree->SetBranchAddress("numberOfGeneratedLeptons",&(myEvent->numberOfGeneratedLeptons));
+    endif
+    
+    #ifdef USE_NEW_VAR
+    theTree->SetBranchAddress("ST"		,&(myEvent->ST));
+    theTree->SetBranchAddress("LP"		,&(myEvent->LP));
+    theTree->SetBranchAddress("Meff"		,&(myEvent->Meff));
+    theTree->SetBranchAddress("MTdeco_Q"	,&(myEvent->MTdeco_Q));
+    theTree->SetBranchAddress("DeltaPtbb"	,&(myEvent->DeltaPtbb));
+    #endif
+
+    #ifdef USE_GEN_LOSTLEPTON
+    theTree->SetBranchAddress("genLostLeptons_pt",	&(myEvent->pointerForGenLostLeptons_pt));
+    theTree->SetBranchAddress("genLostLeptons_eta",	&(myEvent->pointerForGenLostLeptons_eta));
+    theTree->SetBranchAddress("genLostLeptons_pdgid",   &(myEvent->pointerForGenLostLeptons_pdgid));
     #endif
 
     //old framework
@@ -708,6 +746,12 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->gen_charge			 =                      *(myEvent->pointerForgen_charge);
     myEvent->gen_index			 =                      *(myEvent->pointerForgen_index);
     myEvent->gen_mother_index			 =              *(myEvent->pointerForgen_mother_index);
+    #endif
+    
+    #ifdef USE_GEN_LOSTLEPTON
+    myEvent->genLostLeptons_pt = *myEvent->pointerForGenLostLeptons_pt;
+    myEvent->genLostLeptons_eta = *myEvent->pointerForGenLostLeptons_eta;
+    myEvent->genLostLeptons_pdgid = *myEvent->pointerForGenLostLeptons_pdgid;
     #endif
 
     //Fill temporary info
