@@ -21,6 +21,7 @@ using namespace std;
 // To Be DONE
 // -btagging weights: done as US group
 //   does not treat SF for C ...
+//   do not propage the uncertainties yet
 
 
 class WeightFactory{
@@ -92,6 +93,9 @@ class WeightFactory{
 	  BTagCalibrationReader* reader_heavy;
 	  BTagCalibrationReader* reader_heavy_UP;
 	  BTagCalibrationReader* reader_heavy_DN;
+	  BTagCalibrationReader* reader_c;
+	  BTagCalibrationReader* reader_c_UP;
+	  BTagCalibrationReader* reader_c_DN;
 	  BTagCalibrationReader* reader_light;
 	  BTagCalibrationReader* reader_light_UP;
 	  BTagCalibrationReader* reader_light_DN;
@@ -104,9 +108,12 @@ class WeightFactory{
 		//-- for fastsim --//
 	  
 	  BTagCalibration* calib_fastsim;
-	  BTagCalibrationReader* reader_fastsim;
-	  BTagCalibrationReader* reader_fastsim_UP;
-	  BTagCalibrationReader* reader_fastsim_DN;
+	  BTagCalibrationReader* reader_light_fastsim;
+	  BTagCalibrationReader* reader_light_fastsim_UP;
+	  BTagCalibrationReader* reader_light_fastsim_DN;
+	  BTagCalibrationReader* reader_heavy_fastsim;
+	  BTagCalibrationReader* reader_heavy_fastsim_UP;
+	  BTagCalibrationReader* reader_heavy_fastsim_DN;
 
 		//-- fastsim plots
 	  TH2D* h_btag_eff_b_fastsim;
