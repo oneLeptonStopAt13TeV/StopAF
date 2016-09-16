@@ -100,6 +100,7 @@ typedef struct
     vector<float> ak8pfjets_tau2;
     vector<float> ak10pfjets_tau2;
     vector<int>   ak4pfjets_partonFlavour;
+    vector<int>   ak4pfjets_hadronFlavour;
     int           ngoodbtags;
     float         lep2_eta;
     float         crossSection = -13;
@@ -284,6 +285,7 @@ typedef struct
     vector<bool>*  pointerForak4pfjets_loose_pfid;
     vector<float>* pointerForak4pfjets_CSV;
     vector<int>* pointerForak4pfjets_partonFlavour;
+    vector<int>* pointerForak4pfjets_hadronFlavour;
     vector<float>* pointerForak4pfjets_qgtag;
 
     vector<string>* pointerForTriggerName;
@@ -318,6 +320,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForak4pfjets_loose_pfid = 0;
     myEvent->pointerForak4pfjets_CSV = 0;
     myEvent->pointerForak4pfjets_partonFlavour = 0;
+    myEvent->pointerForak4pfjets_hadronFlavour = 0;
     myEvent->pointerForak4pfjets_qgtag = 0;
     #endif
 
@@ -449,6 +452,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("ak4pfjets_mass",          &(myEvent->pointerForak4pfjets_mass));
     theTree->SetBranchAddress("ak4pfjets_CSV",           &(myEvent->pointerForak4pfjets_CSV));
     theTree->SetBranchAddress("ak4pfjets_partonFlavour", &(myEvent->pointerForak4pfjets_partonFlavour));
+    theTree->SetBranchAddress("ak4pfjets_hadronFlavour", &(myEvent->pointerForak4pfjets_hadronFlavour));
     theTree->SetBranchAddress("ak4pfjets_qgtag",           &(myEvent->pointerForak4pfjets_qgtag));
     #endif
 
@@ -682,8 +686,11 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->jet_mass            = *(myEvent->pointerForak4pfjets_mass);
     myEvent->jet_CSV             = *(myEvent->pointerForak4pfjets_CSV);
     myEvent->ak4pfjets_partonFlavour = *(myEvent->pointerForak4pfjets_partonFlavour);
+    myEvent->ak4pfjets_hadronFlavour = *(myEvent->pointerForak4pfjets_hadronFlavour);
     myEvent->ak4pfjets_qgtag     = *(myEvent->pointerForak4pfjets_qgtag);
     myEvent->ak4pfjets_pt              = *(myEvent->pointerForak4pfjets_pt);
+    myEvent->ak4pfjets_eta              = *(myEvent->pointerForak4pfjets_eta);
+    myEvent->ak4pfjets_CSV              = *(myEvent->pointerForak4pfjets_CSV);
     myEvent->ak4pfjets_phi             = *(myEvent->pointerForak4pfjets_phi);
     #endif
     #ifdef USE_JETS_EXT
