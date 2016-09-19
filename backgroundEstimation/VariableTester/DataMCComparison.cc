@@ -20,6 +20,7 @@
 #define USE_WEIGHTS
 #define USE_GLOBAL_VAR
 #define USE_NEW_VAR
+#define USE_GEN_LOSTLEPTON
 
 //#include "../../common/common.h"
 #include "../../common/TFFactory.h"
@@ -56,6 +57,12 @@ TAxis *yaxis = NULL;
 
 map< pair<uint32_t,uint32_t>, string > scanMap;
 
+
+//new variable
+
+float METSig= 0;
+float DeltaPhibb = 0;
+
 bool lepChannel() 
 { 
     return true; 
@@ -69,7 +76,8 @@ void BabyScrewdriver::Init()
     PrintBoxedMessage("Initializing babyScrewdriver");
 
     //babyTuplePath = "/opt/sbg/scratch1/cms/mjansova/store/tmp/0909/";
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/14_09/";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/14_09/";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/16_09/";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop2016/Synchro/CMSSW_8_0_5/src/store/babyTuples/TriggerStudy/";
     totalNumberOfWorkers = 10;
 
@@ -108,7 +116,7 @@ void BabyScrewdriver::Init()
     AddVariable("MET", "MET",  "MET", 20 ,200,1000,  &(myEvent.pfmet), "");
     AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,1000,  &(myEvent.MT2W), "");
     AddVariable("MT", "MT",  "MT", 100 ,100,1000,  &(myEvent.mt_met_lep), "");
-    AddVariable("topness","topness","topness",20,0,20,&(myEvent.topness),"");
+    AddVariable("topness","topness","topness",20,-20,20,&(myEvent.topness),"");
     AddVariable("nJets","nJets","nJets",5,1,5,&(myEvent.ngoodjets),"");
     AddVariable("dphi","dphi","dphi",50,0,5,&(myEvent.ngoodjets),"");
     AddVariable("ST", "ST", "S_{T}",25,0,1000,&(myEvent.ST),"");
@@ -116,11 +124,15 @@ void BabyScrewdriver::Init()
     AddVariable("Meff", "Meff", "M_{eff}",25,0,4000,&(myEvent.Meff),"");
     AddVariable("MTdeco_Q", "MTdeco_Q", "MTdeco_Q",30,0,600,&(myEvent.MTdeco_Q),"");
     AddVariable("DeltaPtbb", "DeltaPtbb", "DeltaPtbb",25,0,1,&(myEvent.DeltaPtbb),"");
+    //AddVariable("DeltaPhibb", "DeltaPhibb", "DeltaPhibb",50,-3.5,3.5,&(myEvent.DeltaPhibb),"");
+    AddVariable("DeltaPhibb", "DeltaPhibb", "DeltaPhibb",50,0,3.5,&(DeltaPhibb),"");
+    AddVariable("DeltaRbb", "DeltaRbb", "DeltaRbb",50,0,3.5,&(myEvent.DeltaRbb),"");
     AddVariable("dphi_Wlep", "dphi_Wlep", "dphi_Wlep",25,0,3.5,&(myEvent.dphi_Wlep),"");
     AddVariable("dR_lep_leadb", "dR_lep_leadb", "dR_lep_leadb",25,0,3.5,&(myEvent.dR_lep_leadb),"");
     AddVariable("ak4_HT", "ak4_HT", "ak4_HT",25,0,2000,&(myEvent.ak4_HT),"");
     AddVariable("ak4_htssm", "ak4_htssm", "ak4_htssm",25,0,1000,&(myEvent.ak4_htssm),"");
-    AddVariable("ak4_htosm", "ak4_htosm", "ak4_htosm",25,0,1500,&(myEvent.ak4_htosm),"ak4_htosm");
+    AddVariable("ak4_htosm", "ak4_htosm", "ak4_htosm",25,0,1500,&(myEvent.ak4_htosm),"");
+    AddVariable("METSig", "MET Significance", "MET/sqrt(HT}",60,0,30,&METSig,"");
 
 
     // ------------------
@@ -177,8 +189,12 @@ void BabyScrewdriver::Init()
     AddProcessClass("data", "data", "data", COLORPLOT_BLACK); //kViolet);
     	AddDataset("SE_0", "data", 0, 0 );
     	AddDataset("SE_1", "data", 0, 0 );
+    	AddDataset("SE_C", "data", 0, 0 );
+    	AddDataset("SE_D", "data", 0, 0 );
         AddDataset("SM_0", "data", 0, 0 );
         AddDataset("SM_1", "data", 0, 0 );
+        AddDataset("SM_C", "data", 0, 0 );
+        AddDataset("SM_D", "data", 0, 0 );
         //AddDataset("MET_0", "data", 0, 0 );
         //AddDataset("MET_1", "data", 0, 0 );
     
@@ -232,8 +248,8 @@ void BabyScrewdriver::Init()
     AddRegion("SR1l4jMET450to550highMT2W","SR1l4jMET450to550highMT2W", &SR1l4jMET450to550highMT2W);
     AddRegion("SR1l4jMET550to650highMT2W","SR1l4jMET550to650highMT2W", &SR1l4jMET550to650highMT2W);
     AddRegion("SR1l4jMET650toInfhighMT2W","SR1l4jMET650toInfhighMT2W", &SR1l4jMET650toInfhighMT2W);
-
-
+    */
+   /*
     AddRegion("CR2l2jMET250to350","CR2l2jMET250to350",&CR2l2jMET250to350);
     AddRegion("CR2l2jMET350to450","CR2l2jMET350to450",&CR2l2jMET350to450);
     AddRegion("CR2l2jMET450toInf","CR2l2jMET450toInf",&CR2l2jMET450toInf);
@@ -285,8 +301,8 @@ void BabyScrewdriver::Init()
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    //SetLumi(12900.);
-    SetLumi(3900.);
+    SetLumi(12900.);
+    //SetLumi(3900.);
 
     Create1DHistos();
     //Add2DHisto("LeptonPT","MET");
@@ -311,8 +327,11 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     currentProcessType == "signal" ? WFact.SetIsFastSim(true): WFact.SetIsFastSim(false);
     //---------------------
 
+    // --- Recompute variables event per event
+    METSig = myEvent.pfmet/myEvent.ak4_HT;
+    DeltaPhibb = fabs(myEvent.DeltaPhibb);
 
-    TFile *fle = NULL;
+    TFile *file = NULL;
     float weightSignal = -13;
     if (currentProcessType == "signal" && (myEvent.gen_stop_m.at(0) == 500 || myEvent.gen_stop_m.at(0) == 1000))
     {
@@ -320,8 +339,8 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         {
             storedDataset = currentDataset;
             TString fName =  babyTuplePath+currentDataset+".root";
-            fle = new TFile(fName);
-            h2 = (TH2D*)fle->Get("hStopNeutralino")->Clone();
+            file = new TFile(fName);
+            h2 = (TH2D*)file->Get("hStopNeutralino")->Clone();
             xaxis = h2->GetXaxis();
             yaxis = h2->GetYaxis();
         }
@@ -376,6 +395,15 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     double btagWeight = WFact.GetBtagW();
     if(btagWeight==0) cout<<"btagWeight = "<<btagWeight<<endl;
 
+    double lepWeight = 0;
+    if(currentProcessType != "data"){
+    	WFact.LeptonWeightComputor(myEvent.lep1_pt, myEvent.lep1_eta, myEvent.lep1_pdgid, myEvent.lep2_pt, myEvent.lep2_eta, myEvent.lep2_pdgid, myEvent.nvetoleps, myEvent.numberOfSelectedLeptons, myEvent.genLostLeptons_pt.size(), myEvent.genLostLeptons_pt, myEvent.genLostLeptons_eta, myEvent.genLostLeptons_pdgid );
+	lepWeight = WFact.GetLepW();
+    	//cout<<"lepw = "<<lepWeight<<endl;
+    }
+
+
+
     //if(currentDataset.find("WJets")!=std::string::npos || currentDataset.find("W1Jets")!=std::string::npos || currentDataset.find("W2Jets")!=std::string::npos || currentDataset.find("W3Jets")!=std::string::npos || currentDataset.find("W4Jets")!=std::string::npos)
     //{
     //    weightLumi = weightLumi/2;
@@ -385,7 +413,8 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     float weight     = weightLumi;
     if (currentProcessType == "signal") weight = weightSignal;
     if (currentProcessType == "data") weight = 1.0;
-    //else weight*=btagWeight;
+    //else weight*=btagWeight*lepWeight;
+    //else weight*=1;
     
     AutoFillProcessClass(currentProcessClass, weight);
 
@@ -397,7 +426,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         cout << counter << endl;
     }
 
-    //fle->Delete();
+    //file->Delete();
 }
 
 // ################################################################
@@ -458,6 +487,8 @@ void BabyScrewdriver::PostProcessingStep()
     SchedulePlots("1DSuperimposed");
     SchedulePlots("1DStack");
     SchedulePlots("1DDataMCComparison");
+    //SchedulePlots("1DFigureOfMerit","var=DeltaPhibb,cutType=keepHighValues");
+    SchedulePlots("1DFigureOfMerit","var=DeltaPhibb,cutType=keepLowValues,type=sOverSqrtB");
     //SchedulePlots("2D");
 
     // Config plots
