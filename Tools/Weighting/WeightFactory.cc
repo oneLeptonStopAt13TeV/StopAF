@@ -622,7 +622,7 @@ void WeightFactory::InitializeLeptonSFTool(){
 }
 
 
-void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons){
+void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons, vector<float> genLostLeptons_pt, vector<float> genLostLeptons_eta, vector<int> genLostLeptons_pdgid){
       // Lepton SFs
       float lepSF_pt_cutoff = 99.999;
       float lepSF_pt_min    = 10.001;
@@ -764,30 +764,34 @@ void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float le
       
       // If only 1 reco lepton, and is2lep event, then find lost gen lepton
       // Not yet implemented ... need to be ported in pyROOF code ...
-      /*
+      ///*
       if( !isData && nVetoLeptons==1 && NgenLeptons ){
-	
-	for(int iGen=0; iGen<(int)gen_leps.p4.size(); iGen++){
+
+ 	for(int i=0;i<NgenLeptons;i++){
+	//this part commented was ported in PyROOT
+	//for(int iGen=0; iGen<(int)gen_leps.p4.size(); iGen++){
+	  /*
 	  if( abs(gen_leps.id.at(iGen))!=11 && abs(gen_leps.id.at(iGen))!=13 ) continue;
 	  if( !gen_leps.fromHardProcessFinalState.at(iGen) ) continue;
 	  if( !gen_leps.isLastCopy.at(iGen) ) continue;
 	  if( ROOT::Math::VectorUtil::DeltaR(gen_leps.p4.at(iGen), lep1.p4)<matched_dr ) continue;
 	  if( gen_leps.p4.at(iGen).Pt()<5 || fabs(gen_leps.p4.at(iGen).Eta())>2.4 ) continue;
-	  
+	  */
+
 	  TH2D *h_vetoLep_eff = NULL;
-	  if( abs(gen_leps.id.at(iGen))==11 ) h_vetoLep_eff = h_el_vetoLepEff;
-	  if( abs(gen_leps.id.at(iGen))==13 ) h_vetoLep_eff = h_mu_vetoLepEff;
+	  if( abs(genLostLeptons_pdgid[i])==11 ) h_vetoLep_eff = h_el_vetoLepEff;
+	  if( abs(genLostLeptons_pdgid[i])==13 ) h_vetoLep_eff = h_mu_vetoLepEff;
 	  
-	  int binX_eff = h_vetoLep_eff->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)gen_leps.p4.at(iGen).Pt()), lepSF_pt_min ) );
-	  int binY_eff = h_vetoLep_eff->GetYaxis()->FindBin( fabs(gen_leps.p4.at(iGen).Eta()) );
+	  int binX_eff = h_vetoLep_eff->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)genLostLeptons_pt[i]), lepSF_pt_min ) );
+	  int binY_eff = h_vetoLep_eff->GetYaxis()->FindBin( fabs(genLostLeptons_eta[i]) );
 	  double vetoEff = h_vetoLep_eff->GetBinContent( binX_eff, binY_eff );
 	  
 	  TH2D *h_lep_sf = NULL;
-	  if( abs(gen_leps.id.at(iGen))==11 ) h_lep_sf = h_el_SF_veto;
-	  if( abs(gen_leps.id.at(iGen))==13 ) h_lep_sf = h_mu_SF_veto;
+	  if( abs(genLostLeptons_pdgid[i])==11 ) h_lep_sf = h_el_SF_veto;
+	  if( abs(genLostLeptons_pdgid[i])==13 ) h_lep_sf = h_mu_SF_veto;
 
-	  int binX_sf = h_lep_sf->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)gen_leps.p4.at(iGen).Pt()), lepSF_pt_min ) );
-	  int binY_sf = h_lep_sf->GetYaxis()->FindBin( fabs(gen_leps.p4.at(iGen).Eta()) );
+	  int binX_sf = h_lep_sf->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)genLostLeptons_pt[i]), lepSF_pt_min ) );
+	  int binY_sf = h_lep_sf->GetYaxis()->FindBin( fabs(genLostLeptons_eta[i]) );
 	  
 	  double vetoLepSF_temp    = h_lep_sf->GetBinContent( binX_sf, binY_sf );
 	  double vetoLepSF_temp_Up = vetoLepSF_temp + h_lep_sf->GetBinError( binX_sf, binY_sf );
@@ -810,6 +814,7 @@ void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float le
 	} // end loop over gen leptons
 
       } // end if finding gen lost lepton for vetoEff SF
-     	*/
+     //	*/
 
+      Wlep = lepSF;
 }

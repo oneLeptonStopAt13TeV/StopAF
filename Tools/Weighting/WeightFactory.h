@@ -44,7 +44,7 @@ class WeightFactory{
 	float GetBtagEff(const float& pt, const float& eta, const int& mcFlavour); // called by BtagWeighComputor
 	void BtagWeighComputor (const vector<float>& jets_pt, const vector<float>& jets_eta, const vector<int>& jets_hadronFlavour, const vector<float>& jets_CSV);// should be called once per event
 	//float GetLepEff();
-	void LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons);
+	void LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons, vector<float> genLostLeptons_pt, vector<float> genLostLeptons_eta, vector<int> genLostLeptons_pdgid);
 
 	//-- Accessors
 	double GetGlobalW() {return Wglobal;}
