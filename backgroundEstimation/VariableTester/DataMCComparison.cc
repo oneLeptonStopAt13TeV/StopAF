@@ -39,6 +39,67 @@ using namespace std;
 // ----------------------------------------------
 #include "../../sonicScrewdriver/interface/BabyScrewdriver.h"
 
+
+
+//----------------------
+// temporary selection 
+//----------------------
+bool SR1l_2j() {return SR1l() && myEvent.ngoodjets == 2;}
+bool SR1l_3j() {return SR1l() && myEvent.ngoodjets == 3;}
+bool SR1l_4j() {return SR1l() && myEvent.ngoodjets >=4;}
+
+
+bool Pass2LooseB(){
+   if(myEvent.ngoodjets >=2){
+     int nbtag = 0;
+     for(unsigned int i=0;i<myEvent.ak4pfjets_CSV.size();i++){
+     	if(myEvent.ak4pfjets_CSV[i]>=0.46) nbtag++;
+     }
+     if (nbtag>=2) return true;
+   }
+   return false;
+}
+
+///*
+int nMatched2LooseB;
+
+bool SortByCSV(pair<float,int> i, pair<float,int> j) {return (i.first>j.first);}
+
+void MatchBQuarks(){
+	vector<pair<float,int> > jets;
+	if(myEvent.ak4pfjets_CSV.size() != myEvent.ak4pfjets_hadronFlavour.size()){
+		return ;
+	}
+	for(unsigned int i=0;i<myEvent.ak4pfjets_CSV.size();i++){
+		float CSV = myEvent.ak4pfjets_CSV[i];
+		int flavour = myEvent.ak4pfjets_hadronFlavour[i];
+		pair<float,int> pair;
+		pair.first = CSV;
+		pair.second = flavour;
+		//jets.push_back(make_pair<float,int>(myEvent.ak4pfjets_CSV[i],myEvent.ak4pfjets_hadronFlavour[i]));
+		//jets.push_back(make_pair<float,int>(CSV,flavour));
+		jets.push_back(pair);
+	}
+	//sort the collection
+	std::sort(jets.begin(), jets.end(), SortByCSV);
+	//Check the pdgid of the 2 first jets
+	nMatched2LooseB = 0;
+	if(jets.size()>=2){
+		cout<<jets[0].first<<" "<<jets[1].first<<endl;
+		if(fabs(jets[0].second)==5) nMatched2LooseB++;
+		if(fabs(jets[1].second)==5) nMatched2LooseB++;
+	}
+}
+
+
+bool SR1l_2lb() {return SR1l() && Pass2LooseB();}
+bool SR1l_2j_2lb() {return SR1l_2j() && Pass2LooseB();}
+bool SR1l_3j_2lb() {return SR1l_3j() && Pass2LooseB();}
+bool SR1l_4j_2lb() {return SR1l_4j() && Pass2LooseB();}
+bool CR1l_2lb() {return CR1l() && Pass2LooseB();}
+
+//----------------------
+
 uint32_t counter = 0;
 string empty = "";
 vector<string> process_name;
@@ -125,7 +186,7 @@ void BabyScrewdriver::Init()
     AddVariable("MTdeco_Q", "MTdeco_Q", "MTdeco_Q",30,0,600,&(myEvent.MTdeco_Q),"");
     AddVariable("DeltaPtbb", "DeltaPtbb", "DeltaPtbb",25,0,1,&(myEvent.DeltaPtbb),"");
     //AddVariable("DeltaPhibb", "DeltaPhibb", "DeltaPhibb",50,-3.5,3.5,&(myEvent.DeltaPhibb),"");
-    AddVariable("DeltaPhibb", "DeltaPhibb", "DeltaPhibb",50,0,3.5,&(DeltaPhibb),"");
+    AddVariable("DeltaPhibb", "DeltaPhibb", "DeltaPhibb",18,0,3.6,&(DeltaPhibb),"");
     AddVariable("DeltaRbb", "DeltaRbb", "DeltaRbb",50,0,3.5,&(myEvent.DeltaRbb),"");
     AddVariable("dphi_Wlep", "dphi_Wlep", "dphi_Wlep",25,0,3.5,&(myEvent.dphi_Wlep),"");
     AddVariable("dR_lep_leadb", "dR_lep_leadb", "dR_lep_leadb",25,0,3.5,&(myEvent.dR_lep_leadb),"");
@@ -133,6 +194,9 @@ void BabyScrewdriver::Init()
     AddVariable("ak4_htssm", "ak4_htssm", "ak4_htssm",25,0,1000,&(myEvent.ak4_htssm),"");
     AddVariable("ak4_htosm", "ak4_htosm", "ak4_htosm",25,0,1500,&(myEvent.ak4_htosm),"");
     AddVariable("METSig", "MET Significance", "MET/sqrt(HT}",60,0,30,&METSig,"");
+
+    
+    AddVariable("nMatched2LooseB","nMatched2LooseB","nMatched2LooseB",3,0,2,&nMatched2LooseB,"");
 
 
     // ------------------
@@ -172,7 +236,16 @@ void BabyScrewdriver::Init()
                     string stops = to_string(htmp->GetXaxis()->GetBinLowEdge(bx+1));
                     string neutrs = to_string( htmp->GetYaxis()->GetBinLowEdge(by+1));
                     scanMap[key] = stops+"_"+neutrs;
-                    AddProcessClass( stops+"_"+neutrs, stops+"_"+neutrs, "signal", kViolet+citer++);
+                    int i_stop, i_neutrs;
+		    stringstream ss; ss<<stops ; ss>>i_stop;
+		    ss<<neutrs ; ss>>i_neutrs;
+		    stringstream ss2;
+		    cout<<ss.str()<<endl;
+		    ss2<<"("<<i_stop<<","<<i_neutrs<<")"<<endl;
+		    cout<<"name = "<<i_stop<<" "<<i_neutrs<<endl;
+		    cout<<"ss = "<<ss2.str()<<endl;
+		    //AddProcessClass( stops+"_"+neutrs, stops+"_"+neutrs, "signal", kViolet+citer++);
+                    AddProcessClass( stops+"_"+neutrs, ss.str(), "signal", kViolet+citer++);
 		}
             }
         }
@@ -198,7 +271,8 @@ void BabyScrewdriver::Init()
         //AddDataset("MET_0", "data", 0, 0 );
         //AddDataset("MET_1", "data", 0, 0 );
     
-    AddProcessClass("test", "other", "background",kBlack);
+    //AddProcessClass("test", "other", "background",kBlack);
+    AddProcessClass("test", "1l", "background",kGreen);
     	AddDataset("ST_s","test",0,10.11*0.364176);
     	AddDataset("ST_tW_top","test",0,38.09*0.5135);
     	AddDataset("ST_tW_atop","test",0,38.09*0.5135);
@@ -217,18 +291,28 @@ void BabyScrewdriver::Init()
     	AddDataset("VV","test",0,12.05*0.9917);
 
     
-    AddProcessClass("lostLepton", "lostLepton", "background", kPink);
-    AddProcessClass("singleLepton", "singleLepton", "background", kGreen);
-    AddProcessClass("singleLeptonFromT", "singleLeptonFromT", "background", kOrange);
+    AddProcessClass("lostLepton", "lost Lepton", "background", kPink);
+    //AddProcessClass("singleLepton", "1l", "background", kGreen);
+    AddProcessClass("singleLeptonFromT", "1l from top", "background", kOrange);
     
     // ------------------
     // Regions
     // ------------------
     
     AddRegion("SR1l","SR1l",&SR1l);
+    AddRegion("SR1l_2j","SR1l_2j",&SR1l_2j);
+    AddRegion("SR1l_3j","SR1l_3j",&SR1l_3j);
+    AddRegion("SR1l_4j","SR1l_4j",&SR1l_4j);
     AddRegion("CR1l","CR1l",&CR1l);
     AddRegion("CR2l","CR2l",&CR2l);
-	
+
+    AddRegion("SR1l_2lb","SR1l_2lb",&SR1l_2lb);
+    AddRegion("CR1l_2lb","CR1l_2lb",&CR1l_2lb);
+    AddRegion("SR1l_2j_2lb","SR1l_2j_2lb", &SR1l_2j_2lb);
+    AddRegion("SR1l_3j_2lb","SR1l_3j_2lb", &SR1l_3j_2lb);
+    AddRegion("SR1l_4j_2lb","SR1l_4j_2lb", &SR1l_4j_2lb);
+
+
     /*
     AddRegion("SR1l2jMET250to350","SR1l2jMET250to350",&SR1l2jMET250to350); //@MJ@ TODO thing in time about more flexible naming/regions
     AddRegion("SR1l2jMET350to450","SR1l2jMET350to450",&SR1l2jMET350to450);
@@ -307,6 +391,7 @@ void BabyScrewdriver::Init()
     Create1DHistos();
     //Add2DHisto("LeptonPT","MET");
     //Add2DHisto("nJets","MET");
+    Add2DHisto("MET","MT");
 
     WriteXMLConfig(); 
 }
@@ -330,10 +415,12 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     // --- Recompute variables event per event
     METSig = myEvent.pfmet/myEvent.ak4_HT;
     DeltaPhibb = fabs(myEvent.DeltaPhibb);
+    MatchBQuarks(); // call this function to compute nMatched2LooseB 
+
 
     TFile *file = NULL;
     float weightSignal = -13;
-    if (currentProcessType == "signal" && (myEvent.gen_stop_m.at(0) == 500 || myEvent.gen_stop_m.at(0) == 1000))
+    if (currentProcessType == "signal"  && (myEvent.gen_stop_m.at(0) == 500 || myEvent.gen_stop_m.at(0) == 425 || myEvent.gen_stop_m.at(0) == 900))
     {
         if(currentDataset != storedDataset && h2 == NULL) //@MJ@ TODO this can work only with one signal dataset!!!
         {
@@ -357,8 +444,9 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         }
         else
         {
-            cout << "process class not found ;stop" << stopMass <<" ,neutralino: " <<  neutralinoMass << endl;
-        }
+        	//    cout << "process class not found ;stop" << stopMass <<" ,neutralino: " <<  neutralinoMass << endl;
+        	return;
+	}
         Int_t binx = xaxis->FindBin(stopMass);
         Int_t biny = yaxis->FindBin(neutralinoMass);
         uint32_t totalNrOfEvents = h2->GetBinContent(binx, biny);
@@ -378,7 +466,8 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     }
     else if (currentProcessClass == "test" && (myEvent.numberOfGeneratedLeptons < 2))
     {
-        currentProcessClass = "singleLepton";
+        //currentProcessClass = "singleLepton";
+        currentProcessClass = "test";
     }
     else
     {}
@@ -488,8 +577,8 @@ void BabyScrewdriver::PostProcessingStep()
     SchedulePlots("1DStack");
     SchedulePlots("1DDataMCComparison");
     //SchedulePlots("1DFigureOfMerit","var=DeltaPhibb,cutType=keepHighValues");
-    SchedulePlots("1DFigureOfMerit","var=DeltaPhibb,cutType=keepLowValues,type=sOverSqrtB");
-    //SchedulePlots("2D");
+    SchedulePlots("1DFigureOfMerit","var=DeltaPhibb,cutType=keepLowValues,type=sOverSqrtB,minBackground=0");
+    SchedulePlots("2D");
 
     // Config plots
 
@@ -512,7 +601,7 @@ void BabyScrewdriver::PostProcessingStep()
     //  Tables and other stuff
     // ######################
 
-   /*
+   ///*
     vector<string> processClassTags;
     GetProcessClassTagList(&processClassTags);
     for(uint32_t p =0; p< processClassTags.size(); p++)
@@ -547,7 +636,7 @@ void BabyScrewdriver::PostProcessingStep()
               myfile.close();
           }
     }
-
+    /*
     vector<string> signalReg = {"SR1l2jMET250to350","SR1l2jMET350to450","SR1l2jMET450toInf","SR1l3jMET250to350","SR1l3jMET350to450","SR1l3jMET450to550","SR1l3jMET550toInf","SR1l4jMET250to350lowMT2W","SR1l4jMET350to450lowMT2W","SR1l4jMET450toInflowMT2W","SR1l4jMET250to350highMT2W","SR1l4jMET350to450highMT2W","SR1l4jMET450to550highMT2W","SR1l4jMET550to650highMT2W","SR1l4jMET650toInfhighMT2W" };
     TableDataMC(this, signalReg,"lepChannel", "includeSignal" ).Print("signalReg.tab", 4);
     TableDataMC(this, signalReg,"lepChannel", "includeSignal" ).PrintLatex("signalReg.tex", 4);
@@ -560,20 +649,17 @@ void BabyScrewdriver::PostProcessingStep()
         }
         sigfile.close();
     }
+    */
     
-    vector<string> totYield = {"SR1l", "CR1l", "CR2l", "SR1l2jMET250to350","SR1l2jMET350to450","SR1l2jMET450toInf","SR1l3jMET250to350","SR1l3jMET350to450","SR1l3jMET450to550","SR1l3jMET550toInf","SR1l4jMET250to350lowMT2W","SR1l4jMET350to450lowMT2W","SR1l4jMET450toInflowMT2W","SR1l4jMET250to350highMT2W","SR1l4jMET350to450highMT2W","SR1l4jMET450to550highMT2W","SR1l4jMET550to650highMT2W","SR1l4jMET650toInfhighMT2W" , "CR2l2jMET250to350","CR2l2jMET350to450","CR2l2jMET450toInf","CR2l3jMET250to350","CR2l3jMET350to450","CR2l3jMET450to550","CR2l3jMET550toInf","CR2l4jMET250to350lowMT2W","CR2l4jMET350to450lowMT2W","CR2l4jMET450toInflowMT2W","CR2l4jMET250to350highMT2W","CR2l4jMET350to450highMT2W","CR2l4jMET450to550highMT2W","CR2l4jMET550to650highMT2W","CR2l4jMET650toInfhighMT2W" , "CR1l2jMET250to350","CR1l2jMET350to450","CR1l2jMET450toInf","CR1l3jMET250to350","CR1l3jMET350to450","CR1l3jMET450to550","CR1l3jMET550toInf","CR1l4jMET250to350lowMT2W","CR1l4jMET350to450lowMT2W","CR1l4jMET450toInflowMT2W","CR1l4jMET250to350highMT2W","CR1l4jMET350to450highMT2W","CR1l4jMET450to550highMT2W","CR1l4jMET550to650highMT2W","CR1l4jMET650toInfhighMT2W", "SR1lTwoJets","SR1lThreeJetsHighMT2W","SR1lFourJetsHighMT2W","SR1lFourJetsLowMT2W"};
+    //vector<string> totYield = {"SR1l", "CR1l", "CR2l", "SR1l2jMET250to350","SR1l2jMET350to450","SR1l2jMET450toInf","SR1l3jMET250to350","SR1l3jMET350to450","SR1l3jMET450to550","SR1l3jMET550toInf","SR1l4jMET250to350lowMT2W","SR1l4jMET350to450lowMT2W","SR1l4jMET450toInflowMT2W","SR1l4jMET250to350highMT2W","SR1l4jMET350to450highMT2W","SR1l4jMET450to550highMT2W","SR1l4jMET550to650highMT2W","SR1l4jMET650toInfhighMT2W" , "CR2l2jMET250to350","CR2l2jMET350to450","CR2l2jMET450toInf","CR2l3jMET250to350","CR2l3jMET350to450","CR2l3jMET450to550","CR2l3jMET550toInf","CR2l4jMET250to350lowMT2W","CR2l4jMET350to450lowMT2W","CR2l4jMET450toInflowMT2W","CR2l4jMET250to350highMT2W","CR2l4jMET350to450highMT2W","CR2l4jMET450to550highMT2W","CR2l4jMET550to650highMT2W","CR2l4jMET650toInfhighMT2W" , "CR1l2jMET250to350","CR1l2jMET350to450","CR1l2jMET450toInf","CR1l3jMET250to350","CR1l3jMET350to450","CR1l3jMET450to550","CR1l3jMET550toInf","CR1l4jMET250to350lowMT2W","CR1l4jMET350to450lowMT2W","CR1l4jMET450toInflowMT2W","CR1l4jMET250to350highMT2W","CR1l4jMET350to450highMT2W","CR1l4jMET450to550highMT2W","CR1l4jMET550to650highMT2W","CR1l4jMET650toInfhighMT2W", "SR1lTwoJets","SR1lThreeJetsHighMT2W","SR1lFourJetsHighMT2W","SR1lFourJetsLowMT2W"};
+    vector<string> totYield = {"SR1l"};
     TableDataMC(this, totYield,"lepChannel" ).Print("yield.tab", 4);
     TableDataMC(this, totYield,"lepChannel" ).PrintLatex("yield.tex", 4);
     
-    vector<string> tfreg = {"2jMET250to350","2jMET350to450","2jMET450toInf","3jMET250to350","3jMET350to450","3jMET450to550","3jMET550toInf","4jMET250to350lowMT2W","4jMET350to450lowMT2W","4jMET450toInflowMT2W","4jMET250to350highMT2W","4jMET350to450highMT2W","4jMET450to550highMT2W","4jMET550to650highMT2W","4jMET650toInfhighMT2W"};
+    TableZbi(this, totYield,"lepChannel" ).Print("Zbi.tab", 4);
+    TableBackgroundSignal(this, totYield,"lepChannel" ).Print("BkgSig.tab", 4);
+    //CombineCardMaker(this, totYield, "lepChannel", "throw", "StopMass", "NeutralinoMass").Print("card.tab", 4);
 
-    TFProducer prod(tfreg, "lostLepton", "CR2l");
-    prod.produceTFTable("yield.tab", "lostLeptonTF");
-    TFProducer prod2(tfreg, "singleLepton", "CR1l");
-    prod2.produceTFTable("yield.tab", "singleLeptonTF");
-    TFProducer prod3(tfreg, "singleLeptonFromT", "CR1l");
-    prod3.produceTFTable("yield.tab", "singleLeptonFromTTF");
-
-  */
+  //*/
     cout << "end of processing" << endl;
  }
