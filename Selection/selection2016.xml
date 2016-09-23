@@ -2,22 +2,24 @@
 <body>
  <Variables>
    <Variable name="Njets" babyTuple="ngoodjets"/>
+   <Variable name="Nbjets" babyTuple="ngoodbtags"/>
    <Variable name="MET"	  babyTuple="pfmet"/>
    <Variable name="MT" 	  babyTuple="mt_met_lep"/>
    <Variable name="MT2W"  babyTuple="MT2W"/>
    <Variable name="tmod"  babyTuple="topness"/>
    <Variable name="DPhi_jMET" babyTuple="dphi_ak4pfjets_met" />
  </Variables>
+ <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jMET>=0.8 and trigged()" />
  <Regions>
-  <Region name="SR1l" selection="Njets>=2 and "/>
-  <Region name="CR1l" selection=""/>
-  <Region name="CR2l" selection=""/>
+  <Region name="SR1l" selection="Nbjets>=1 and OneLep()"/>
+  <Region name="CR1l" selection="Nbjets==0 and OneLep()"/>
+  <Region name="CR2l" selection="Nbjets>=1 and TwoLep()"/>
  </Regions>
- <Bins name="">
+ <Bins>
   <Bin name="2j" label="2j" selection="Njets==2 and tmod>6.4" METbins="250,350,450,inf" />
   <Bin name="3j" label="3j" selection="Njets==3 and MT2W>200" METbins="250,350,450,550,inf" />
   <Bin name="3j" label="3j" selection="Njets==3 and MT2W>200" METbins="250,350,450,550,inf" />
-  <Bin name="4jLow" label="4jLow" selection="Njets==4 and MT2W!>=200" METbins="250,350,450,inf" />
-  <Bin name="4jHighMT2W" label="4jLowMT2W" selection="Njets==4 and MT2W!>=200" METbins="250,350,450,550,650,inf" />
+  <Bin name="4jLow" label="4jLow" selection="Njets>=4 and MT2W!>=200" METbins="250,350,450,inf" />
+  <Bin name="4jHighMT2W" label="4jLowMT2W" selection="Njets>=4 and MT2W!>=200" METbins="250,350,450,550,650,inf" />
  </Bins>
 </body>
