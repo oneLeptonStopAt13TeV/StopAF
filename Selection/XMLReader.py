@@ -1,46 +1,58 @@
 import xml.etree.ElementTree as ET
+import os
 
+###################################
+# Goal is to create selection.h
+###################################
+
+###################################
+# should become a parameter
+###################################
 ifilename='selection2016.xml'
+template='template.h'
+ofilename='test.h'
 
-#tree = ET.parse(ifilename)
-tree = ET.parse('selection2016.xml')
+tree = ET.parse(ifilename)
+#tree = ET.parse('selection2016.xml')
 #tree = ET.parse('test.xml')
 root = tree.getroot()
 
-#root = ET.fromstring(country_data_as_string)
-
-for child in root:
- print child.tag, child.attrib
 
 import SelectionMaker as sel
 s = sel.Selection()
+
+###################################
+# Add Variable
+###################################
 for var in root.iter("Variable"):
-   print var.attrib
+   #print var.attrib
    s.AddVariable(var.attrib)
 
-
+###################################
+# Add Bins
+###################################
 for bins in root.iter("Bin"):
-   print bins.attrib
-   print type(bins.attrib)
+   #print bins.attrib
    s.AddBin(bins.attrib)
 
+###################################
+# Add Region
+###################################
+for regions in root.iter("Region"):
+   s.AddRegion(regions.attrib)
 
-s.CreateSelFunctions()
+###################################
+# Create selection region
+###################################
+template='template.h'
+ofilename='test.h'
+ofilename2="test2.cc"
+command = "cp "+template+" "+ofilename
+os.system(command)
 
-#for neighbor in root.iter('neighbor'):
-#	print neighbor.attrib
+s.CreateSelFunctions(ofilename)
+s.AddSelection(ofilename2)
 
-#for v in root.iter("var"):
-#   print v
-
-for v in root.findall('var'):
-	print "toto"
-	print v.get('name')
-
-for country in root.findall('country'):
-    rank = country.find('rank').text
-    name = country.get('name')
-    print name, rank
 
 
 

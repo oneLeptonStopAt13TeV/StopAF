@@ -29,6 +29,7 @@ class Selection:
    def __init__(self):
 	self.variables = []
 	self.bins = []
+	self.regions = []
 
    def AddVariable(self, variable_from_xml):
 	self.variables.append(variable_from_xml)
@@ -43,8 +44,16 @@ class Selection:
    	self.bins.append(bin)
 
 
-   def CreateSelFunctions(self):
-   	
+   def AddRegion(self, region_from_xml):
+	region = region_from_xml
+	region['selection'] = region['selection'].replace('and','&&', 100) # max nof occurence = 100
+	region['selection'] = region['selection'].replace('!>','<', 100) # max nof occurence = 100
+	self.regions.append(region)
+
+
+   def CreateSelFunctions(self, ofilename):
+     with open(ofilename, "a") as myfile:
+
 	## replace MET by its babytuple name
 	METbabytuple = "MET"
 	for var in self.variables:
@@ -52,16 +61,39 @@ class Selection:
 	    METbabytuple = "myEvent."+var['babyTuple']
 	####################################
 
-	## loop over the bins
 
-	for bin in self.bins:
-	   METbins = bin['METbins'].split(",")
+	####################################
+	# Create Region function
+	####################################
+	for region in self.regions:
+	       selection = region['selection']
+	       #replace the variable label by their babytuple name
+	       for var in self.variables:
+	         selection = selection.replace(var['name'],"myEvent."+var['babyTuple'])
 	   
-	   ## loop over the MET bins
-	   for i  in range(len(METbins)-1):
-	     #if i!=len(METbins)-1:
-	       name=bin['name']+"_MET"+METbins[i]
-	       selection = bin['selection']+" && "+METbabytuple+">="+METbins[i]
+	       dump = "bool "+region['name']+"() { return ("+selection+" ); }\n" 
+	       myfile.write(dump)
+	       print dump
+
+
+	################################
+	## loop over the regions
+	################################
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       selection = region['name']+"() && "+bin['selection']+" && "+METbabytuple+">="+METbins[i]
 	       if METbins[i+1]!="inf" :
 	         selection+=" && "+METbabytuple+"<"+METbins[i+1]  
 		 name+="to"+METbins[i+1]
@@ -72,9 +104,36 @@ class Selection:
 	       for var in self.variables:
 	         selection = selection.replace(var['name'],"myEvent."+var['babyTuple'])
 	      	 
-	       dump="bool "+name+"() { "+selection+";}"
+	       dump="bool "+name+"() { return ("+selection+");}\n"
+	       myfile.write(dump)
 	       print dump
 
-   #def AddSelection
+   def AddSelection(self,ofilename):
+     with open(ofilename, "a") as myfile:
+	################################
+	## loop over the regions
+	################################
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       if METbins[i+1]!="inf" :
+		 name+="to"+METbins[i+1]
+	       else: 
+	         name+="toInf"
+	      	 
+	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       print dump
 
 
