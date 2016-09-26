@@ -137,3 +137,111 @@ class Selection:
 	       print dump
 
 
+   def DumpAllRegionsVectors(self,ofilename):
+     with open(ofilename, "a") as myfile:
+	################################
+	## loop over the regions
+	################################
+	dump="vector<string> yield = { "
+	myfile.write(dump)
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       if METbins[i+1]!="inf" :
+		 name+="to"+METbins[i+1]
+	       else: 
+	         name+="toInf"
+	      	 
+	       dump= "\""+ name + "\""
+	       myfile.write(dump)
+               #if bin not len(self.bins):
+	       dump= " , "
+	       myfile.write(dump)
+
+        dump = " };\n"
+        myfile.write(dump)
+
+   def DumpSignalRegionsVectors(self,ofilename):
+     with open(ofilename, "a") as myfile:
+	################################
+	## loop over the regions
+	################################
+	dump="vector<string> signalReg = { "
+	myfile.write(dump)
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       if METbins[i+1]!="inf" :
+		 name+="to"+METbins[i+1]
+	       else: 
+	         name+="toInf"
+	      
+               substring = "SR1l"	 
+               if substring in name:
+	         dump= "\"" +name +"\""
+	         myfile.write(dump)
+	         dump= " , "
+	         myfile.write(dump)
+
+        dump = " };\n"
+        myfile.write(dump)
+
+   def DumpTFRegionsVectors(self,ofilename):
+     with open(ofilename, "a") as myfile:
+	################################
+	## loop over the regions
+	################################
+	dump="vector<string> tfreg = { "
+	myfile.write(dump)
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       if METbins[i+1]!="inf" :
+		 name+="to"+METbins[i+1]
+	       else: 
+	         name+="toInf"
+	      
+               substring = "SR1l"	 
+               if substring in name:
+                 name2 = name.replace("SR1l", "")
+	         dump= "\"" + name2 + "\"" 
+	         myfile.write(dump)
+	         dump= " , "
+	         myfile.write(dump)
+
+        dump = " };\n"
+        myfile.write(dump)
+
