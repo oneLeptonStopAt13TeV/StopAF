@@ -8,7 +8,7 @@ import os
 ###################################
 # should become a parameter
 ###################################
-ifilename='selection2016.xml'
+ifilename='selectionHJ.xml'
 template='template.h'
 ofilename='test.h'
 
@@ -47,13 +47,19 @@ for regions in root.iter("Region"):
 template='template.h'
 ofilename='test.h'
 ofilename2="test2.cc"
+ofilename3="yieldStr.h"
+ofilename4="SRStr.h"
+ofilename5="TFStr.h"
+command = "rm " + " " + ofilename +" " + ofilename2 +" " + ofilename3 +" " + ofilename4 +" " + ofilename5
+os.system(command)
 command = "cp "+template+" "+ofilename
 os.system(command)
 
 s.CreateSelFunctions(ofilename)
 s.AddSelection(ofilename2)
-
-
+s.DumpAllRegionsVectors(ofilename3)
+s.DumpSignalRegionsVectors(ofilename4)
+s.DumpTFRegionsVectors(ofilename5)
 
 
 
