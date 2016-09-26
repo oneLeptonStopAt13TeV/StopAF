@@ -15,6 +15,7 @@ WeightFactory::WeightFactory ()
 	  Wmc = 1.0;
 	  Wbtag = 1.0;
 	  Wlep = 1.0;
+	  Wtop_pt = 1.0;
 
           lepSF    = 1.0;
           lepSF_Up = 1.0;
@@ -818,3 +819,11 @@ void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float le
 
       Wlep = lepSF;
 }
+
+double WeightFactory::TopPTWeightComputor(float top_pt){
+	double a = 0.156;
+	double b = -0.00137;
+	Wtop_pt =  exp(a+b*top_pt);
+	return Wtop_pt;
+}
+
