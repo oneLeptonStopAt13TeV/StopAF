@@ -128,7 +128,9 @@ float DeltaPhibb = 0;
 
 bool lepChannel() 
 { 
-    return true; 
+    //return true; 
+    //return fabs(myEvent.DeltaPhibb)>1.5; 
+    return Pass2LooseB();
 }
     
 //Add this as a global variable 

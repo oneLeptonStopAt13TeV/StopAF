@@ -6,7 +6,7 @@ from os import listdir
 from os.path import isfile, join
 import subprocess
 
-WORKERS = 12
+WORKERS = 16
 
 
 ############################################################################
