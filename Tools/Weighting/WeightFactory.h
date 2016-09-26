@@ -21,6 +21,7 @@ using namespace std;
 // To Be DONE
 // -btagging weights: done as US group
 //   does not treat SF for C ...
+//   do not propage the uncertainties yet
 
 
 class WeightFactory{
@@ -43,7 +44,7 @@ class WeightFactory{
 	float GetBtagEff(const float& pt, const float& eta, const int& mcFlavour); // called by BtagWeighComputor
 	void BtagWeighComputor (const vector<float>& jets_pt, const vector<float>& jets_eta, const vector<int>& jets_hadronFlavour, const vector<float>& jets_CSV);// should be called once per event
 	//float GetLepEff();
-	void LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons);
+	void LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons, vector<float> genLostLeptons_pt, vector<float> genLostLeptons_eta, vector<int> genLostLeptons_pdgid);
 
 	//-- Accessors
 	double GetGlobalW() {return Wglobal;}
@@ -92,6 +93,9 @@ class WeightFactory{
 	  BTagCalibrationReader* reader_heavy;
 	  BTagCalibrationReader* reader_heavy_UP;
 	  BTagCalibrationReader* reader_heavy_DN;
+	  BTagCalibrationReader* reader_c;
+	  BTagCalibrationReader* reader_c_UP;
+	  BTagCalibrationReader* reader_c_DN;
 	  BTagCalibrationReader* reader_light;
 	  BTagCalibrationReader* reader_light_UP;
 	  BTagCalibrationReader* reader_light_DN;
@@ -104,9 +108,12 @@ class WeightFactory{
 		//-- for fastsim --//
 	  
 	  BTagCalibration* calib_fastsim;
-	  BTagCalibrationReader* reader_fastsim;
-	  BTagCalibrationReader* reader_fastsim_UP;
-	  BTagCalibrationReader* reader_fastsim_DN;
+	  BTagCalibrationReader* reader_light_fastsim;
+	  BTagCalibrationReader* reader_light_fastsim_UP;
+	  BTagCalibrationReader* reader_light_fastsim_DN;
+	  BTagCalibrationReader* reader_heavy_fastsim;
+	  BTagCalibrationReader* reader_heavy_fastsim_UP;
+	  BTagCalibrationReader* reader_heavy_fastsim_DN;
 
 		//-- fastsim plots
 	  TH2D* h_btag_eff_b_fastsim;

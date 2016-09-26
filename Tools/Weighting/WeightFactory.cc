@@ -37,6 +37,9 @@ WeightFactory::WeightFactory ()
 	  reader_heavy = NULL;
 	  reader_heavy_UP = NULL;
 	  reader_heavy_DN = NULL;
+	  reader_c = NULL;
+	  reader_c_UP = NULL;
+	  reader_c_DN = NULL;
 	  reader_light = NULL;
 	  reader_light_UP = NULL;
 	  reader_light_DN = NULL;
@@ -49,9 +52,12 @@ WeightFactory::WeightFactory ()
 		//-- for fastsim --//
 	  
 	  calib_fastsim = NULL;
-	  reader_fastsim = NULL;
-	  reader_fastsim_UP = NULL;
-	  reader_fastsim_DN = NULL;
+	  reader_light_fastsim = NULL;
+	  reader_light_fastsim_UP = NULL;
+	  reader_light_fastsim_DN = NULL;
+	  reader_heavy_fastsim = NULL;
+	  reader_heavy_fastsim_UP = NULL;
+	  reader_heavy_fastsim_DN = NULL;
 
 		//-- fastsim plots
 	  h_btag_eff_b_fastsim = NULL;
@@ -141,49 +147,60 @@ void WeightFactory::InitializeBtagSFTool (string CSVfileFullSim, string CSVfileF
   //-- Loading SF --//
   //
   // fullSim
-  cout<<"toto"<<endl;
   calib = new BTagCalibration ("csvv2", CSVfileFullSim.c_str ());
-  cout<<"toto"<<endl;
+  //- heavy (b) flavor
   //reader_heavy = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "comb", "central");	// central
   reader_heavy = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
-  cout<<"toto"<<endl;
   reader_heavy->load(*calib,BTagEntry::FLAV_B,"comb");
-  cout<<"toto"<<endl;
   //reader_heavy_UP = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "comb", "up");	// sys up
   reader_heavy_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
   reader_heavy_UP->load(*calib,BTagEntry::FLAV_B,"comb");
-  cout<<"toto"<<endl;
   //reader_heavy_DN = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "comb", "down");	// sys down
   reader_heavy_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
   reader_heavy_DN->load(*calib,BTagEntry::FLAV_B,"comb");
-  cout<<"toto"<<endl;
+  
+  //- c flavor
+  reader_c = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
+  reader_c->load(*calib,BTagEntry::FLAV_C,"comb");
+  //reader_c_UP = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "comb", "up");	// sys up
+  reader_c_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
+  reader_c_UP->load(*calib,BTagEntry::FLAV_C,"comb");
+  //reader_c_DN = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "comb", "down");	// sys down
+  reader_c_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
+  reader_c_DN->load(*calib,BTagEntry::FLAV_C,"comb");
+  
+  //- light flavor
   //reader_light = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "incl", "central");	// central
   reader_light = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
   reader_light->load(*calib,BTagEntry::FLAV_UDSG,"incl");
-  cout<<"toto"<<endl;
   //reader_light_UP = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "incl", "up");	// sys up
   reader_light_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
   reader_light_UP->load(*calib,BTagEntry::FLAV_UDSG,"incl");
-  cout<<"toto"<<endl;
   //reader_light_DN = new BTagCalibrationReader (calib, BTagEntry::OP_MEDIUM, "incl", "down");	// sys down
   reader_light_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
   reader_light_DN->load(*calib,BTagEntry::FLAV_UDSG,"incl");
-  cout<<"toto"<<endl;
   
   // fastSim
   calib_fastsim = new BTagCalibration("CSV", CSVfileFastSim.c_str()); 
-  //reader_fastsim = new BTagCalibrationReader (calib_fastsim, BTagEntry::OP_MEDIUM, "fastsim", "central");	// central
-  reader_fastsim = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
-  cout<<"toto"<<endl;
-  reader_fastsim->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
-  cout<<"toto"<<endl;
-  //reader_fastsim_UP = new BTagCalibrationReader (calib_fastsim, BTagEntry::OP_MEDIUM, "fastsim", "up");	// sys up
-  reader_fastsim_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
-  reader_fastsim_UP->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
-  cout<<"toto"<<endl;
-  //reader_fastsim_DN = new BTagCalibrationReader (calib_fastsim, BTagEntry::OP_MEDIUM, "fastsim", "down");	// sys down
-  reader_fastsim_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
-  reader_fastsim_DN->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
+  //reader_light_fastsim = new BTagCalibrationReader (calib_light_fastsim, BTagEntry::OP_MEDIUM, "light_fastsim", "central");	// central
+  reader_light_fastsim = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
+  reader_light_fastsim->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
+  //reader_light_fastsim_UP = new BTagCalibrationReader (calib_light_fastsim, BTagEntry::OP_MEDIUM, "light_fastsim", "up");	// sys up
+  reader_light_fastsim_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
+  reader_light_fastsim_UP->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
+  //reader_light_fastsim_DN = new BTagCalibrationReader (calib_light_fastsim, BTagEntry::OP_MEDIUM, "light_fastsim", "down");	// sys down
+  reader_light_fastsim_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
+  reader_light_fastsim_DN->load(*calib_fastsim,BTagEntry::FLAV_UDSG,"fastsim");
+  
+  //reader_heavy_fastsim = new BTagCalibrationReader (calib_heavy_fastsim, BTagEntry::OP_MEDIUM, "heavy_fastsim", "central");	// central
+  reader_heavy_fastsim = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "central");	// central
+  reader_heavy_fastsim->load(*calib_fastsim,BTagEntry::FLAV_B,"fastsim");
+  //reader_heavy_fastsim_UP = new BTagCalibrationReader (calib_heavy_fastsim, BTagEntry::OP_MEDIUM, "heavy_fastsim", "up");	// sys up
+  reader_heavy_fastsim_UP = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "up");	// sys up
+  reader_heavy_fastsim_UP->load(*calib_fastsim,BTagEntry::FLAV_B,"fastsim");
+  //reader_heavy_fastsim_DN = new BTagCalibrationReader (calib_heavy_fastsim, BTagEntry::OP_MEDIUM, "heavy_fastsim", "down");	// sys down
+  reader_heavy_fastsim_DN = new BTagCalibrationReader ( BTagEntry::OP_MEDIUM, "down");	// sys down
+  reader_heavy_fastsim_DN->load(*calib_fastsim,BTagEntry::FLAV_B,"fastsim");
 
   //-- Loading efficiency --//
   //-- fullSim
@@ -243,12 +260,14 @@ void WeightFactory::BtagWeighComputor (const vector<float>& jets_pt, const vecto
     if (jets_CSV[i] > BTAG_DISCRI_CUT) {
       if (!isData) {
 	float eff = GetBtagEff (jets_pt[i], jets_eta[i], jets_hadronFlavour[i]);
+	//if(eff==0) cout<<"b-tagg eff is null !!"<<endl;
 	BTagEntry::JetFlavor flavor = BTagEntry::FLAV_UDSG;
 
 	if (abs (jets_hadronFlavour[i]) == 5)
 	  flavor = BTagEntry::FLAV_B;
 	else if (abs (jets_hadronFlavour[i]) == 4)
-	  flavor = BTagEntry::FLAV_C;
+	  //flavor = BTagEntry::FLAV_C;
+	  flavor = BTagEntry::FLAV_B;
 
 	float pt_cutoff = std::max (30., std::min (669., double (jets_pt[i])));
 	float eta_cutoff = std::min (2.39, fabs (double (jets_eta[i])));
@@ -256,21 +275,41 @@ void WeightFactory::BtagWeighComputor (const vector<float>& jets_pt, const vecto
 
 	if (flavor == BTagEntry::FLAV_UDSG) {
 	  weight_cent = reader_light->eval (flavor, eta_cutoff, pt_cutoff);
+	  //if(weight_cent==0) cout<<"weight_cent = "<<weight_cent<<" UDSG "<<flavor<<" eta "<<jets_eta[i]<<" % "<< eta_cutoff<<" pt "<<jets_pt[i]<<" % "<< pt_cutoff<<endl;
 	  weight_UP = reader_light_UP->eval (flavor, eta_cutoff, pt_cutoff);
 	  weight_DN = reader_light_DN->eval (flavor, eta_cutoff, pt_cutoff);
 	}
-	else {
+	else if(flavor == BTagEntry::FLAV_B){
+	  //if(weight_cent==0) cout<<"weight_cent = "<<weight_cent<<" BorC "<<flavor<<" eta "<<jets_eta[i]<<" % "<< eta_cutoff<<" pt "<<jets_pt[i]<<" % "<< pt_cutoff<<endl;
 	  weight_cent = reader_heavy->eval (flavor, eta_cutoff, pt_cutoff);
 	  weight_UP = reader_heavy_UP->eval (flavor, eta_cutoff, pt_cutoff);
 	  weight_DN = reader_heavy_DN->eval (flavor, eta_cutoff, pt_cutoff);
 	}
-	if (isFastSim) {
-	  weight_FS_UP = weight_cent * reader_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);
-	  weight_FS_DN = weight_cent * reader_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);
-	  weight_cent *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
-	  weight_UP *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
-	  weight_DN *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	else{
+	  weight_cent = reader_c->eval (flavor, eta_cutoff, pt_cutoff);
+	  weight_UP = reader_c_UP->eval (flavor, eta_cutoff, pt_cutoff);
+	  weight_DN = reader_c_DN->eval (flavor, eta_cutoff, pt_cutoff);
 	}
+	if (isFastSim) {
+	  if (flavor == BTagEntry::FLAV_UDSG) {
+	    weight_FS_UP = weight_cent * reader_light_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);
+	    weight_FS_DN = weight_cent * reader_light_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);
+	    weight_cent *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
+	    //if(weight_cent==0) cout<<"FASTSIM effect "<<flavor<<endl;
+	    weight_UP *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	    weight_DN *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	  }
+	  else{// need to differentiate b and c
+	    weight_FS_UP = weight_cent * reader_heavy_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);
+	    weight_FS_DN = weight_cent * reader_heavy_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);
+	    weight_cent *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
+	    //if(weight_cent==0) cout<<"FASTSIM effect "<<flavor<<endl;
+	    weight_UP *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	    weight_DN *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	  }
+	}
+	//if(weight_cent==0 || eff==0)
+	//  cout<<"weight_cent = "<<weight_cent<<" || eff = "<<eff<<endl;
 	btagprob_data *= weight_cent * eff;
 	btagprob_mc *= eff;
 	if (flavor == BTagEntry::FLAV_UDSG) {
@@ -298,26 +337,47 @@ void WeightFactory::BtagWeighComputor (const vector<float>& jets_pt, const vecto
 	if (abs (jets_hadronFlavour[i]) == 5)
 	  flavor = BTagEntry::FLAV_B;
 	else if (abs (jets_hadronFlavour[i]) == 4)
-	  flavor = BTagEntry::FLAV_C;
-	float pt_cutoff = std::max (30., std::min (669., double (jets_eta[i])));
+	  //flavor = BTagEntry::FLAV_C;
+	  // wrong .. but just for test ...
+	  flavor = BTagEntry::FLAV_B;
+	float pt_cutoff = std::max (30., std::min (669., double (jets_pt[i])));
 	float eta_cutoff = std::min (2.39, fabs (double (jets_eta[i])));
 	float weight_cent (1.), weight_UP (1.), weight_DN (1.), weight_FS_UP (1.), weight_FS_DN (1.);
 	if (flavor == BTagEntry::FLAV_UDSG) {
 	  weight_cent = reader_light->eval (flavor, eta_cutoff, pt_cutoff);
+	  if(weight_cent==0) cout<<"Weight_cent = "<<weight_cent<<" UDSG "<<flavor<<" eta "<<jets_eta[i]<<" % "<< eta_cutoff<<" pt "<<jets_pt[i]<<" % "<< pt_cutoff<<endl;
 	  weight_UP = reader_light_UP->eval (flavor, eta_cutoff, pt_cutoff);
 	  weight_DN = reader_light_DN->eval (flavor, eta_cutoff, pt_cutoff);
 	}
-	else {
+	else if(flavor == BTagEntry::FLAV_B) {
 	  weight_cent = reader_heavy->eval (flavor, eta_cutoff, pt_cutoff);
+	  if(weight_cent==0) cout<<"else weight_cent = "<<weight_cent<<" UDSG "<<flavor<<" eta "<<jets_eta[i]<<" % "<< eta_cutoff<<" pt "<<jets_pt[i]<<" % "<< pt_cutoff<<endl;
 	  weight_UP = reader_heavy_UP->eval (flavor, eta_cutoff, pt_cutoff);
 	  weight_DN = reader_heavy_DN->eval (flavor, eta_cutoff, pt_cutoff);
 	}
+	else{
+	  weight_cent = reader_c->eval (flavor, eta_cutoff, pt_cutoff);
+	  if(weight_cent==0) cout<<"else weight_cent = "<<weight_cent<<" UDSG "<<flavor<<" eta "<<jets_eta[i]<<" % "<< eta_cutoff<<" pt "<<jets_pt[i]<<" % "<< pt_cutoff<<endl;
+	  weight_UP = reader_c_UP->eval (flavor, eta_cutoff, pt_cutoff);
+	  weight_DN = reader_c_DN->eval (flavor, eta_cutoff, pt_cutoff);
+	}
 	if (isFastSim) {
-	  weight_FS_UP = weight_cent * reader_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure fastsimSF
-	  weight_FS_DN = weight_cent * reader_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure fastsimSF
-	  weight_cent *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
-	  weight_UP *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
-	  weight_DN *= reader_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	  if (flavor == BTagEntry::FLAV_UDSG) {
+	    weight_FS_UP = weight_cent * reader_light_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure light_fastsimSF
+	    weight_FS_DN = weight_cent * reader_light_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure light_fastsimSF
+	    weight_cent *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
+	    if(weight_cent==0) cout<<"FASTSIM effect"<<endl;
+	    weight_UP *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	    weight_DN *= reader_light_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	  }
+	  else{// need to differentiate btw b and c
+	    weight_FS_UP = weight_cent * reader_heavy_fastsim_UP->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure heavy_fastsimSF
+	    weight_FS_DN = weight_cent * reader_heavy_fastsim_DN->eval (flavor, eta_cutoff, pt_cutoff);	//this is pure heavy_fastsimSF
+	    weight_cent *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);
+	    if(weight_cent==0) cout<<"FASTSIM effect"<<endl;
+	    weight_UP *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	    weight_DN *= reader_heavy_fastsim->eval (flavor, eta_cutoff, pt_cutoff);	//this is still just btagSF
+	  }
 	}
 
 	btagprob_data *= (1. - weight_cent * eff);
@@ -342,7 +402,9 @@ void WeightFactory::BtagWeighComputor (const vector<float>& jets_pt, const vecto
     }
   }
   //Compute a weight as the ratio of data over mc
+  //if(btagprob_data==0) cout<<"btagprob_data = "<<btagprob_data<<"/"<<"btagprob_mc = "<<btagprob_mc<<endl;
   Wbtag = btagprob_data / btagprob_mc;
+
 }
 
 void WeightFactory::InitializeLeptonSFTool(){
@@ -560,7 +622,7 @@ void WeightFactory::InitializeLeptonSFTool(){
 }
 
 
-void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons){
+void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float lep1_pdgid, float lep2_pt, float lep2_eta, float lep2_pdgid, int nVetoLeptons, int nGoodLeptons, int NgenLeptons, vector<float> genLostLeptons_pt, vector<float> genLostLeptons_eta, vector<int> genLostLeptons_pdgid){
       // Lepton SFs
       float lepSF_pt_cutoff = 99.999;
       float lepSF_pt_min    = 10.001;
@@ -702,30 +764,34 @@ void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float le
       
       // If only 1 reco lepton, and is2lep event, then find lost gen lepton
       // Not yet implemented ... need to be ported in pyROOF code ...
-      /*
+      ///*
       if( !isData && nVetoLeptons==1 && NgenLeptons ){
-	
-	for(int iGen=0; iGen<(int)gen_leps.p4.size(); iGen++){
+
+ 	for(int i=0;i<NgenLeptons;i++){
+	//this part commented was ported in PyROOT
+	//for(int iGen=0; iGen<(int)gen_leps.p4.size(); iGen++){
+	  /*
 	  if( abs(gen_leps.id.at(iGen))!=11 && abs(gen_leps.id.at(iGen))!=13 ) continue;
 	  if( !gen_leps.fromHardProcessFinalState.at(iGen) ) continue;
 	  if( !gen_leps.isLastCopy.at(iGen) ) continue;
 	  if( ROOT::Math::VectorUtil::DeltaR(gen_leps.p4.at(iGen), lep1.p4)<matched_dr ) continue;
 	  if( gen_leps.p4.at(iGen).Pt()<5 || fabs(gen_leps.p4.at(iGen).Eta())>2.4 ) continue;
-	  
+	  */
+
 	  TH2D *h_vetoLep_eff = NULL;
-	  if( abs(gen_leps.id.at(iGen))==11 ) h_vetoLep_eff = h_el_vetoLepEff;
-	  if( abs(gen_leps.id.at(iGen))==13 ) h_vetoLep_eff = h_mu_vetoLepEff;
+	  if( abs(genLostLeptons_pdgid[i])==11 ) h_vetoLep_eff = h_el_vetoLepEff;
+	  if( abs(genLostLeptons_pdgid[i])==13 ) h_vetoLep_eff = h_mu_vetoLepEff;
 	  
-	  int binX_eff = h_vetoLep_eff->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)gen_leps.p4.at(iGen).Pt()), lepSF_pt_min ) );
-	  int binY_eff = h_vetoLep_eff->GetYaxis()->FindBin( fabs(gen_leps.p4.at(iGen).Eta()) );
+	  int binX_eff = h_vetoLep_eff->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)genLostLeptons_pt[i]), lepSF_pt_min ) );
+	  int binY_eff = h_vetoLep_eff->GetYaxis()->FindBin( fabs(genLostLeptons_eta[i]) );
 	  double vetoEff = h_vetoLep_eff->GetBinContent( binX_eff, binY_eff );
 	  
 	  TH2D *h_lep_sf = NULL;
-	  if( abs(gen_leps.id.at(iGen))==11 ) h_lep_sf = h_el_SF_veto;
-	  if( abs(gen_leps.id.at(iGen))==13 ) h_lep_sf = h_mu_SF_veto;
+	  if( abs(genLostLeptons_pdgid[i])==11 ) h_lep_sf = h_el_SF_veto;
+	  if( abs(genLostLeptons_pdgid[i])==13 ) h_lep_sf = h_mu_SF_veto;
 
-	  int binX_sf = h_lep_sf->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)gen_leps.p4.at(iGen).Pt()), lepSF_pt_min ) );
-	  int binY_sf = h_lep_sf->GetYaxis()->FindBin( fabs(gen_leps.p4.at(iGen).Eta()) );
+	  int binX_sf = h_lep_sf->GetXaxis()->FindBin( std::max( std::min(lepSF_pt_cutoff, (float)genLostLeptons_pt[i]), lepSF_pt_min ) );
+	  int binY_sf = h_lep_sf->GetYaxis()->FindBin( fabs(genLostLeptons_eta[i]) );
 	  
 	  double vetoLepSF_temp    = h_lep_sf->GetBinContent( binX_sf, binY_sf );
 	  double vetoLepSF_temp_Up = vetoLepSF_temp + h_lep_sf->GetBinError( binX_sf, binY_sf );
@@ -748,6 +814,7 @@ void WeightFactory::LeptonWeightComputor(float lep1_pt, float lep1_eta, float le
 	} // end loop over gen leptons
 
       } // end if finding gen lost lepton for vetoEff SF
-     	*/
+     //	*/
 
+      Wlep = lepSF;
 }

@@ -37,10 +37,7 @@ typedef struct
     vector<bool>  jet_loose_pfid;
     //vector<string> trigger_name;
     //vector<bool>   trigger_pass;
-    float         dphi_Wlep;
-    float         ak4_htssm;
     float         lep1_d0;
-    float         dR_lep_leadb;
     int           numberOfSelectedLeptons;
     float         lep2_d0;
     vector<float> ak4pfjets_puid;
@@ -56,8 +53,6 @@ typedef struct
     bool          HLT_IsoMu22;
     bool          HLT_PFMET170;
     bool          HLT_PFMET100_PFMHT100_IDTight;
-    float         ak4_htosm;
-    float         ak4_HT;
     vector<float> ak4pfjets_phi;
     vector<float> ak8pfjets_phi;
     vector<float> ak10pfjets_phi;
@@ -153,7 +148,8 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    int64_t      totalNumberOfInitialEvent = -13;
+    Int_t      totalNumberOfInitialEvent = -13;
+    //int64_t      totalNumberOfInitialEvent = -13;
     //double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
@@ -178,6 +174,31 @@ typedef struct
     float DeltaRlj;
     vector<float> ak8pfjets_nsubjettines; //WARNING! this is empty now
     vector<float> ak10pfjets_nsubjettines; //WARNING! this is empty now
+
+    #ifdef USE_NEW_VAR
+    float ST;
+    float LP;
+    float Meff;
+    float MTdeco_Q;
+    float DeltaPtbb;
+    float DeltaPhibb;
+    float DeltaRbb;
+    float dphi_Wlep;
+    float dR_lep_leadb;
+    float ak4_HT;
+    float ak4_htssm;
+    float ak4_htosm;
+    #endif
+
+    #ifdef USE_GEN_LOSTLEPTON
+    vector<float>* pointerForGenLostLeptons_pt;
+    vector<float>* pointerForGenLostLeptons_eta;
+    vector<int>* pointerForGenLostLeptons_pdgid;
+    
+    vector<float> genLostLeptons_pt;
+    vector<float> genLostLeptons_eta;
+    vector<int> genLostLeptons_pdgid;
+    #endif
 
     #ifdef USE_GEN_INFO
     int gen_n;
@@ -348,6 +369,12 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForgen_mother_index = 0;
     #endif 
     
+    #ifdef USE_GEN_LOSTLEPTON
+    myEvent->pointerForGenLostLeptons_pt = 0;
+    myEvent->pointerForGenLostLeptons_eta = 0;
+    myEvent->pointerForGenLostLeptons_pdgid = 0;
+    #endif
+
     //not in the common format but needed
     //theTree->SetBranchAddress("scale1fb",                &(myEvent->scale1fb));
     //theTree->SetBranchAddress("crossSection",            &(myEvent->crossSection));
@@ -492,20 +519,37 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     theTree->SetBranchAddress("nvertex",                 &(myEvent->nvertex));
     theTree->SetBranchAddress("puIntime",                &(myEvent->puIntime));
     theTree->SetBranchAddress("puTrue",                  &(myEvent->puTrue));
-    theTree->SetBranchAddress("dphi_Wlep",               &(myEvent->dphi_Wlep));
     #endif
 
     #ifdef USE_GLOBAL_VAR
-    theTree->SetBranchAddress("ak4_htssm",               &(myEvent->ak4_htssm));
-    theTree->SetBranchAddress("ak4_htosm",               &(myEvent->ak4_htosm));
-    theTree->SetBranchAddress("ak4_HT",                  &(myEvent->ak4_HT));
-    theTree->SetBranchAddress("dR_lep_leadb",            &(myEvent->dR_lep_leadb));
     theTree->SetBranchAddress("Mjjj",                    &(myEvent->Mjjj));
     theTree->SetBranchAddress("Mlb",                     &(myEvent->Mlb));
     theTree->SetBranchAddress("Mlb_leadb",               &(myEvent->Mlb_leadb));
     theTree->SetBranchAddress("topness",                 &(myEvent->topness));
     theTree->SetBranchAddress("leadingLeptonId",         &(myEvent->leadingLeptonId));
     theTree->SetBranchAddress("numberOfGeneratedLeptons",&(myEvent->numberOfGeneratedLeptons));
+    #endif
+    
+    #ifdef USE_NEW_VAR
+    theTree->SetBranchAddress("ST"		,&(myEvent->ST));
+    theTree->SetBranchAddress("LP"		,&(myEvent->LP));
+    theTree->SetBranchAddress("Meff"		,&(myEvent->Meff));
+    theTree->SetBranchAddress("MTdeco_Q"	,&(myEvent->MTdeco_Q));
+    theTree->SetBranchAddress("DeltaPtbb"	,&(myEvent->DeltaPtbb));
+    theTree->SetBranchAddress("DeltaPhibb"	,&(myEvent->DeltaPhibb));
+    theTree->SetBranchAddress("DeltaRbb"	,&(myEvent->DeltaRbb));
+    theTree->SetBranchAddress("dphi_Wlep",	&(myEvent->dphi_Wlep));
+    theTree->SetBranchAddress("dR_lep_leadb",	&(myEvent->dR_lep_leadb));
+    theTree->SetBranchAddress("ak4_HT",		&(myEvent->ak4_HT));
+    theTree->SetBranchAddress("ak4_htssm",	&(myEvent->ak4_htssm));
+    theTree->SetBranchAddress("ak4_htosm",	&(myEvent->ak4_htosm));
+    #endif
+
+    #ifdef USE_GEN_LOSTLEPTON
+    theTree->SetBranchAddress("genLostLeptons_pt",	&(myEvent->pointerForGenLostLeptons_pt));
+    theTree->SetBranchAddress("genLostLeptons_eta",	&(myEvent->pointerForGenLostLeptons_eta));
+    theTree->SetBranchAddress("genLostLeptons_pdgid",   &(myEvent->pointerForGenLostLeptons_pdgid));
+    //cout<<"Branch adress done !"<<endl;
     #endif
 
     //old framework
@@ -637,8 +681,12 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
 
     //myEvent->trigger_name        = *(myEvent->pointerForTriggerName);
     //myEvent->trigger_pass        = *(myEvent->pointerForTriggerPass);
-    myEvent->gen_neutralino_m	         =                      *(myEvent->pointerForgen_neutralino_m);
-    myEvent->gen_stop_m			 =                      *(myEvent->pointerForgen_stop_m);
+    //protect against branches not found
+    if(myEvent->pointerForgen_neutralino_m!=0 && myEvent->pointerForgen_stop_m!=0){
+      myEvent->gen_neutralino_m	         =                      *(myEvent->pointerForgen_neutralino_m);
+      myEvent->gen_stop_m			 =                      *(myEvent->pointerForgen_stop_m);
+    }
+    
     #ifdef USE_JETS
     //std::cout << "setting jet info" << std::endl;
     myEvent->jet_pt              = *(myEvent->pointerForak4pfjets_pt);
@@ -650,6 +698,8 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->ak4pfjets_hadronFlavour = *(myEvent->pointerForak4pfjets_hadronFlavour);
     myEvent->ak4pfjets_qgtag     = *(myEvent->pointerForak4pfjets_qgtag);
     myEvent->ak4pfjets_pt              = *(myEvent->pointerForak4pfjets_pt);
+    myEvent->ak4pfjets_eta              = *(myEvent->pointerForak4pfjets_eta);
+    myEvent->ak4pfjets_CSV              = *(myEvent->pointerForak4pfjets_CSV);
     myEvent->ak4pfjets_phi             = *(myEvent->pointerForak4pfjets_phi);
     #endif
     #ifdef USE_JETS_EXT
@@ -713,6 +763,15 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->gen_charge			 =                      *(myEvent->pointerForgen_charge);
     myEvent->gen_index			 =                      *(myEvent->pointerForgen_index);
     myEvent->gen_mother_index			 =              *(myEvent->pointerForgen_mother_index);
+    #endif
+    
+    #ifdef USE_GEN_LOSTLEPTON
+    //protect against branches not found
+    if(myEvent->pointerForGenLostLeptons_pt!=0 && myEvent->pointerForGenLostLeptons_eta!=0 && myEvent->pointerForGenLostLeptons_pdgid!=0){
+      myEvent->genLostLeptons_pt = *myEvent->pointerForGenLostLeptons_pt;
+      myEvent->genLostLeptons_eta = *myEvent->pointerForGenLostLeptons_eta;
+      myEvent->genLostLeptons_pdgid = *myEvent->pointerForGenLostLeptons_pdgid;
+    }
     #endif
 
     //Fill temporary info
