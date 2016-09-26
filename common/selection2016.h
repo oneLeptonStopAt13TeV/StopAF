@@ -388,3 +388,10 @@ bool CR1l4jMET450to550highMT2W(){ return eventCat.FourJets_highMT2W_MET_450 && C
 bool CR1l4jMET550to650highMT2W(){ return eventCat.FourJets_highMT2W_MET_550 && CR1l();}
 bool CR1l4jMET650toInfhighMT2W(){ return eventCat.FourJets_highMT2W_MET_650 && CR1l();}
 
+//all regions
+bool allRegions()
+{
+return SR1l2jMET250to350() || SR1l2jMET350to450() || SR1l2jMET450toInf() || SR1l3jMET250to350() || SR1l3jMET350to450() || SR1l3jMET450to550() || SR1l3jMET550toInf() ||
+SR1l4jMET250to350lowMT2W() || SR1l4jMET350to450lowMT2W() || SR1l4jMET450toInflowMT2W() || 
+SR1l4jMET250to350highMT2W() || SR1l4jMET350to450highMT2W() || SR1l4jMET450to550highMT2W() || SR1l4jMET550to650highMT2W() || SR1l4jMET650toInfhighMT2W();
+}

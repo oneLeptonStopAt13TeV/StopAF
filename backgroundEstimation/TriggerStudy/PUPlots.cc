@@ -7,6 +7,8 @@ using namespace std;
 
 int main(){
 
+        TH1::SetDefaultSumw2();
+
         vector< vector<string> > regions;
         //
         //TO READ ALL SIGNAL REGIONS
