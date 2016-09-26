@@ -163,7 +163,7 @@ class Selection:
 	       else: 
 	         name+="toInf"
 	      	 
-	       dump= name
+	       dump= "\""+ name + "\""
 	       myfile.write(dump)
                #if bin not len(self.bins):
 	       dump= " , "
@@ -200,7 +200,7 @@ class Selection:
 	      
                substring = "SR1l"	 
                if substring in name:
-	         dump= name
+	         dump= "\"" +name +"\""
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
@@ -213,7 +213,7 @@ class Selection:
 	################################
 	## loop over the regions
 	################################
-	dump="vector<string> signalReg = { "
+	dump="vector<string> tfreg = { "
 	myfile.write(dump)
 	for region in self.regions:
 
@@ -237,7 +237,7 @@ class Selection:
                substring = "SR1l"	 
                if substring in name:
                  name2 = name.replace("SR1l", "")
-	         dump= name2
+	         dump= "\"" + name2 + "\"" 
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
