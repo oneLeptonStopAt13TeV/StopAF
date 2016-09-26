@@ -19,13 +19,13 @@
   <Region name="CR2l" selection="Nbjets>=1 and TwoLep()"/>
  </Regions>
  <Bins>
-  <Bin name="23jLowMlb" label="23jLowMlb" selection="Njets<=3 and tmod>7.5 and Mlb<175" METbins="250,350,450,550,inf" />
-  <Bin name="23jHighMlb" label="23jHighMlb" selection="Njets<=3 and tmod>7.5 and Mlb!>=175" METbins="250,350,450,550,inf" />
-  <Bin name="4jLowMT2WLowMlb" label="4jLowMT2WLowMlb" selection="Njets>=4 and tmod<0 and Mlb<175" METbins="250,350,450,550,650,inf" />
-  <Bin name="4jLowMT2WHighMlb" label="4jLowMT2WHighMlb" selection="Njets>=4 and tmod<0 and Mlb!>=175" METbins="250,350,450,550,inf" />
-  <Bin name="4jMidMT2WLowMlb" label="4jMidMT2WLowMlb" selection="Njets>=4 and tmod!>=0  and tmod <7.5 and Mlb<175" METbins="250,350,450,inf" />
-  <Bin name="4jMidMT2WHighMlb" label="4jMidMT2WHighMlb" selection="Njets>=4 and tmod!>=0  and tmod <7.5 and Mlb!>=175" METbins="250,400,inf" />
-  <Bin name="4jHighMT2WLowMlb" label="4jHighMT2WLowMlb" selection="Njets>=4 and tmod!>=7.5 and Mlb<175" METbins="250,350,450,550,650,inf" />
-  <Bin name="4jHighMT2WHighMlb" label="4jHighMT2WHighMlb" selection="Njets>=4 and tmod!>=7.5 and Mlb!>=175" METbins="250,400,650,inf" />
+  <Bin name="23jLowMlb" label="23jLowMlb" selection="Njets!>3 and tmod>7.5 and Mlb!>175" METbins="250,350,450,550,inf" />
+  <Bin name="23jHighMlb" label="23jHighMlb" selection="Njets!>3 and tmod>7.5 and Mlb>=175" METbins="250,350,450,550,inf" />
+  <Bin name="4jLowMT2WLowMlb" label="4jLowMT2WLowMlb" selection="Njets>=4 and tmod!>0 and Mlb!>175" METbins="250,350,450,550,650,inf" />
+  <Bin name="4jLowMT2WHighMlb" label="4jLowMT2WHighMlb" selection="Njets>=4 and tmod!>0 and Mlb>=175" METbins="250,350,450,550,inf" />
+  <Bin name="4jMidMT2WLowMlb" label="4jMidMT2WLowMlb" selection="Njets>=4 and tmod>=0  and tmod!>7.5 and Mlb!>175" METbins="250,350,450,inf" />
+  <Bin name="4jMidMT2WHighMlb" label="4jMidMT2WHighMlb" selection="Njets>=4 and tmod>=0  and tmod!>7.5 and Mlb>=175" METbins="250,400,inf" />
+  <Bin name="4jHighMT2WLowMlb" label="4jHighMT2WLowMlb" selection="Njets>=4 and tmod>=7.5 and Mlb!>175" METbins="250,350,450,600,inf" />
+  <Bin name="4jHighMT2WHighMlb" label="4jHighMT2WHighMlb" selection="Njets>=4 and tmod>=7.5 and Mlb>=175" METbins="250,400,650,inf" />
  </Bins>
 </body>
