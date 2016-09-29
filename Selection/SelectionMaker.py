@@ -30,6 +30,7 @@ class Selection:
 	self.variables = []
 	self.bins = []
 	self.regions = []
+	self.baseline = ""
 
    def AddVariable(self, variable_from_xml):
 	self.variables.append(variable_from_xml)
@@ -42,6 +43,12 @@ class Selection:
 	bin['selection'] = bin['selection'].replace('and','&&', 100) # max nof occurence = 100
 	bin['selection'] = bin['selection'].replace('!>','<', 100) # max nof occurence = 100
    	self.bins.append(bin)
+   
+   def SetBaseline(self, baseline):
+	self.baseline = baseline
+	self.baseline = self.baseline.replace('and','&&', 100) # max nof occurence = 100
+	self.baseline = self.baseline.replace('!>','<', 100) # max nof occurence = 100
+
 
 
    def AddRegion(self, region_from_xml):
@@ -54,13 +61,26 @@ class Selection:
    def CreateSelFunctions(self, ofilename):
      with open(ofilename, "a") as myfile:
 
+
+	
+
 	## replace MET by its babytuple name
 	METbabytuple = "MET"
 	for var in self.variables:
 	  if var['name'] == "MET":
 	    METbabytuple = "myEvent."+var['babyTuple']
 	####################################
-
+	
+	
+	####################################
+	# Create Baseline function
+	####################################
+	baseSel = self.baseline
+	for var in self.variables:
+		baseSel = baseSel.replace(var['name'],"myEvent."+var['babyTuple'])
+	dump = "bool baseline(){ return "+baseSel+";}\n"
+	myfile.write(dump)
+	print dump
 
 	####################################
 	# Create Region function
@@ -71,7 +91,7 @@ class Selection:
 	       for var in self.variables:
 	         selection = selection.replace(var['name'],"myEvent."+var['babyTuple'])
 	   
-	       dump = "bool "+region['name']+"() { return ("+selection+" ); }\n" 
+	       dump = "bool "+region['name']+"() { return ( baseline() && "+selection+" ); }\n" 
 	       myfile.write(dump)
 	       print dump
 
@@ -207,6 +227,7 @@ class Selection:
 
         dump = " };\n"
         myfile.write(dump)
+
 
    def DumpTFRegionsVectors(self,ofilename):
      with open(ofilename, "a") as myfile:

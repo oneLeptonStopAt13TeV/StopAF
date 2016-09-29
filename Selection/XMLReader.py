@@ -22,6 +22,13 @@ import SelectionMaker as sel
 s = sel.Selection()
 
 ###################################
+# Read Baseline
+###################################
+for child in root:
+	if child.tag == "Baseline":
+		s.SetBaseline(child.attrib['selection'])
+
+###################################
 # Add Variable
 ###################################
 for var in root.iter("Variable"):
