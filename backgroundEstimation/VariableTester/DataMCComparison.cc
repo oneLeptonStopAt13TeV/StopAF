@@ -140,7 +140,7 @@ void BabyScrewdriver::Init()
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/14_09/";
     babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/16_09/";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop2016/Synchro/CMSSW_8_0_5/src/store/babyTuples/TriggerStudy/";
-    totalNumberOfWorkers = 10;
+    totalNumberOfWorkers = 4;
 
 
     //@EC@: to be done: put default files in the code itself or load info from a external config file
