@@ -3,7 +3,7 @@ SrcSuf        = cc
 ExeSuf        = run
 LogSuf        = log
 
-ROOTCFLAGS    = $(shell root-config --cflags)
+ROOTCFLAGS    = $(shell root-config --cflags) -lMinuit -lMinuit2 -lRooFit -lRooFitCore
 ROOTLIBS      = $(shell root-config --libs) 
 
 CXX           = g++
