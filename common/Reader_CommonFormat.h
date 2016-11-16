@@ -148,8 +148,8 @@ typedef struct
     float         dphi_ak4pfjets_met;
     float         chi2;
     float         ETmissPhi;
-    Int_t      totalNumberOfInitialEvent = -13;
-    //int64_t      totalNumberOfInitialEvent = -13;
+    //Int_t      totalNumberOfInitialEvent = -13;
+    int64_t      totalNumberOfInitialEvent = -13;
     //double      totalNumberOfInitialEvent = -13;
     float         lep_sf;
     float         btag_sf;
@@ -164,6 +164,11 @@ typedef struct
     vector<float> gen_stop_m;
     vector<float>* pointerForgen_neutralino_m;
     vector<float>* pointerForgen_stop_m;
+    vector<float> genTops_pt;
+    vector<int> genTops_pdgid;
+    vector<float>* pointerForgenTops_pt;
+    vector<int>* pointerForgenTops_pdgid;
+
 
     bool PassTrackVeto;
     bool PassTauVeto;
@@ -312,6 +317,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     myEvent->pointerForTriggerPass = NULL;
     myEvent->pointerForgen_neutralino_m = 0;
     myEvent->pointerForgen_stop_m = 0;
+    myEvent->pointerForgenTops_pt = 0;
+    myEvent->pointerForgenTops_pdgid = 0;
 
     #ifdef USE_JETS
     myEvent->pointerForak4pfjets_pt = 0;
@@ -407,6 +414,9 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     //signal related
     theTree->SetBranchAddress("gen_neutralino_m", &(myEvent->pointerForgen_neutralino_m));
     theTree->SetBranchAddress("gen_stop_m", &(myEvent->pointerForgen_stop_m));
+    //gen top
+    theTree->SetBranchAddress("genTops_pt", &(myEvent->pointerForgenTops_pt));
+    theTree->SetBranchAddress("genTops_pdgid", &(myEvent->pointerForgenTops_pdgid));
     
     //vetos
     theTree->SetBranchAddress("PassTrackVeto",            &(myEvent->PassTrackVeto));
@@ -685,6 +695,10 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     if(myEvent->pointerForgen_neutralino_m!=0 && myEvent->pointerForgen_stop_m!=0){
       myEvent->gen_neutralino_m	         =                      *(myEvent->pointerForgen_neutralino_m);
       myEvent->gen_stop_m			 =                      *(myEvent->pointerForgen_stop_m);
+    }
+    if(myEvent->pointerForgenTops_pt!=0 && myEvent->pointerForgenTops_pdgid!=0){
+    	myEvent->genTops_pt = *(myEvent->pointerForgenTops_pt);
+    	myEvent->genTops_pdgid = *(myEvent->pointerForgenTops_pdgid);
     }
     
     #ifdef USE_JETS
