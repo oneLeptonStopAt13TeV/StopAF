@@ -340,8 +340,8 @@ void BabyScrewdriver::Init()
     
     AddProcessClass("test", "test", "signal", kBlue);
     	//AddDataset("test","test",0,0);
-	//AddDataset("SingleElectron", "test", 0, 0 );
-	//AddDataset("SingleMuon", "test", 0, 0 );
+	AddDataset("SingleElectron", "test", 0, 0 );
+	AddDataset("SingleMuon", "test", 0, 0 );
 	//AddDataset("DoubleMuon", "test", 0, 0 );
 	//AddDataset("DoubleElectron", "test", 0, 0 );
 	AddDataset("JetHT", "test", 0, 0 );
