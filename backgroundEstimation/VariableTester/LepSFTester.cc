@@ -131,13 +131,26 @@ bool lepChannel()
 bool SuggestedSelection(){
 	if (myEvent.pfmet < 250) return false;
 	if (myEvent.ak4_HT < 250) return false;
-	if (myEvent.ngoodjets < 1) return false;
-	if (myEvent.ngoodleps < 1) return false; // >=1 lepton
+	if (myEvent.ngoodjets < 2) return false;
+	if (myEvent.ngoodleps != 1) return false; // >=1 lepton
+	if (myEvent.lep1_pt < 25) return false;
+	return true;
 	//if (myEvent.
 	// lepton requirement
 	// trigger requirement 
 }
 
+bool Sel0b(){
+	return (SuggestedSelection() && myEvent.ngoodbtags==0);
+}
+
+bool Sel1b(){
+	return (SuggestedSelection() && myEvent.ngoodbtags>=1);
+}
+
+bool Sel2b(){
+	return (SuggestedSelection() && myEvent.ngoodbtags>=2);
+}
 
 
 //Add this as a global variable 
@@ -149,7 +162,8 @@ void BabyScrewdriver::Init()
 
     //babyTuplePath = "/opt/sbg/scratch1/cms/mjansova/store/tmp/0909/";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/14_09/";
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/16_09/";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/16_09/";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/BabyTuples/25_11/";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop2016/Synchro/CMSSW_8_0_5/src/store/babyTuples/TriggerStudy/";
     totalNumberOfWorkers = 10;
 
@@ -184,24 +198,22 @@ void BabyScrewdriver::Init()
     //AddVariable("MET", "MET",  "MET", 20,   20, 500,  &(myEvent.MET), "");
     //AddVariable("LeptonPT", "LeptonPT",  "Lepton PT", 20,   0, 200,  &(myEvent.leadingLeptonPt), "");
     // defined binning
-    AddVariable("MET", "MET",  "MET", 20 ,200,1000,  &(myEvent.pfmet), "");
-    AddVariable("MET2", "MET",  "MET", (int) (METBins.size()-1), METBins.data(),  &(myEvent.pfmet), "");
-    AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,1000,  &(myEvent.MT2W), "");
-    AddVariable("MT", "MT",  "MT", 50 ,100,1000,  &(myEvent.mt_met_lep), "");
-    AddVariable("topness","topness","topness",20,-20,20,&(myEvent.topness),"");
-    AddVariable("nJets","nJets","nJets",5,1,5,&(myEvent.ngoodjets),"");
-    AddVariable("nBJets","nBJets","nBJets", 4, 1, 4, &(myEvent.ngoodbtags),"");
-    AddVariable("ak4_HT", "ak4_HT", "ak4_HT",35,250,2000,&(myEvent.ak4_HT),"");
+    AddVariable("MET", "MET",  "GeV", 20 ,250,1000,  &(myEvent.pfmet), "logY");
+    AddVariable("MET2", "MET",  "GeV", (int) (METBins.size()-1), METBins.data(),  &(myEvent.pfmet), "logY");
+    AddVariable("MT2W", "MT2W",  "GeV", 100 ,0,1000,  &(myEvent.MT2W), "logY");
+    AddVariable("MT", "#M_{T}",  "GeV", 50 ,0,1000,  &(myEvent.mt_met_lep), "logY");
+    AddVariable("topness","topness","",20,-20,20,&(myEvent.topness),"logY");
+    AddVariable("nJets","nJets","",8,1,8,&(myEvent.ngoodjets),"logY");
+    AddVariable("nBJets","nBJets","", 4, 1, 4, &(myEvent.ngoodbtags),"logY");
+    AddVariable("ak4_HT", "ak4_HT", "GeV",35,250,2000,&(myEvent.ak4_HT),"logY");
+    AddVariable("lep_pt","p_{T}(lep)", "GeV",50, 0,500,&(myEvent.lep1_pt),"logY");
+    AddVariable("lep_eta","eta (lep)", "",50, -2.5,2.5,&(myEvent.lep1_eta),"logY");
+
 
     // ------------------
     // Datasets
     // ------------------
-    AddProcessClass("rare", "rare", "background", kBlue);//@MJ@ TODO K-factor?
-    	AddDataset("ttZ","rare",0,0.7826);
-    	AddDataset("tZq","rare",0,0.0758);
-    	AddDataset("ZZ","rare",0,0.564);
-    	//AddDataset("WZ","rare",0,3.06);
-
+    
     /*
     AddProcessClass("throw", "throw", "signal", kBlue);
      	AddDataset("T2tt_400to1200", "throw", 0, 0 );
@@ -252,9 +264,11 @@ void BabyScrewdriver::Init()
     ftmp =NULL;
 
    */
+   
 
     AddProcessClass("data", "data", "data", COLORPLOT_BLACK); //kViolet);
-    	AddDataset("SE_0", "data", 0, 0 );
+    	/*
+	AddDataset("SE_0", "data", 0, 0 );
     	AddDataset("SE_1", "data", 0, 0 );
     	AddDataset("SE_C", "data", 0, 0 );
     	AddDataset("SE_D", "data", 0, 0 );
@@ -262,38 +276,76 @@ void BabyScrewdriver::Init()
         AddDataset("SM_1", "data", 0, 0 );
         AddDataset("SM_C", "data", 0, 0 );
         AddDataset("SM_D", "data", 0, 0 );
-        //AddDataset("MET_0", "data", 0, 0 );
-        //AddDataset("MET_1", "data", 0, 0 );
+        */
+	AddDataset("MET_0", "data", 0, 0 );
+        AddDataset("MET_1", "data", 0, 0 );
+        AddDataset("MET_C", "data", 0, 0 );
+        AddDataset("MET_D", "data", 0, 0 );
     
     //AddProcessClass("test", "other", "background",kBlack);
-    AddProcessClass("test", "1l", "background",kGreen);
-    	AddDataset("ST_s","test",0,10.11*0.364176);
-    	AddDataset("ST_tW_top","test",0,38.09*0.5135);
-    	AddDataset("ST_tW_atop","test",0,38.09*0.5135);
-    	AddDataset("ST_t","test",0,80.95*0.324);
-	AddDataset("TTJetsSLtop", "test", 0, 114.6*1.594 );
-    	AddDataset("TTJetsSLatopv1","test",0,114.6*1.594);
-    	AddDataset("TTJetsDLv0v4","test",0, 57.35*1.5225);
-    	//AddDataset("WJetsToLNuTune","test",0,60781.5*1.01);
+    AddProcessClass("ttbar", "t#bar{t}", "background",kBlue);
+	AddDataset("TTJetsSLtop", "ttbar", 0, 114.6*1.594 );
+    	AddDataset("TTJetsSLatopv1","ttbar",0,114.6*1.594);
+    	//AddDataset("TTJetsSLatopext","ttbar",0,114.6*1.594);
+    	AddDataset("TTJetsDLv0v4","ttbar",0, 57.35*1.5225);
+    	//AddDataset("TTJetsDLext","ttbar",0, 57.35*1.5225);
+	
+	/*
+	//AddDataset("WJetsToLNuTune","test",0,60781.5*1.01);
     	AddDataset("W1JetsToLNuTune","test",0, 9493*1.238);
     	AddDataset("W2JetsToLNuTune","test",0, 3120*1.231);
     	AddDataset("W3JetsToLNuTune","test",0, 942.3*1.231);
     	AddDataset("W4JetsToLNuTune","test",0, 524.2*1.114);
-    	AddDataset("TTWtoQQ","test",0,0.4062);
-    	AddDataset("TTWtoLNu","test",0,0.2043);
-    	AddDataset("TTT","test",0,1.0);
-    	AddDataset("VV","test",0,12.05*0.9917);
+        */
+
+	///*
+    AddProcessClass("Wjets", "W+jets", "background",kGreen+1);
+	AddDataset("WJetsToLNuHT100To200ext","Wjets",0,1345*1.21);
+	AddDataset("WJetsToLNuHT200To400v3v2","Wjets",0,359.7*1.21);
+	//AddDataset("WJetsToLNuHT200To400ext","Wjets",0,359.7*1.21);
+	AddDataset("WJetsToLNuHT400To600ext","Wjets",0,48.91*1.21);
+	AddDataset("WJetsToLNuHT600To800v3v2","Wjets",0,12.1*1.21);
+	AddDataset("WJetsToLNuHT800To1200v3v1","Wjets",0,5.50*1.21);
+	AddDataset("WJetsToLNuHT1200To2500v3v2","Wjets",0,1.33*1.21);
+	//AddDataset("WJetsToLNuHT1200To2500ext","Wjets",0,1.33*1.21);
+	AddDataset("WJetsToLNuHT2500ToInfv3v1","Wjets",0,0.032*1.21);
+	//*/
+    AddProcessClass("singleTop", "single top", "background",kRed);
+	AddDataset("ST_s","singleTop",0,10.11*0.364176);
+    	AddDataset("ST_tW_top","singleTop",0,38.09*0.5135);
+    	AddDataset("ST_tW_atop","singleTop",0,38.09*0.5135);
+    	//AddDataset("ST_t","singleTop",0,80.95*0.324);
+    	AddDataset("ST_t","singleTop",0,70.71);
+    
+
+/*	
+    AddProcessClass("other", "other", "background",kBlack);
+	AddDataset("TTWtoQQ","other",0,0.4062);
+    	AddDataset("TTWtoLNu","other",0,0.2043);
+    	AddDataset("TTT","other",0,1.0);
+    	AddDataset("VV","other",0,12.05*0.9917);
+  */  
+    AddProcessClass("rare", "rare", "background", kBlue);//@MJ@ TODO K-factor?
+    	AddDataset("ttZ","other",0,0.7826);
+    	//AddDataset("tZq","rare",0,0.0758);
+    	//AddDataset("ZZ","rare",0,0.564);
+    	//AddDataset("WZ","rare",0,3.06);
+	AddDataset("TTWtoQQ","rare",0,0.4062);
+    	AddDataset("TTWtoLNu","rare",0,0.2043);
 
     
-    AddProcessClass("lostLepton", "lost Lepton", "background", kPink);
+    //AddProcessClass("lostLepton", "lost Lepton", "background", kPink);
     //AddProcessClass("singleLepton", "1l", "background", kGreen);
-    AddProcessClass("singleLeptonFromT", "1l from top", "background", kOrange);
+    //AddProcessClass("singleLeptonFromT", "1l from top", "background", kOrange);
     
     // ------------------
     // Regions
     // ------------------
    
-    AddRegion("Suggested","Suggested",&SuggestedSelection);
+    AddRegion("Suggested","",&SuggestedSelection);
+    AddRegion("CR0b","",&Sel0b);
+    AddRegion("CR1b","",&Sel1b);
+    AddRegion("CR2b","",&Sel2b);
    
     /*
     AddRegion("SR1l","SR1l",&SR1l);
@@ -315,9 +367,10 @@ void BabyScrewdriver::Init()
     // Channels
     // ------------------
     
-    AddChannel("lepChannel","lepChannel", &lepChannel);
+    AddChannel("lepChannel","", &lepChannel);
 
     SetLumi(12900.);
+    //SetLumi(42800.);
     //SetLumi(3900.);
 
     Create1DHistos();
@@ -382,6 +435,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
      }
 
     //@MJ@ TODO do a method from this
+    /*
     if (currentProcessClass == "test" && (myEvent.numberOfGeneratedLeptons >= 2))
     {
         currentProcessClass = "lostLepton";
@@ -397,9 +451,21 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     }
     else
     {}
+    */
+
+    //cout<<"n-tops: "<<myEvent.genTops_pt.size()<<endl;
+    double top_pt = 0;
+    if(myEvent.genTops_pt.size()!=0){
+    	//cout<<"I found tops: "<<myEvent.genTops_pt[0]<<endl;
+	for(unsigned int i=0;i<myEvent.genTops_pt.size();i++){
+		if(myEvent.genTops_pdgid[i] == 6)
+			top_pt = myEvent.genTops_pt[i];
+	}
+    }
 
     recompute(useTriggerInfo, currentDataset);
 
+    //cout<<GetLumi()<<endl;
     float weightLumi = myEvent.crossSection * GetLumi() * myEvent.mc_weight / myEvent.totalNumberOfInitialEvent; //@MJ@ TODO cross section form file?!
 
     //--- Compute Weights  ---//
@@ -416,6 +482,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 	lepWeight = WFact.GetLepW();
     	//cout<<"lepw = "<<lepWeight<<endl;
     }
+	
 
 
 
@@ -428,8 +495,10 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     float weight     = weightLumi;
     if (currentProcessType == "signal") weight = weightSignal;
     if (currentProcessType == "data") weight = 1.0;
-    //else weight*=btagWeight*lepWeight;
+    else weight*=btagWeight*lepWeight;
     //else weight*=1;
+    //if(top_pt!=0) cout<<"top pt weight = "<< WFact.TopPTWeightComputor(top_pt)<<endl;
+    //if(top_pt!=0) weight*= WFact.TopPTWeightComputor(top_pt);
     
     AutoFillProcessClass(currentProcessClass, weight);
 
@@ -496,6 +565,21 @@ void BabyScrewdriver::PostProcessingStep()
         }
     }
 
+    vector<string> inputRegionTags = {"CR0b", "CR1b", "CR2b"};
+    string channel = "lepChannel";
+    TableDataMC table(this, inputRegionTags, channel);//, string options = "")
+    table.Print("yield.tab", 4);
+    cout<<"CR0b: SF: "<<endl;
+    Figure fig = table.Get("CR0b", "data")/table.Get("CR0b", "totalSM");
+    cout<<fig.Print()<<endl;
+    cout<<"CR1b: SF: "<<endl;
+    fig = table.Get("CR1b", "data")/table.Get("CR1b","totalSM");
+    cout<<fig.Print()<<endl;
+    cout<<"CR2b: SF: "<<endl;
+    fig = table.Get("CR2b", "data")/table.Get("CR2b","totalSM");
+    cout<<fig.Print()<<endl;
+
+
     // Schedule plots
     //
 
@@ -507,15 +591,14 @@ void BabyScrewdriver::PostProcessingStep()
     //SchedulePlots("2D");
 
     // Config plots
-
-    SetGlobalStringOption("Plot", "infoTopRight", "CMS Simulation");
-    SetGlobalStringOption("Plot", "infoTopLeft",  "#sqrt{s} = 13 TeV");
+    SetGlobalStringOption("Plot", "infoTopRight", "CMS Preliminary");
+    SetGlobalStringOption("Plot", "infoTopLeft",  "12.9 fb^{-1} (#sqrt{s} = 13 TeV)");
 
     SetGlobalBoolOption("Plot", "exportPdf", false);
     SetGlobalBoolOption("Plot", "exportEps", true);
     SetGlobalBoolOption("Plot", "exportPng", false);
-    SetGlobalBoolOption("DataMCRatio","min",0);
-    SetGlobalBoolOption("DataMCRatio","max",2);
+    SetGlobalFloatOption("DataMCRatio","min",0);
+    SetGlobalFloatOption("DataMCRatio","max",2);
 
     // Make and write the plots
 
