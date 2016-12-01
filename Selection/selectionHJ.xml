@@ -10,14 +10,17 @@
    <Variable name="MT" 	  babyTuple="mt_met_lep"/>
    <Variable name="MT2W"  babyTuple="MT2W"/>
    <Variable name="tmod"  babyTuple="topness"/>
-   <Variable name="DPhi_jMET" babyTuple="dphi_ak4pfjets_met" />
+   <Variable name="DPhi_jmet" babyTuple="dphi_ak4pfjets_met" />
    <Variable name="Mlb" babyTuple="Mlb" />
+   <Variable name="lep1_MediumID" babyTuple="lep1_passMediumID" />
+   <Variable name="lep1_TightID" babyTuple="lep1_passTightID" />
+   <Variable name="lep1_pdgid" babyTuple="lep1_pdgid" />
  </Variables>
 
 
- <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jMET>=0.8 and trigged()" />
+ <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jmet>=0.8" /> 
  <Regions>
-  <Region name="SR1l" selection="Nbjets>=1 and NLeps==1 and TrackVeto and TauVeto"/>
+  <Region name="SR1l" selection="Nbjets>=1 and NLeps==1 and TrackVeto and TauVeto and ( (lep1_MediumID and abs(lep1_pdgid)==11) or (lep1_TightID and abs(lep1_pdgid)==13) )"/>
   <Region name="CR1l" selection="Nbjets==0 and NLeps==1 and TrackVeto and TauVeto"/>
   <Region name="CR2l" selection="Nbjets>=1 and NLeps==2 and TrackVeto and TauVeto"/>
  </Regions>

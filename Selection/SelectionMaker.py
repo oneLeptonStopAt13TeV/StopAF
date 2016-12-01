@@ -41,12 +41,14 @@ class Selection:
 	# !>  -> <
 	bin = bin_from_xml
 	bin['selection'] = bin['selection'].replace('and','&&', 100) # max nof occurence = 100
+	bin['selection'] = bin['selection'].replace('or','||', 100) # max nof occurence = 100
 	bin['selection'] = bin['selection'].replace('!>','<', 100) # max nof occurence = 100
    	self.bins.append(bin)
    
    def SetBaseline(self, baseline):
 	self.baseline = baseline
 	self.baseline = self.baseline.replace('and','&&', 100) # max nof occurence = 100
+	self.baseline = self.baseline.replace('or','||', 100) # max nof occurence = 100
 	self.baseline = self.baseline.replace('!>','<', 100) # max nof occurence = 100
 
 
@@ -54,6 +56,7 @@ class Selection:
    def AddRegion(self, region_from_xml):
 	region = region_from_xml
 	region['selection'] = region['selection'].replace('and','&&', 100) # max nof occurence = 100
+	region['selection'] = region['selection'].replace('or','||', 100) # max nof occurence = 100
 	region['selection'] = region['selection'].replace('!>','<', 100) # max nof occurence = 100
 	self.regions.append(region)
 

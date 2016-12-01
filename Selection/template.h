@@ -1,4 +1,4 @@
-#include "Reader_CommonFormat.h"
+#include "../common/Reader_CommonFormat_CommonBabies.h"
 
 //global variable
 babyEvent myEvent;
@@ -17,7 +17,7 @@ void CheckTrigger(bool data, string dataset){
         bool passElTrigger = false;
         bool passMuTrigger = false;
 	
-	trigged = false
+	trigged = false;
 
         if(data)
         {

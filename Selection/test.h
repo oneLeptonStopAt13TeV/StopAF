@@ -1,4 +1,4 @@
-#include "Reader_CommonFormat.h"
+#include "../common/Reader_CommonFormat_CommonBabies.h"
 
 //global variable
 babyEvent myEvent;
@@ -10,7 +10,7 @@ bool OneLep(){ return (myEvent.ngoodleps == 1 && myEvent.PassTrackVeto && myEven
 bool TwoLep(){ return ( (myEvent.ngoodleps+myEvent.nvetoleps)==2  && myEvent.PassTauVeto); }
 
 void CheckTrigger(bool data, string dataset){
-        if(dataset == "")
+/*        if(dataset == "")
             throw std::runtime_error("dataset for using the trigger info not specified");
 
 	bool passMETMHTTrigger = false;
@@ -48,10 +48,10 @@ void CheckTrigger(bool data, string dataset){
          {
              trigged = true;
          }
-}
+*/}
 
-bool baseline(){ return myEvent.pfmet>=250 && myEvent.mt_met_lep>=150 && myEvent.ngoodjets>=2 && DPhi_jmyEvent.pfmet>=0.8 && trigged();}
-bool SR1l() { return ( baseline() && myEvent.ngoodbtags>=1 && myEvent.ngoodleps==1 && myEvent.PassTrackVeto && myEvent.PassTauVeto ); }
+bool baseline(){ return myEvent.pfmet>=250 && myEvent.mt_met_lep>=150 && myEvent.ngoodjets>=2 && myEvent.dphi_ak4pfjets_met>=0.8;}
+bool SR1l() { return ( baseline() && myEvent.ngoodbtags>=1 && myEvent.ngoodleps==1 && myEvent.PassTrackVeto && myEvent.PassTauVeto && ( (myEvent.lep1_passMediumID && abs(myEvent.lep1_pdgid)==11) || (myEvent.lep1_passTightID && abs(myEvent.lep1_pdgid)==13) ) ); }
 bool CR1l() { return ( baseline() && myEvent.ngoodbtags==0 && myEvent.ngoodleps==1 && myEvent.PassTrackVeto && myEvent.PassTauVeto ); }
 bool CR2l() { return ( baseline() && myEvent.ngoodbtags>=1 && myEvent.ngoodleps==2 && myEvent.PassTrackVeto && myEvent.PassTauVeto ); }
 bool SR1l23jLowMlb_MET250to350() { return (SR1l() && myEvent.ngoodjets<3 && myEvent.topness>7.5 && myEvent.Mlb<175 && myEvent.pfmet>=250 && myEvent.pfmet<350);}

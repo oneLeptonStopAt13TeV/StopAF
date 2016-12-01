@@ -18,6 +18,7 @@
 #define babyFormat
 
 #include "TLorentzVector.h"
+#include "Math/GenVector/LorentzVector.h"
 
 //#define USE_GEN_INFO
 
@@ -29,17 +30,17 @@ typedef struct
 {
     bool hasGenInfo;
     //int           numberOfSelectedLeptons = -13;
-    vector<bool>   ak4pfjets_passMEDbtag;
-    vector<float> ak4pfjets_mva;
-    vector<float> ak4pfjets_loose_puid;
-    vector<float> ak4pfjets_pt;
-    vector<float> ak4pfjets_phi;
-    vector<float> ak4pfjets_eta;
-    vector<float> ak4pfjets_mass;
-    vector<int>   ak4pfjets_partonFlavour;
-    vector<int>   ak4pfjets_hadronFlavour;
-    vector<bool>  ak4pfjets_loose_pfid;
-    vector<float> ak4pfjets_CSV;
+    vector<bool>*   ak4pfjets_passMEDbtag;
+    vector<float>* ak4pfjets_mva;
+    vector<float>* ak4pfjets_loose_puid;
+    vector<float>* ak4pfjets_pt;
+    vector<float>* ak4pfjets_phi;
+    vector<float>* ak4pfjets_eta;
+    vector<float>* ak4pfjets_mass;
+    vector<int>*   ak4pfjets_partonFlavour;
+    vector<int>*   ak4pfjets_hadronFlavour;
+    vector<bool>*  ak4pfjets_loose_pfid;
+    vector<float>* ak4pfjets_CSV;
     //vector<float> ak4pfjets_qgtag;
     float         ak4pfjets_rho = -13;
     float         dphi_ak4pfjets_met = -13;
@@ -48,13 +49,13 @@ typedef struct
     //float         met_sig = -13;
     //vector<float> ak8pfjets_pt;
     //vector<float> ak10pfjets_pt;
-    bool          HLT_SingleEl;
-    bool          HLT_SingleMu;
-    bool          HLT_MET;
-    bool          HLT_MET100_MHT100;
-    bool          HLT_DiEl;
-    bool          HLT_DiMu;
-    bool          HLT_MuE;
+    int          HLT_SingleEl;
+    int          HLT_SingleMu;
+    int          HLT_MET;
+    int          HLT_MET100_MHT100;
+    int          HLT_DiEl;
+    int          HLT_DiMu;
+    int          HLT_MuE;
     //vector<float> ak8pfjets_phi;
     //vector<float> ak10pfjets_phi;
     float         lep1_passMediumID = -13;
@@ -123,12 +124,11 @@ typedef struct
     //float         leadingLeptonPhi = -13;
     //int           numberOfBTaggedJets = -13;
     //int           genlepsfromtop = -13;
-    bool          is1lepFromW = -13;
-    bool          is1lepFromTop = -13;
+    int          is1lepFromW = -13;
+    int          is1lepFromTop = -13;
     ///int           secondLeptonId = -13;
     //float         jetsCSV = -13;
     float         weight_PU = -13;
-    float 	  genweights = -13;
     float         weight_btagsf = -13;
     float         weight_lepSF = -13;
     float         weight_vetoLepSF = -13;
@@ -155,8 +155,8 @@ typedef struct
     float         hadronic_top_chi2 = -13;
     int           nvertex = -13;
     //int           puIntime = -13;
-    int           puTrue = -13;
-    int           is_data = -13;
+    float           puTrue = -13;
+    bool           is_data = -13;
     int           is0lep = -13;
     int           is1lep = -13;
     int           is2lep = -13;
@@ -173,14 +173,22 @@ typedef struct
     vector<float>* pointerForgenTops_pt;
     vector<int>* pointerForgenTops_pdgid;*/
 
-    TLorentzVector lep1_p4;
-    TLorentzVector lep2_p4;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > lep1_p4;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4lep1_p4 = NULL;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > lep2_p4;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4lep2_p4 = NULL;
 
     bool PassTrackVeto = -13;
     bool PassTauVeto = -13;
 
     float metGen_pt = -13;
     float metGen_phi = -13;
+
+
+    vector<float>* genweights;
+    vector<string>* genweightsID;
+    vector<int>* 	  gensusy_id;
+    vector< ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >* gensusy_p4;
 
     //float DeltaRlj = -13;
     //vector<float> ak8pfjets_nsubjettines; //WARNING! this is empty now
@@ -306,8 +314,8 @@ typedef struct
     vector<bool>* pointerForTriggerPass;*/
 
    //Add content
-   TLorentzVector leadingLepton;
-   TLorentzVector secondLepton;
+   //TLorentzVector leadingLepton;
+   //TLorentzVector secondLepton;
 
 }
 babyEvent;
@@ -360,6 +368,18 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
         theTree->SetBranchAddress("kfactor",            &(myEvent->kfactor));
     if(theTree->GetListOfBranches()->FindObject("scale1fb"))
         theTree->SetBranchAddress("scale1fb", &(myEvent->scale1fb));
+
+
+    //@MJ@ TODO gen info - move
+    if(theTree->GetListOfBranches()->FindObject("genweights"))
+        theTree->SetBranchAddress("genweights", &(myEvent->genweights));
+    if(theTree->GetListOfBranches()->FindObject("genweightsID"))
+        theTree->SetBranchAddress("genweightsID", &(myEvent->genweightsID));
+    if(theTree->GetListOfBranches()->FindObject("gensusy_id"))
+        theTree->SetBranchAddress("gensusy_id", &(myEvent->gensusy_id));
+    if(theTree->GetListOfBranches()->FindObject("gensusy_p4"))
+        theTree->SetBranchAddress("gensusy_p4", &(myEvent->gensusy_p4));
+
 
     // multiplicities
     if(theTree->GetListOfBranches()->FindObject("ngoodjets"))
@@ -431,11 +451,12 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     #ifdef USE_LEP1
     if(theTree->GetListOfBranches()->FindObject("lep1_p4"))
     {
-        theTree->SetBranchAddress("lep1_p4",              &(myEvent->lep1_p4));
-        myEvent->lep1_pt = myEvent->lep1_p4.Pt();
-        myEvent->lep1_eta = myEvent->lep1_p4.Eta();
-        myEvent->lep1_phi = myEvent->lep1_p4.Phi();
-        myEvent->lep1_mass = myEvent->lep1_p4.M();
+        //myEvent->lep1_p4 = NULL;
+        theTree->SetBranchAddress("lep1_p4",              &(myEvent->p4lep1_p4));
+        //myEvent->lep1_pt = myEvent->lep1_p4->Pt();
+        //myEvent->lep1_eta = myEvent->lep1_p4->Eta();
+        //myEvent->lep1_phi = myEvent->lep1_p4->Phi();
+        //myEvent->lep1_mass = myEvent->lep1_p4->M();//@MJ@ TODO something is going on
     }
     #endif
     #ifdef USE_LEP1_EXT
@@ -459,11 +480,11 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     #ifdef USE_LEP2
     if(theTree->GetListOfBranches()->FindObject("lep2_p4"))
     {
-        theTree->SetBranchAddress("lep2_p4",              &(myEvent->lep2_p4));
-        myEvent->lep2_pt = myEvent->lep2_p4.Pt();
-        myEvent->lep2_eta = myEvent->lep2_p4.Eta();
-        myEvent->lep2_phi = myEvent->lep2_p4.Phi();
-        myEvent->lep2_mass = myEvent->lep2_p4.M();
+        theTree->SetBranchAddress("lep2_p4",              &(myEvent->p4lep2_p4));
+        //myEvent->lep2_pt = myEvent->lep2_p4->Pt();
+        //myEvent->lep2_eta = myEvent->lep2_p4->Eta();
+        //myEvent->lep2_phi = myEvent->lep2_p4->Phi();
+        //myEvent->lep2_mass = myEvent->lep2_p4->M();//@MJ@ TODO something is going on
     }
     #endif
     #ifdef USE_LEP2_EXT
@@ -492,14 +513,14 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
         theTree->SetBranchAddress("ak4pfjets_parton_flavor", &(myEvent->ak4pfjets_partonFlavour));
     if(theTree->GetListOfBranches()->FindObject("ak4pfjets_hadron_flavor"))
         theTree->SetBranchAddress("ak4pfjets_hadron_flavor", &(myEvent->ak4pfjets_hadronFlavour));
-    if(theTree->GetListOfBranches()->FindObject("ak4pfjets_loose_puid"))
-        theTree->SetBranchAddress("ak4pfjets_loose_puid",          &(myEvent->ak4pfjets_loose_puid));
-    if(theTree->GetListOfBranches()->FindObject("ak4pfjets_loose_pfid"))
-        theTree->SetBranchAddress("ak4pfjets_loose_pfid",    &(myEvent->ak4pfjets_loose_pfid));
+    //if(theTree->GetListOfBranches()->FindObject("ak4pfjets_loose_puid"))
+    //    theTree->SetBranchAddress("ak4pfjets_loose_puid",          &(myEvent->ak4pfjets_loose_puid));
+    //if(theTree->GetListOfBranches()->FindObject("ak4pfjets_loose_pfid"))
+    //    theTree->SetBranchAddress("ak4pfjets_loose_pfid",    &(myEvent->ak4pfjets_loose_pfid));
     if(theTree->GetListOfBranches()->FindObject("ak4pfjets_rho"))
         theTree->SetBranchAddress("ak4pfjets_rho",           &(myEvent->ak4pfjets_rho));
-    if(theTree->GetListOfBranches()->FindObject("dphi_ak4pfjet_met"))
-        theTree->SetBranchAddress("dphi_ak4pfjet_met",      &(myEvent->dphi_ak4pfjets_met));
+    if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2"))
+        theTree->SetBranchAddress("mindphi_met_j1_j2",      &(myEvent->dphi_ak4pfjets_met));
     #endif
 
     //Fat jets, PV
@@ -562,7 +583,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     #ifdef USE_VAR_BASELINE
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
         theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
-    theTree->SetBranchAddress("met_sig",                 &(myEvent->met_sig));
+    //theTree->SetBranchAddress("met_sig",                 &(myEvent->met_sig));
     if(theTree->GetListOfBranches()->FindObject("pfmet"))
         theTree->SetBranchAddress("pfmet",                   &(myEvent->pfmet));
     if(theTree->GetListOfBranches()->FindObject("MT2W"))
@@ -719,6 +740,21 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
 {
     theTree->GetEntry(i);
 
+    #ifdef USE_LEP1
+    myEvent->lep1_p4 = *(myEvent->p4lep1_p4);
+    myEvent->lep1_pt = myEvent->lep1_p4.Pt();
+    myEvent->lep1_eta = myEvent->lep1_p4.Eta();
+    myEvent->lep1_phi = myEvent->lep1_p4.Phi();
+    myEvent->lep1_mass = myEvent->lep1_p4.M2();
+    #endif
+
+    #ifdef USE_LEP2
+    myEvent->lep2_p4 = *(myEvent->p4lep2_p4);
+    myEvent->lep2_pt = myEvent->lep2_p4.Pt();
+    myEvent->lep2_eta = myEvent->lep2_p4.Eta();
+    myEvent->lep2_phi = myEvent->lep2_p4.Phi();
+    //myEvent->lep2_mass = myEvent->lep2_p4.M();
+    #endif
     // Put actual content of special type branches where they should be...
     ///*
 

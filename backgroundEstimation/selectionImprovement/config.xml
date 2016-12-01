@@ -1,59 +1,101 @@
 <?xml version="1.0"?>
 <Variables>
 <Variable tag="yield" label="Yield" unit="" nbins="1" min="-0.5" max="0.5"/>
-<Variable tag="MET" label="MET" unit="MET" nbins="20" min="200" max="1000"/>
-<Variable tag="MT2W" label="MT2W" unit="MT2W" nbins="20" min="0" max="500"/>
-<Variable tag="Mlb" label="Mlb" unit="Mlb" nbins="20" min="0" max="500"/>
-<Variable tag="MT" label="MT" unit="MT" nbins="20" min="100" max="1000"/>
-<Variable tag="topness" label="topness" unit="topness" nbins="20" min="-20" max="20"/>
-<Variable tag="ngoodbtags" label="ngoodbtags" unit="ngoodbtags" nbins="10" min="-0.5" max="10.5"/>
-<Variable tag="looseB" label="looseB" unit="looseB" nbins="10" min="-0.5" max="10.5"/>
-<Variable tag="ptDiffB" label="ptDiffB" unit="ptDiffB" nbins="20" min="0" max="700"/>
-<Variable tag="phiDiffB" label="phiDiffB" unit="phiDiffB" nbins="20" min="0" max="4"/>
-<Variable tag="phiDiffMETlep" label="phiDiffMETlep" unit="phiDiffMETlep" nbins="20" min="0" max="4"/>
-<Variable tag="lepPtToMET" label="lepPtToMET" unit="lepPtToMET" nbins="20" min="0" max="1.4"/>
-<Variable tag="relLepPtToMET" label="relLepPtToMET" unit="relLepPtToMET" nbins="20" min="0" max="1"/>
-<Variable tag="ptrms" label="ptrms" unit="ptrms" nbins="20" min="0" max="500"/>
-<Variable tag="HT" label="HT" unit="HT" nbins="20" min="0" max="2000"/>
-<Variable tag="ptAssB" label="ptAssB" unit="ptAssB" nbins="20" min="0" max="6"/>
-<Variable tag="ptAssPT" label="ptAssPT" unit="ptAssPT" nbins="20" min="0" max="1.5"/>
-<Variable tag="ptAssBPT" label="ptAssBPT" unit="ptAssBPT" nbins="20" min="0" max="10"/>
-<Variable tag="etaAssB" label="etaAssB" unit="etaAssB" nbins="20" min="0" max="100"/>
-<Variable tag="etaAssPT" label="etaAssPT" unit="etaAssPT" nbins="20" min="0" max="100"/>
-<Variable tag="etaSyst" label="etaSyst" unit="etaSyst" nbins="20" min="0" max="4"/>
-<Variable tag="phiDiffBl" label="phiDiffBl" unit="phiDiffBl" nbins="20" min="0" max="4"/>
-<Variable tag="phiDiffBMET" label="phiDiffBMET" unit="phiDiffBMET" nbins="20" min="0" max="4"/>
-<Variable tag="jet1Pt" label="jet1Pt" unit="" nbins="50" min="0" max="1000"/>
-<Variable tag="jet2Pt" label="jet2Pt" unit="" nbins="50" min="0" max="1000"/>
-<Variable tag="jet3Pt" label="jet3Pt" unit="" nbins="50" min="0" max="1000"/>
-<Variable tag="jet4Pt" label="jet4Pt" unit="" nbins="50" min="0" max="1000"/>
-<Variable tag="jet1PtToHT" label="jet1PtToHT" unit="" nbins="50" min="0" max="1"/>
-<Variable tag="jet2PtToHT" label="jet2PtToHT" unit="" nbins="50" min="0" max="1"/>
-<Variable tag="jet3PtToHT" label="jet3PtToHT" unit="" nbins="50" min="0" max="1"/>
-<Variable tag="jet4PtToHT" label="jet4PtToHT" unit="" nbins="50" min="0" max="1"/>
-<Variable tag="jet1PtToMET" label="jet1PtToMET" unit="" nbins="50" min="0" max="3"/>
-<Variable tag="jet2PtToMET" label="jet2PtToMET" unit="" nbins="50" min="0" max="3"/>
-<Variable tag="jet3PtToMET" label="jet3PtToMET" unit="" nbins="50" min="0" max="3"/>
-<Variable tag="jet4PtToMET" label="jet4PtToMET" unit="" nbins="50" min="0" max="3"/>
-<Variable tag="pt1PlusPt2" label="pt1PlusPt2" unit="" nbins="50" min="0" max="2000"/>
-<Variable tag="pt1MinPt2" label="pt1MinPt2" unit="" nbins="50" min="0" max="1000"/>
-<Variable tag="pt12Ass" label="pt12Ass" unit="" nbins="20" min="0" max="1"/>
-<Variable tag="METAndHT" label="METAndHT" unit="" nbins="50" min="0" max="3000"/>
-<Variable tag="METAndHTAndLPT" label="METAndHTAndLPT" unit="" nbins="50" min="0" max="3000"/>
-<Variable tag="M3b" label="M3b" unit="M3b" nbins="50" min="0" max="1000"/>
+<Variable tag="MET" label="MET" unit="MET" nbins="100" min="200" max="1000"/>
+<Variable tag="MT2W" label="MT2W" unit="MT2W" nbins="100" min="0" max="500"/>
+<Variable tag="MT" label="MT" unit="MT" nbins="100" min="100" max="1000"/>
+<Variable tag="nJets" label="nJets" unit="nJets" nbins="5" min="0.5" max="5.5"/>
+<Variable tag="dphi" label="dphi" unit="dphi" nbins="100" min="0" max="3.5"/>
+<Variable tag="nvertex" label="nvertex" unit="nvertex" nbins="50" min="-0.5" max="50.5"/>
 </Variables>
 <Regions>
-<Region tag="SR1lbaselineOnly_MET250toInf" label="SR1lbaselineOnly_MET250toInf" />
-<Region tag="SR1lbaselineOnlyLeadJetsRedifined_MET250toInf" label="SR1lbaselineOnlyLeadJetsRedifined_MET250toInf" />
-<Region tag="SR1lbaselineOnlyGoodJetsRedifined4j_MET250toInf" label="SR1lbaselineOnlyGoodJetsRedifined4j_MET250toInf" />
-<Region tag="SR1l23jLowMlb_MET250toInf" label="SR1l23jLowMlb_MET250toInf" />
-<Region tag="SR1l23jHighMlb_MET250toInf" label="SR1l23jHighMlb_MET250toInf" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET250toInf" label="SR1l4jLowMT2WLowMlb_MET250toInf" />
-<Region tag="SR1l4jLowMT2WHighMlb_MET250toInf" label="SR1l4jLowMT2WHighMlb_MET250toInf" />
-<Region tag="SR1l4jMidMT2WLowMlb_MET250toInf" label="SR1l4jMidMT2WLowMlb_MET250toInf" />
-<Region tag="SR1l4jMidMT2WHighMlb_MET250toInf" label="SR1l4jMidMT2WHighMlb_MET250toInf" />
-<Region tag="SR1l4jHighMT2WLowMlb_MET250toInf" label="SR1l4jHighMT2WLowMlb_MET250toInf" />
-<Region tag="SR1l4jHighMT2WHighMlb_MET250toInf" label="SR1l4jHighMT2WHighMlb_MET250toInf" />
+<Region tag="SR1l23jLowMlb_MET250to350" label="SR1l23jLowMlb_MET250to350" />
+<Region tag="SR1l23jLowMlb_MET350to450" label="SR1l23jLowMlb_MET350to450" />
+<Region tag="SR1l23jLowMlb_MET450to550" label="SR1l23jLowMlb_MET450to550" />
+<Region tag="SR1l23jLowMlb_MET550toInf" label="SR1l23jLowMlb_MET550toInf" />
+<Region tag="SR1l23jHighMlb_MET250to350" label="SR1l23jHighMlb_MET250to350" />
+<Region tag="SR1l23jHighMlb_MET350to450" label="SR1l23jHighMlb_MET350to450" />
+<Region tag="SR1l23jHighMlb_MET450to550" label="SR1l23jHighMlb_MET450to550" />
+<Region tag="SR1l23jHighMlb_MET550toInf" label="SR1l23jHighMlb_MET550toInf" />
+<Region tag="SR1l4jLowMT2WLowMlb_MET250to350" label="SR1l4jLowMT2WLowMlb_MET250to350" />
+<Region tag="SR1l4jLowMT2WLowMlb_MET350to450" label="SR1l4jLowMT2WLowMlb_MET350to450" />
+<Region tag="SR1l4jLowMT2WLowMlb_MET450to550" label="SR1l4jLowMT2WLowMlb_MET450to550" />
+<Region tag="SR1l4jLowMT2WLowMlb_MET550to650" label="SR1l4jLowMT2WLowMlb_MET550to650" />
+<Region tag="SR1l4jLowMT2WLowMlb_MET650toInf" label="SR1l4jLowMT2WLowMlb_MET650toInf" />
+<Region tag="SR1l4jLowMT2WHighMlb_MET250to350" label="SR1l4jLowMT2WHighMlb_MET250to350" />
+<Region tag="SR1l4jLowMT2WHighMlb_MET350to450" label="SR1l4jLowMT2WHighMlb_MET350to450" />
+<Region tag="SR1l4jLowMT2WHighMlb_MET450to550" label="SR1l4jLowMT2WHighMlb_MET450to550" />
+<Region tag="SR1l4jLowMT2WHighMlb_MET550toInf" label="SR1l4jLowMT2WHighMlb_MET550toInf" />
+<Region tag="SR1l4jMidMT2WLowMlb_MET250to350" label="SR1l4jMidMT2WLowMlb_MET250to350" />
+<Region tag="SR1l4jMidMT2WLowMlb_MET350to450" label="SR1l4jMidMT2WLowMlb_MET350to450" />
+<Region tag="SR1l4jMidMT2WLowMlb_MET450toInf" label="SR1l4jMidMT2WLowMlb_MET450toInf" />
+<Region tag="SR1l4jMidMT2WHighMlb_MET250to400" label="SR1l4jMidMT2WHighMlb_MET250to400" />
+<Region tag="SR1l4jMidMT2WHighMlb_MET400toInf" label="SR1l4jMidMT2WHighMlb_MET400toInf" />
+<Region tag="SR1l4jHighMT2WLowMlb_MET250to350" label="SR1l4jHighMT2WLowMlb_MET250to350" />
+<Region tag="SR1l4jHighMT2WLowMlb_MET350to450" label="SR1l4jHighMT2WLowMlb_MET350to450" />
+<Region tag="SR1l4jHighMT2WLowMlb_MET450to600" label="SR1l4jHighMT2WLowMlb_MET450to600" />
+<Region tag="SR1l4jHighMT2WLowMlb_MET600toInf" label="SR1l4jHighMT2WLowMlb_MET600toInf" />
+<Region tag="SR1l4jHighMT2WHighMlb_MET250to400" label="SR1l4jHighMT2WHighMlb_MET250to400" />
+<Region tag="SR1l4jHighMT2WHighMlb_MET400to650" label="SR1l4jHighMT2WHighMlb_MET400to650" />
+<Region tag="SR1l4jHighMT2WHighMlb_MET650toInf" label="SR1l4jHighMT2WHighMlb_MET650toInf" />
+<Region tag="CR1l23jLowMlb_MET250to350" label="CR1l23jLowMlb_MET250to350" />
+<Region tag="CR1l23jLowMlb_MET350to450" label="CR1l23jLowMlb_MET350to450" />
+<Region tag="CR1l23jLowMlb_MET450to550" label="CR1l23jLowMlb_MET450to550" />
+<Region tag="CR1l23jLowMlb_MET550toInf" label="CR1l23jLowMlb_MET550toInf" />
+<Region tag="CR1l23jHighMlb_MET250to350" label="CR1l23jHighMlb_MET250to350" />
+<Region tag="CR1l23jHighMlb_MET350to450" label="CR1l23jHighMlb_MET350to450" />
+<Region tag="CR1l23jHighMlb_MET450to550" label="CR1l23jHighMlb_MET450to550" />
+<Region tag="CR1l23jHighMlb_MET550toInf" label="CR1l23jHighMlb_MET550toInf" />
+<Region tag="CR1l4jLowMT2WLowMlb_MET250to350" label="CR1l4jLowMT2WLowMlb_MET250to350" />
+<Region tag="CR1l4jLowMT2WLowMlb_MET350to450" label="CR1l4jLowMT2WLowMlb_MET350to450" />
+<Region tag="CR1l4jLowMT2WLowMlb_MET450to550" label="CR1l4jLowMT2WLowMlb_MET450to550" />
+<Region tag="CR1l4jLowMT2WLowMlb_MET550to650" label="CR1l4jLowMT2WLowMlb_MET550to650" />
+<Region tag="CR1l4jLowMT2WLowMlb_MET650toInf" label="CR1l4jLowMT2WLowMlb_MET650toInf" />
+<Region tag="CR1l4jLowMT2WHighMlb_MET250to350" label="CR1l4jLowMT2WHighMlb_MET250to350" />
+<Region tag="CR1l4jLowMT2WHighMlb_MET350to450" label="CR1l4jLowMT2WHighMlb_MET350to450" />
+<Region tag="CR1l4jLowMT2WHighMlb_MET450to550" label="CR1l4jLowMT2WHighMlb_MET450to550" />
+<Region tag="CR1l4jLowMT2WHighMlb_MET550toInf" label="CR1l4jLowMT2WHighMlb_MET550toInf" />
+<Region tag="CR1l4jMidMT2WLowMlb_MET250to350" label="CR1l4jMidMT2WLowMlb_MET250to350" />
+<Region tag="CR1l4jMidMT2WLowMlb_MET350to450" label="CR1l4jMidMT2WLowMlb_MET350to450" />
+<Region tag="CR1l4jMidMT2WLowMlb_MET450toInf" label="CR1l4jMidMT2WLowMlb_MET450toInf" />
+<Region tag="CR1l4jMidMT2WHighMlb_MET250to400" label="CR1l4jMidMT2WHighMlb_MET250to400" />
+<Region tag="CR1l4jMidMT2WHighMlb_MET400toInf" label="CR1l4jMidMT2WHighMlb_MET400toInf" />
+<Region tag="CR1l4jHighMT2WLowMlb_MET250to350" label="CR1l4jHighMT2WLowMlb_MET250to350" />
+<Region tag="CR1l4jHighMT2WLowMlb_MET350to450" label="CR1l4jHighMT2WLowMlb_MET350to450" />
+<Region tag="CR1l4jHighMT2WLowMlb_MET450to600" label="CR1l4jHighMT2WLowMlb_MET450to600" />
+<Region tag="CR1l4jHighMT2WLowMlb_MET600toInf" label="CR1l4jHighMT2WLowMlb_MET600toInf" />
+<Region tag="CR1l4jHighMT2WHighMlb_MET250to400" label="CR1l4jHighMT2WHighMlb_MET250to400" />
+<Region tag="CR1l4jHighMT2WHighMlb_MET400to650" label="CR1l4jHighMT2WHighMlb_MET400to650" />
+<Region tag="CR1l4jHighMT2WHighMlb_MET650toInf" label="CR1l4jHighMT2WHighMlb_MET650toInf" />
+<Region tag="CR2l23jLowMlb_MET250to350" label="CR2l23jLowMlb_MET250to350" />
+<Region tag="CR2l23jLowMlb_MET350to450" label="CR2l23jLowMlb_MET350to450" />
+<Region tag="CR2l23jLowMlb_MET450to550" label="CR2l23jLowMlb_MET450to550" />
+<Region tag="CR2l23jLowMlb_MET550toInf" label="CR2l23jLowMlb_MET550toInf" />
+<Region tag="CR2l23jHighMlb_MET250to350" label="CR2l23jHighMlb_MET250to350" />
+<Region tag="CR2l23jHighMlb_MET350to450" label="CR2l23jHighMlb_MET350to450" />
+<Region tag="CR2l23jHighMlb_MET450to550" label="CR2l23jHighMlb_MET450to550" />
+<Region tag="CR2l23jHighMlb_MET550toInf" label="CR2l23jHighMlb_MET550toInf" />
+<Region tag="CR2l4jLowMT2WLowMlb_MET250to350" label="CR2l4jLowMT2WLowMlb_MET250to350" />
+<Region tag="CR2l4jLowMT2WLowMlb_MET350to450" label="CR2l4jLowMT2WLowMlb_MET350to450" />
+<Region tag="CR2l4jLowMT2WLowMlb_MET450to550" label="CR2l4jLowMT2WLowMlb_MET450to550" />
+<Region tag="CR2l4jLowMT2WLowMlb_MET550to650" label="CR2l4jLowMT2WLowMlb_MET550to650" />
+<Region tag="CR2l4jLowMT2WLowMlb_MET650toInf" label="CR2l4jLowMT2WLowMlb_MET650toInf" />
+<Region tag="CR2l4jLowMT2WHighMlb_MET250to350" label="CR2l4jLowMT2WHighMlb_MET250to350" />
+<Region tag="CR2l4jLowMT2WHighMlb_MET350to450" label="CR2l4jLowMT2WHighMlb_MET350to450" />
+<Region tag="CR2l4jLowMT2WHighMlb_MET450to550" label="CR2l4jLowMT2WHighMlb_MET450to550" />
+<Region tag="CR2l4jLowMT2WHighMlb_MET550toInf" label="CR2l4jLowMT2WHighMlb_MET550toInf" />
+<Region tag="CR2l4jMidMT2WLowMlb_MET250to350" label="CR2l4jMidMT2WLowMlb_MET250to350" />
+<Region tag="CR2l4jMidMT2WLowMlb_MET350to450" label="CR2l4jMidMT2WLowMlb_MET350to450" />
+<Region tag="CR2l4jMidMT2WLowMlb_MET450toInf" label="CR2l4jMidMT2WLowMlb_MET450toInf" />
+<Region tag="CR2l4jMidMT2WHighMlb_MET250to400" label="CR2l4jMidMT2WHighMlb_MET250to400" />
+<Region tag="CR2l4jMidMT2WHighMlb_MET400toInf" label="CR2l4jMidMT2WHighMlb_MET400toInf" />
+<Region tag="CR2l4jHighMT2WLowMlb_MET250to350" label="CR2l4jHighMT2WLowMlb_MET250to350" />
+<Region tag="CR2l4jHighMT2WLowMlb_MET350to450" label="CR2l4jHighMT2WLowMlb_MET350to450" />
+<Region tag="CR2l4jHighMT2WLowMlb_MET450to600" label="CR2l4jHighMT2WLowMlb_MET450to600" />
+<Region tag="CR2l4jHighMT2WLowMlb_MET600toInf" label="CR2l4jHighMT2WLowMlb_MET600toInf" />
+<Region tag="CR2l4jHighMT2WHighMlb_MET250to400" label="CR2l4jHighMT2WHighMlb_MET250to400" />
+<Region tag="CR2l4jHighMT2WHighMlb_MET400to650" label="CR2l4jHighMT2WHighMlb_MET400to650" />
+<Region tag="CR2l4jHighMT2WHighMlb_MET650toInf" label="CR2l4jHighMT2WHighMlb_MET650toInf" />
 </Regions>
 <Channels>
 <Channel tag="lepChannel" label="lepChannel" />
@@ -61,31 +103,13 @@
 <ProcessClasses>
 <ProcessClass tag="rare" label="rare" type="background" color="600" />
 <ProcessClass tag="throw" label="throw" type="signal" color="600" />
-<ProcessClass tag="650.000000_350.000000" label="650.000000_350.000000" type="signal" color="880" />
-<ProcessClass tag="900.000000_50.000000" label="900.000000_50.000000" type="signal" color="881" />
-<ProcessClass tag="test" label="1l" type="background" color="416" />
-<ProcessClass tag="singleLeptonFromT" label="1l from top" type="background" color="800" />
-<ProcessClass tag="lostLepton" label="lost Lepton" type="background" color="900" />
+<ProcessClass tag="850_100" label="850_100" type="signal" color="600" />
+<ProcessClass tag="1000_1" label="1000_1" type="signal" color="600" />
+<ProcessClass tag="lostLepton" label="lostLepton" type="background" color="900" />
+<ProcessClass tag="singleLepton" label="singleLepton" type="background" color="416" />
+<ProcessClass tag="singleLeptonFromT" label="singleLeptonFromT" type="background" color="416" />
 </ProcessClasses>
 <Datasets>
-<Dataset tag="ttZ" label="rare" processClass="rare" XsecOrLumi="0.7826" getTrueNumberOfEvents="0" />
-<Dataset tag="tZq" label="rare" processClass="rare" XsecOrLumi="0.0758" getTrueNumberOfEvents="0" />
-<Dataset tag="ZZ" label="rare" processClass="rare" XsecOrLumi="0.564" getTrueNumberOfEvents="0" />
-<Dataset tag="WZ" label="rare" processClass="rare" XsecOrLumi="3.06" getTrueNumberOfEvents="0" />
-<Dataset tag="T2tt_400to1200" label="throw" processClass="throw" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ST_s" label="test" processClass="test" XsecOrLumi="3.68182" getTrueNumberOfEvents="0" />
-<Dataset tag="ST_tW_top" label="test" processClass="test" XsecOrLumi="19.5592" getTrueNumberOfEvents="0" />
-<Dataset tag="ST_tW_atop" label="test" processClass="test" XsecOrLumi="19.5592" getTrueNumberOfEvents="0" />
-<Dataset tag="ST_t" label="test" processClass="test" XsecOrLumi="26.2278" getTrueNumberOfEvents="0" />
-<Dataset tag="W1JetsToLNuTune" label="test" processClass="test" XsecOrLumi="11752.3" getTrueNumberOfEvents="0" />
-<Dataset tag="W2JetsToLNuTune" label="test" processClass="test" XsecOrLumi="3840.72" getTrueNumberOfEvents="0" />
-<Dataset tag="W3JetsToLNuTune" label="test" processClass="test" XsecOrLumi="1159.97" getTrueNumberOfEvents="0" />
-<Dataset tag="W4JetsToLNuTune" label="test" processClass="test" XsecOrLumi="583.959" getTrueNumberOfEvents="0" />
-<Dataset tag="TTWtoQQ" label="test" processClass="test" XsecOrLumi="0.4062" getTrueNumberOfEvents="0" />
-<Dataset tag="TTWtoLNu" label="test" processClass="test" XsecOrLumi="0.2043" getTrueNumberOfEvents="0" />
-<Dataset tag="TTT" label="test" processClass="test" XsecOrLumi="1" getTrueNumberOfEvents="0" />
-<Dataset tag="VV" label="test" processClass="test" XsecOrLumi="11.95" getTrueNumberOfEvents="0" />
-<Dataset tag="TTJetsSLtop" label="singleLeptonFromT" processClass="singleLeptonFromT" XsecOrLumi="182.672" getTrueNumberOfEvents="0" />
-<Dataset tag="TTJetsSLatopv1" label="singleLeptonFromT" processClass="singleLeptonFromT" XsecOrLumi="182.672" getTrueNumberOfEvents="0" />
-<Dataset tag="TTJetsDLv0v4" label="lostLepton" processClass="lostLepton" XsecOrLumi="87.3154" getTrueNumberOfEvents="0" />
+<Dataset tag="ZZ_pythia8_25ns" label="rare" processClass="rare" XsecOrLumi="0.564" getTrueNumberOfEvents="0" />
+<Dataset tag="T2tt_mStop_850_mLSP_100_25ns" label="throw" processClass="throw" XsecOrLumi="0" getTrueNumberOfEvents="0" />
 </Datasets>
