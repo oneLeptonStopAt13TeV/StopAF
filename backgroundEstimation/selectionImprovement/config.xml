@@ -1,115 +1,150 @@
 <?xml version="1.0"?>
 <Variables>
 <Variable tag="yield" label="Yield" unit="" nbins="1" min="-0.5" max="0.5"/>
-<Variable tag="MET" label="MET" unit="MET" nbins="100" min="200" max="1000"/>
-<Variable tag="MT2W" label="MT2W" unit="MT2W" nbins="100" min="0" max="500"/>
-<Variable tag="MT" label="MT" unit="MT" nbins="100" min="100" max="1000"/>
-<Variable tag="nJets" label="nJets" unit="nJets" nbins="5" min="0.5" max="5.5"/>
-<Variable tag="dphi" label="dphi" unit="dphi" nbins="100" min="0" max="3.5"/>
-<Variable tag="nvertex" label="nvertex" unit="nvertex" nbins="50" min="-0.5" max="50.5"/>
 </Variables>
 <Regions>
-<Region tag="SR1l23jLowMlb_MET250to350" label="SR1l23jLowMlb_MET250to350" />
-<Region tag="SR1l23jLowMlb_MET350to450" label="SR1l23jLowMlb_MET350to450" />
-<Region tag="SR1l23jLowMlb_MET450to550" label="SR1l23jLowMlb_MET450to550" />
-<Region tag="SR1l23jLowMlb_MET550toInf" label="SR1l23jLowMlb_MET550toInf" />
-<Region tag="SR1l23jHighMlb_MET250to350" label="SR1l23jHighMlb_MET250to350" />
-<Region tag="SR1l23jHighMlb_MET350to450" label="SR1l23jHighMlb_MET350to450" />
-<Region tag="SR1l23jHighMlb_MET450to550" label="SR1l23jHighMlb_MET450to550" />
-<Region tag="SR1l23jHighMlb_MET550toInf" label="SR1l23jHighMlb_MET550toInf" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET250to350" label="SR1l4jLowMT2WLowMlb_MET250to350" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET350to450" label="SR1l4jLowMT2WLowMlb_MET350to450" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET450to550" label="SR1l4jLowMT2WLowMlb_MET450to550" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET550to650" label="SR1l4jLowMT2WLowMlb_MET550to650" />
-<Region tag="SR1l4jLowMT2WLowMlb_MET650toInf" label="SR1l4jLowMT2WLowMlb_MET650toInf" />
-<Region tag="SR1l4jLowMT2WHighMlb_MET250to350" label="SR1l4jLowMT2WHighMlb_MET250to350" />
-<Region tag="SR1l4jLowMT2WHighMlb_MET350to450" label="SR1l4jLowMT2WHighMlb_MET350to450" />
-<Region tag="SR1l4jLowMT2WHighMlb_MET450to550" label="SR1l4jLowMT2WHighMlb_MET450to550" />
-<Region tag="SR1l4jLowMT2WHighMlb_MET550toInf" label="SR1l4jLowMT2WHighMlb_MET550toInf" />
-<Region tag="SR1l4jMidMT2WLowMlb_MET250to350" label="SR1l4jMidMT2WLowMlb_MET250to350" />
-<Region tag="SR1l4jMidMT2WLowMlb_MET350to450" label="SR1l4jMidMT2WLowMlb_MET350to450" />
-<Region tag="SR1l4jMidMT2WLowMlb_MET450toInf" label="SR1l4jMidMT2WLowMlb_MET450toInf" />
-<Region tag="SR1l4jMidMT2WHighMlb_MET250to400" label="SR1l4jMidMT2WHighMlb_MET250to400" />
-<Region tag="SR1l4jMidMT2WHighMlb_MET400toInf" label="SR1l4jMidMT2WHighMlb_MET400toInf" />
-<Region tag="SR1l4jHighMT2WLowMlb_MET250to350" label="SR1l4jHighMT2WLowMlb_MET250to350" />
-<Region tag="SR1l4jHighMT2WLowMlb_MET350to450" label="SR1l4jHighMT2WLowMlb_MET350to450" />
-<Region tag="SR1l4jHighMT2WLowMlb_MET450to600" label="SR1l4jHighMT2WLowMlb_MET450to600" />
-<Region tag="SR1l4jHighMT2WLowMlb_MET600toInf" label="SR1l4jHighMT2WLowMlb_MET600toInf" />
-<Region tag="SR1l4jHighMT2WHighMlb_MET250to400" label="SR1l4jHighMT2WHighMlb_MET250to400" />
-<Region tag="SR1l4jHighMT2WHighMlb_MET400to650" label="SR1l4jHighMT2WHighMlb_MET400to650" />
-<Region tag="SR1l4jHighMT2WHighMlb_MET650toInf" label="SR1l4jHighMT2WHighMlb_MET650toInf" />
-<Region tag="CR1l23jLowMlb_MET250to350" label="CR1l23jLowMlb_MET250to350" />
-<Region tag="CR1l23jLowMlb_MET350to450" label="CR1l23jLowMlb_MET350to450" />
-<Region tag="CR1l23jLowMlb_MET450to550" label="CR1l23jLowMlb_MET450to550" />
-<Region tag="CR1l23jLowMlb_MET550toInf" label="CR1l23jLowMlb_MET550toInf" />
-<Region tag="CR1l23jHighMlb_MET250to350" label="CR1l23jHighMlb_MET250to350" />
-<Region tag="CR1l23jHighMlb_MET350to450" label="CR1l23jHighMlb_MET350to450" />
-<Region tag="CR1l23jHighMlb_MET450to550" label="CR1l23jHighMlb_MET450to550" />
-<Region tag="CR1l23jHighMlb_MET550toInf" label="CR1l23jHighMlb_MET550toInf" />
-<Region tag="CR1l4jLowMT2WLowMlb_MET250to350" label="CR1l4jLowMT2WLowMlb_MET250to350" />
-<Region tag="CR1l4jLowMT2WLowMlb_MET350to450" label="CR1l4jLowMT2WLowMlb_MET350to450" />
-<Region tag="CR1l4jLowMT2WLowMlb_MET450to550" label="CR1l4jLowMT2WLowMlb_MET450to550" />
-<Region tag="CR1l4jLowMT2WLowMlb_MET550to650" label="CR1l4jLowMT2WLowMlb_MET550to650" />
-<Region tag="CR1l4jLowMT2WLowMlb_MET650toInf" label="CR1l4jLowMT2WLowMlb_MET650toInf" />
-<Region tag="CR1l4jLowMT2WHighMlb_MET250to350" label="CR1l4jLowMT2WHighMlb_MET250to350" />
-<Region tag="CR1l4jLowMT2WHighMlb_MET350to450" label="CR1l4jLowMT2WHighMlb_MET350to450" />
-<Region tag="CR1l4jLowMT2WHighMlb_MET450to550" label="CR1l4jLowMT2WHighMlb_MET450to550" />
-<Region tag="CR1l4jLowMT2WHighMlb_MET550toInf" label="CR1l4jLowMT2WHighMlb_MET550toInf" />
-<Region tag="CR1l4jMidMT2WLowMlb_MET250to350" label="CR1l4jMidMT2WLowMlb_MET250to350" />
-<Region tag="CR1l4jMidMT2WLowMlb_MET350to450" label="CR1l4jMidMT2WLowMlb_MET350to450" />
-<Region tag="CR1l4jMidMT2WLowMlb_MET450toInf" label="CR1l4jMidMT2WLowMlb_MET450toInf" />
-<Region tag="CR1l4jMidMT2WHighMlb_MET250to400" label="CR1l4jMidMT2WHighMlb_MET250to400" />
-<Region tag="CR1l4jMidMT2WHighMlb_MET400toInf" label="CR1l4jMidMT2WHighMlb_MET400toInf" />
-<Region tag="CR1l4jHighMT2WLowMlb_MET250to350" label="CR1l4jHighMT2WLowMlb_MET250to350" />
-<Region tag="CR1l4jHighMT2WLowMlb_MET350to450" label="CR1l4jHighMT2WLowMlb_MET350to450" />
-<Region tag="CR1l4jHighMT2WLowMlb_MET450to600" label="CR1l4jHighMT2WLowMlb_MET450to600" />
-<Region tag="CR1l4jHighMT2WLowMlb_MET600toInf" label="CR1l4jHighMT2WLowMlb_MET600toInf" />
-<Region tag="CR1l4jHighMT2WHighMlb_MET250to400" label="CR1l4jHighMT2WHighMlb_MET250to400" />
-<Region tag="CR1l4jHighMT2WHighMlb_MET400to650" label="CR1l4jHighMT2WHighMlb_MET400to650" />
-<Region tag="CR1l4jHighMT2WHighMlb_MET650toInf" label="CR1l4jHighMT2WHighMlb_MET650toInf" />
-<Region tag="CR2l23jLowMlb_MET250to350" label="CR2l23jLowMlb_MET250to350" />
-<Region tag="CR2l23jLowMlb_MET350to450" label="CR2l23jLowMlb_MET350to450" />
-<Region tag="CR2l23jLowMlb_MET450to550" label="CR2l23jLowMlb_MET450to550" />
-<Region tag="CR2l23jLowMlb_MET550toInf" label="CR2l23jLowMlb_MET550toInf" />
-<Region tag="CR2l23jHighMlb_MET250to350" label="CR2l23jHighMlb_MET250to350" />
-<Region tag="CR2l23jHighMlb_MET350to450" label="CR2l23jHighMlb_MET350to450" />
-<Region tag="CR2l23jHighMlb_MET450to550" label="CR2l23jHighMlb_MET450to550" />
-<Region tag="CR2l23jHighMlb_MET550toInf" label="CR2l23jHighMlb_MET550toInf" />
-<Region tag="CR2l4jLowMT2WLowMlb_MET250to350" label="CR2l4jLowMT2WLowMlb_MET250to350" />
-<Region tag="CR2l4jLowMT2WLowMlb_MET350to450" label="CR2l4jLowMT2WLowMlb_MET350to450" />
-<Region tag="CR2l4jLowMT2WLowMlb_MET450to550" label="CR2l4jLowMT2WLowMlb_MET450to550" />
-<Region tag="CR2l4jLowMT2WLowMlb_MET550to650" label="CR2l4jLowMT2WLowMlb_MET550to650" />
-<Region tag="CR2l4jLowMT2WLowMlb_MET650toInf" label="CR2l4jLowMT2WLowMlb_MET650toInf" />
-<Region tag="CR2l4jLowMT2WHighMlb_MET250to350" label="CR2l4jLowMT2WHighMlb_MET250to350" />
-<Region tag="CR2l4jLowMT2WHighMlb_MET350to450" label="CR2l4jLowMT2WHighMlb_MET350to450" />
-<Region tag="CR2l4jLowMT2WHighMlb_MET450to550" label="CR2l4jLowMT2WHighMlb_MET450to550" />
-<Region tag="CR2l4jLowMT2WHighMlb_MET550toInf" label="CR2l4jLowMT2WHighMlb_MET550toInf" />
-<Region tag="CR2l4jMidMT2WLowMlb_MET250to350" label="CR2l4jMidMT2WLowMlb_MET250to350" />
-<Region tag="CR2l4jMidMT2WLowMlb_MET350to450" label="CR2l4jMidMT2WLowMlb_MET350to450" />
-<Region tag="CR2l4jMidMT2WLowMlb_MET450toInf" label="CR2l4jMidMT2WLowMlb_MET450toInf" />
-<Region tag="CR2l4jMidMT2WHighMlb_MET250to400" label="CR2l4jMidMT2WHighMlb_MET250to400" />
-<Region tag="CR2l4jMidMT2WHighMlb_MET400toInf" label="CR2l4jMidMT2WHighMlb_MET400toInf" />
-<Region tag="CR2l4jHighMT2WLowMlb_MET250to350" label="CR2l4jHighMT2WLowMlb_MET250to350" />
-<Region tag="CR2l4jHighMT2WLowMlb_MET350to450" label="CR2l4jHighMT2WLowMlb_MET350to450" />
-<Region tag="CR2l4jHighMT2WLowMlb_MET450to600" label="CR2l4jHighMT2WLowMlb_MET450to600" />
-<Region tag="CR2l4jHighMT2WLowMlb_MET600toInf" label="CR2l4jHighMT2WLowMlb_MET600toInf" />
-<Region tag="CR2l4jHighMT2WHighMlb_MET250to400" label="CR2l4jHighMT2WHighMlb_MET250to400" />
-<Region tag="CR2l4jHighMT2WHighMlb_MET400to650" label="CR2l4jHighMT2WHighMlb_MET400to650" />
-<Region tag="CR2l4jHighMT2WHighMlb_MET650toInf" label="CR2l4jHighMT2WHighMlb_MET650toInf" />
+<Region tag="SR1l2j_MET250to350" label="SR1l2j_MET250to350" />
+<Region tag="SR1l2j_MET250to350PUdown" label="SR1l2j_MET250to350PUdown" />
+<Region tag="SR1l2j_MET250to350PUup" label="SR1l2j_MET250to350PUup" />
+<Region tag="SR1l2j_MET250to350LSFdown" label="SR1l2j_MET250to350LSFdown" />
+<Region tag="SR1l2j_MET250to350LSFup" label="SR1l2j_MET250to350LSFup" />
+<Region tag="SR1l2j_MET250to350BTdown" label="SR1l2j_MET250to350BTdown" />
+<Region tag="SR1l2j_MET250to350BTup" label="SR1l2j_MET250to350BTup" />
+<Region tag="SR1l2j_MET250to350PDFdown" label="SR1l2j_MET250to350PDFdown" />
+<Region tag="SR1l2j_MET250to350PDFup" label="SR1l2j_MET250to350PDFup" />
+<Region tag="SR1l2j_MET350to450" label="SR1l2j_MET350to450" />
+<Region tag="SR1l2j_MET350to450PUdown" label="SR1l2j_MET350to450PUdown" />
+<Region tag="SR1l2j_MET350to450PUup" label="SR1l2j_MET350to450PUup" />
+<Region tag="SR1l2j_MET350to450LSFdown" label="SR1l2j_MET350to450LSFdown" />
+<Region tag="SR1l2j_MET350to450LSFup" label="SR1l2j_MET350to450LSFup" />
+<Region tag="SR1l2j_MET350to450BTdown" label="SR1l2j_MET350to450BTdown" />
+<Region tag="SR1l2j_MET350to450BTup" label="SR1l2j_MET350to450BTup" />
+<Region tag="SR1l2j_MET350to450PDFdown" label="SR1l2j_MET350to450PDFdown" />
+<Region tag="SR1l2j_MET350to450PDFup" label="SR1l2j_MET350to450PDFup" />
+<Region tag="SR1l2j_MET450toInf" label="SR1l2j_MET450toInf" />
+<Region tag="SR1l2j_MET450toInfPUdown" label="SR1l2j_MET450toInfPUdown" />
+<Region tag="SR1l2j_MET450toInfPUup" label="SR1l2j_MET450toInfPUup" />
+<Region tag="SR1l2j_MET450toInfLSFdown" label="SR1l2j_MET450toInfLSFdown" />
+<Region tag="SR1l2j_MET450toInfLSFup" label="SR1l2j_MET450toInfLSFup" />
+<Region tag="SR1l2j_MET450toInfBTdown" label="SR1l2j_MET450toInfBTdown" />
+<Region tag="SR1l2j_MET450toInfBTup" label="SR1l2j_MET450toInfBTup" />
+<Region tag="SR1l2j_MET450toInfPDFdown" label="SR1l2j_MET450toInfPDFdown" />
+<Region tag="SR1l2j_MET450toInfPDFup" label="SR1l2j_MET450toInfPDFup" />
+<Region tag="SR1l3j_MET250to350" label="SR1l3j_MET250to350" />
+<Region tag="SR1l3j_MET250to350PUdown" label="SR1l3j_MET250to350PUdown" />
+<Region tag="SR1l3j_MET250to350PUup" label="SR1l3j_MET250to350PUup" />
+<Region tag="SR1l3j_MET250to350LSFdown" label="SR1l3j_MET250to350LSFdown" />
+<Region tag="SR1l3j_MET250to350LSFup" label="SR1l3j_MET250to350LSFup" />
+<Region tag="SR1l3j_MET250to350BTdown" label="SR1l3j_MET250to350BTdown" />
+<Region tag="SR1l3j_MET250to350BTup" label="SR1l3j_MET250to350BTup" />
+<Region tag="SR1l3j_MET250to350PDFdown" label="SR1l3j_MET250to350PDFdown" />
+<Region tag="SR1l3j_MET250to350PDFup" label="SR1l3j_MET250to350PDFup" />
+<Region tag="SR1l3j_MET350to450" label="SR1l3j_MET350to450" />
+<Region tag="SR1l3j_MET350to450PUdown" label="SR1l3j_MET350to450PUdown" />
+<Region tag="SR1l3j_MET350to450PUup" label="SR1l3j_MET350to450PUup" />
+<Region tag="SR1l3j_MET350to450LSFdown" label="SR1l3j_MET350to450LSFdown" />
+<Region tag="SR1l3j_MET350to450LSFup" label="SR1l3j_MET350to450LSFup" />
+<Region tag="SR1l3j_MET350to450BTdown" label="SR1l3j_MET350to450BTdown" />
+<Region tag="SR1l3j_MET350to450BTup" label="SR1l3j_MET350to450BTup" />
+<Region tag="SR1l3j_MET350to450PDFdown" label="SR1l3j_MET350to450PDFdown" />
+<Region tag="SR1l3j_MET350to450PDFup" label="SR1l3j_MET350to450PDFup" />
+<Region tag="SR1l3j_MET450to550" label="SR1l3j_MET450to550" />
+<Region tag="SR1l3j_MET450to550PUdown" label="SR1l3j_MET450to550PUdown" />
+<Region tag="SR1l3j_MET450to550PUup" label="SR1l3j_MET450to550PUup" />
+<Region tag="SR1l3j_MET450to550LSFdown" label="SR1l3j_MET450to550LSFdown" />
+<Region tag="SR1l3j_MET450to550LSFup" label="SR1l3j_MET450to550LSFup" />
+<Region tag="SR1l3j_MET450to550BTdown" label="SR1l3j_MET450to550BTdown" />
+<Region tag="SR1l3j_MET450to550BTup" label="SR1l3j_MET450to550BTup" />
+<Region tag="SR1l3j_MET450to550PDFdown" label="SR1l3j_MET450to550PDFdown" />
+<Region tag="SR1l3j_MET450to550PDFup" label="SR1l3j_MET450to550PDFup" />
+<Region tag="SR1l3j_MET550toInf" label="SR1l3j_MET550toInf" />
+<Region tag="SR1l3j_MET550toInfPUdown" label="SR1l3j_MET550toInfPUdown" />
+<Region tag="SR1l3j_MET550toInfPUup" label="SR1l3j_MET550toInfPUup" />
+<Region tag="SR1l3j_MET550toInfLSFdown" label="SR1l3j_MET550toInfLSFdown" />
+<Region tag="SR1l3j_MET550toInfLSFup" label="SR1l3j_MET550toInfLSFup" />
+<Region tag="SR1l3j_MET550toInfBTdown" label="SR1l3j_MET550toInfBTdown" />
+<Region tag="SR1l3j_MET550toInfBTup" label="SR1l3j_MET550toInfBTup" />
+<Region tag="SR1l3j_MET550toInfPDFdown" label="SR1l3j_MET550toInfPDFdown" />
+<Region tag="SR1l3j_MET550toInfPDFup" label="SR1l3j_MET550toInfPDFup" />
+<Region tag="SR1l4jLow_MET250to350" label="SR1l4jLow_MET250to350" />
+<Region tag="SR1l4jLow_MET250to350PUdown" label="SR1l4jLow_MET250to350PUdown" />
+<Region tag="SR1l4jLow_MET250to350PUup" label="SR1l4jLow_MET250to350PUup" />
+<Region tag="SR1l4jLow_MET250to350LSFdown" label="SR1l4jLow_MET250to350LSFdown" />
+<Region tag="SR1l4jLow_MET250to350LSFup" label="SR1l4jLow_MET250to350LSFup" />
+<Region tag="SR1l4jLow_MET250to350BTdown" label="SR1l4jLow_MET250to350BTdown" />
+<Region tag="SR1l4jLow_MET250to350BTup" label="SR1l4jLow_MET250to350BTup" />
+<Region tag="SR1l4jLow_MET250to350PDFdown" label="SR1l4jLow_MET250to350PDFdown" />
+<Region tag="SR1l4jLow_MET250to350PDFup" label="SR1l4jLow_MET250to350PDFup" />
+<Region tag="SR1l4jLow_MET350to450" label="SR1l4jLow_MET350to450" />
+<Region tag="SR1l4jLow_MET350to450PUdown" label="SR1l4jLow_MET350to450PUdown" />
+<Region tag="SR1l4jLow_MET350to450PUup" label="SR1l4jLow_MET350to450PUup" />
+<Region tag="SR1l4jLow_MET350to450LSFdown" label="SR1l4jLow_MET350to450LSFdown" />
+<Region tag="SR1l4jLow_MET350to450LSFup" label="SR1l4jLow_MET350to450LSFup" />
+<Region tag="SR1l4jLow_MET350to450BTdown" label="SR1l4jLow_MET350to450BTdown" />
+<Region tag="SR1l4jLow_MET350to450BTup" label="SR1l4jLow_MET350to450BTup" />
+<Region tag="SR1l4jLow_MET350to450PDFdown" label="SR1l4jLow_MET350to450PDFdown" />
+<Region tag="SR1l4jLow_MET350to450PDFup" label="SR1l4jLow_MET350to450PDFup" />
+<Region tag="SR1l4jLow_MET450toInf" label="SR1l4jLow_MET450toInf" />
+<Region tag="SR1l4jLow_MET450toInfPUdown" label="SR1l4jLow_MET450toInfPUdown" />
+<Region tag="SR1l4jLow_MET450toInfPUup" label="SR1l4jLow_MET450toInfPUup" />
+<Region tag="SR1l4jLow_MET450toInfLSFdown" label="SR1l4jLow_MET450toInfLSFdown" />
+<Region tag="SR1l4jLow_MET450toInfLSFup" label="SR1l4jLow_MET450toInfLSFup" />
+<Region tag="SR1l4jLow_MET450toInfBTdown" label="SR1l4jLow_MET450toInfBTdown" />
+<Region tag="SR1l4jLow_MET450toInfBTup" label="SR1l4jLow_MET450toInfBTup" />
+<Region tag="SR1l4jLow_MET450toInfPDFdown" label="SR1l4jLow_MET450toInfPDFdown" />
+<Region tag="SR1l4jLow_MET450toInfPDFup" label="SR1l4jLow_MET450toInfPDFup" />
+<Region tag="SR1l4jHighMT2W_MET250to350" label="SR1l4jHighMT2W_MET250to350" />
+<Region tag="SR1l4jHighMT2W_MET250to350PUdown" label="SR1l4jHighMT2W_MET250to350PUdown" />
+<Region tag="SR1l4jHighMT2W_MET250to350PUup" label="SR1l4jHighMT2W_MET250to350PUup" />
+<Region tag="SR1l4jHighMT2W_MET250to350LSFdown" label="SR1l4jHighMT2W_MET250to350LSFdown" />
+<Region tag="SR1l4jHighMT2W_MET250to350LSFup" label="SR1l4jHighMT2W_MET250to350LSFup" />
+<Region tag="SR1l4jHighMT2W_MET250to350BTdown" label="SR1l4jHighMT2W_MET250to350BTdown" />
+<Region tag="SR1l4jHighMT2W_MET250to350BTup" label="SR1l4jHighMT2W_MET250to350BTup" />
+<Region tag="SR1l4jHighMT2W_MET250to350PDFdown" label="SR1l4jHighMT2W_MET250to350PDFdown" />
+<Region tag="SR1l4jHighMT2W_MET250to350PDFup" label="SR1l4jHighMT2W_MET250to350PDFup" />
+<Region tag="SR1l4jHighMT2W_MET350to450" label="SR1l4jHighMT2W_MET350to450" />
+<Region tag="SR1l4jHighMT2W_MET350to450PUdown" label="SR1l4jHighMT2W_MET350to450PUdown" />
+<Region tag="SR1l4jHighMT2W_MET350to450PUup" label="SR1l4jHighMT2W_MET350to450PUup" />
+<Region tag="SR1l4jHighMT2W_MET350to450LSFdown" label="SR1l4jHighMT2W_MET350to450LSFdown" />
+<Region tag="SR1l4jHighMT2W_MET350to450LSFup" label="SR1l4jHighMT2W_MET350to450LSFup" />
+<Region tag="SR1l4jHighMT2W_MET350to450BTdown" label="SR1l4jHighMT2W_MET350to450BTdown" />
+<Region tag="SR1l4jHighMT2W_MET350to450BTup" label="SR1l4jHighMT2W_MET350to450BTup" />
+<Region tag="SR1l4jHighMT2W_MET350to450PDFdown" label="SR1l4jHighMT2W_MET350to450PDFdown" />
+<Region tag="SR1l4jHighMT2W_MET350to450PDFup" label="SR1l4jHighMT2W_MET350to450PDFup" />
+<Region tag="SR1l4jHighMT2W_MET450to550" label="SR1l4jHighMT2W_MET450to550" />
+<Region tag="SR1l4jHighMT2W_MET450to550PUdown" label="SR1l4jHighMT2W_MET450to550PUdown" />
+<Region tag="SR1l4jHighMT2W_MET450to550PUup" label="SR1l4jHighMT2W_MET450to550PUup" />
+<Region tag="SR1l4jHighMT2W_MET450to550LSFdown" label="SR1l4jHighMT2W_MET450to550LSFdown" />
+<Region tag="SR1l4jHighMT2W_MET450to550LSFup" label="SR1l4jHighMT2W_MET450to550LSFup" />
+<Region tag="SR1l4jHighMT2W_MET450to550BTdown" label="SR1l4jHighMT2W_MET450to550BTdown" />
+<Region tag="SR1l4jHighMT2W_MET450to550BTup" label="SR1l4jHighMT2W_MET450to550BTup" />
+<Region tag="SR1l4jHighMT2W_MET450to550PDFdown" label="SR1l4jHighMT2W_MET450to550PDFdown" />
+<Region tag="SR1l4jHighMT2W_MET450to550PDFup" label="SR1l4jHighMT2W_MET450to550PDFup" />
+<Region tag="SR1l4jHighMT2W_MET550to650" label="SR1l4jHighMT2W_MET550to650" />
+<Region tag="SR1l4jHighMT2W_MET550to650PUdown" label="SR1l4jHighMT2W_MET550to650PUdown" />
+<Region tag="SR1l4jHighMT2W_MET550to650PUup" label="SR1l4jHighMT2W_MET550to650PUup" />
+<Region tag="SR1l4jHighMT2W_MET550to650LSFdown" label="SR1l4jHighMT2W_MET550to650LSFdown" />
+<Region tag="SR1l4jHighMT2W_MET550to650LSFup" label="SR1l4jHighMT2W_MET550to650LSFup" />
+<Region tag="SR1l4jHighMT2W_MET550to650BTdown" label="SR1l4jHighMT2W_MET550to650BTdown" />
+<Region tag="SR1l4jHighMT2W_MET550to650BTup" label="SR1l4jHighMT2W_MET550to650BTup" />
+<Region tag="SR1l4jHighMT2W_MET550to650PDFdown" label="SR1l4jHighMT2W_MET550to650PDFdown" />
+<Region tag="SR1l4jHighMT2W_MET550to650PDFup" label="SR1l4jHighMT2W_MET550to650PDFup" />
+<Region tag="SR1l4jHighMT2W_MET650toInf" label="SR1l4jHighMT2W_MET650toInf" />
+<Region tag="SR1l4jHighMT2W_MET650toInfPUdown" label="SR1l4jHighMT2W_MET650toInfPUdown" />
+<Region tag="SR1l4jHighMT2W_MET650toInfPUup" label="SR1l4jHighMT2W_MET650toInfPUup" />
+<Region tag="SR1l4jHighMT2W_MET650toInfLSFdown" label="SR1l4jHighMT2W_MET650toInfLSFdown" />
+<Region tag="SR1l4jHighMT2W_MET650toInfLSFup" label="SR1l4jHighMT2W_MET650toInfLSFup" />
+<Region tag="SR1l4jHighMT2W_MET650toInfBTdown" label="SR1l4jHighMT2W_MET650toInfBTdown" />
+<Region tag="SR1l4jHighMT2W_MET650toInfBTup" label="SR1l4jHighMT2W_MET650toInfBTup" />
+<Region tag="SR1l4jHighMT2W_MET650toInfPDFdown" label="SR1l4jHighMT2W_MET650toInfPDFdown" />
+<Region tag="SR1l4jHighMT2W_MET650toInfPDFup" label="SR1l4jHighMT2W_MET650toInfPDFup" />
 </Regions>
 <Channels>
 <Channel tag="lepChannel" label="lepChannel" />
 </Channels>
 <ProcessClasses>
-<ProcessClass tag="rare" label="rare" type="background" color="600" />
-<ProcessClass tag="throw" label="throw" type="signal" color="600" />
-<ProcessClass tag="850_100" label="850_100" type="signal" color="600" />
-<ProcessClass tag="1000_1" label="1000_1" type="signal" color="600" />
-<ProcessClass tag="lostLepton" label="lostLepton" type="background" color="900" />
-<ProcessClass tag="singleLepton" label="singleLepton" type="background" color="416" />
-<ProcessClass tag="singleLeptonFromT" label="singleLeptonFromT" type="background" color="416" />
+<ProcessClass tag="ttZ" label="ttZ" type="background" color="600" />
 </ProcessClasses>
 <Datasets>
-<Dataset tag="ZZ_pythia8_25ns" label="rare" processClass="rare" XsecOrLumi="0.564" getTrueNumberOfEvents="0" />
-<Dataset tag="T2tt_mStop_850_mLSP_100_25ns" label="throw" processClass="throw" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="ttZJets_13TeV_madgraphMLM" label="ttZ" processClass="ttZ" XsecOrLumi="0" getTrueNumberOfEvents="0" />
 </Datasets>

@@ -155,9 +155,25 @@ class Selection:
 	       else: 
 	         name+="toInf"
 	      	 
-	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n"
+	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
+	       dump="AddRegion(\""+name+"PUdown"+"\",\""+name+"PUdown"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"PUup"+"\",\""+name+"PUup"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"LSFdown"+"\",\""+name+"LSFdown"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"LSFup"+"\",\""+name+"LSFup"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"BTdown"+"\",\""+name+"BTdown"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"BTup"+"\",\""+name+"BTup"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"PDFdown"+"\",\""+name+"PDFdown"+"\",&"+name+");\n"
+	       myfile.write(dump)
+	       dump="AddRegion(\""+name+"PDFup"+"\",\""+name+"PDFup"+"\",&"+name+");\n"
+	       myfile.write(dump)
 
 
    def DumpAllRegionsVectors(self,ofilename):
@@ -269,3 +285,46 @@ class Selection:
         dump = " };\n"
         myfile.write(dump)
 
+   def DumpSignalSystRegionsVectors(self,ofilename):
+     with open(ofilename, "a") as myfile:
+	################################
+	## loop over the regions
+	################################
+	dump="vector<string> yield = { "
+	myfile.write(dump)
+	for region in self.regions:
+
+	  ################################
+	  ## loop over the bins
+	  ################################
+	  for bin in self.bins:
+	     METbins = bin['METbins'].split(",")
+	   
+	     ################################
+	     ## loop over the MET bins
+	     ################################
+	     for i  in range(len(METbins)-1):
+	       #if i!=len(METbins)-1:
+	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       if METbins[i+1]!="inf" :
+		 name+="to"+METbins[i+1]
+	       else: 
+	         name+="toInf"
+	      
+               substring = "SR1l"	 
+               if substring in name:
+	         dump= "\"" +name +"\""
+	         myfile.write(dump)
+	         dump= " , "
+	         myfile.write(dump)
+                 systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTdown", "BTup", "PDFdown", "PDFup"]
+                 for syst in systs:
+	             dump= "\"" +name+syst+"\""
+	             myfile.write(dump)
+	             dump= " , "
+	             myfile.write(dump)
+
+
+
+        dump = " };\n"
+        myfile.write(dump)

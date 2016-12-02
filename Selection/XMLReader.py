@@ -8,7 +8,7 @@ import os
 ###################################
 # should become a parameter
 ###################################
-ifilename='selectionHJ.xml'
+ifilename='selection2016.xml'
 template='template.h'
 ofilename='test.h'
 
@@ -57,6 +57,7 @@ ofilename2="test2.cc"
 ofilename3="yieldStr.h"
 ofilename4="SRStr.h"
 ofilename5="TFStr.h"
+ofilename6="Syst.h"
 command = "rm " + " " + ofilename +" " + ofilename2 +" " + ofilename3 +" " + ofilename4 +" " + ofilename5
 os.system(command)
 command = "cp "+template+" "+ofilename
@@ -67,6 +68,6 @@ s.AddSelection(ofilename2)
 s.DumpAllRegionsVectors(ofilename3)
 s.DumpSignalRegionsVectors(ofilename4)
 s.DumpTFRegionsVectors(ofilename5)
-
+s.DumpSignalSystRegionsVectors(ofilename6)
 
 

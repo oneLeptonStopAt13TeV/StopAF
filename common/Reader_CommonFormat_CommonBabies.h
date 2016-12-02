@@ -129,11 +129,25 @@ typedef struct
     ///int           secondLeptonId = -13;
     //float         jetsCSV = -13;
     float         weight_PU = -13;
+    float         weight_PUup = -13;
+    float         weight_PUdown = -13;
     float         weight_btagsf = -13;
+    float         weight_btagsf_heavy_DN = -13;
+    float         weight_btagsf_heavy_UP = -13;
+    float         weight_btagsf_light_DN = -13;
+    float         weight_btagsf_light_UP = -13;
     float         weight_lepSF = -13;
+    float         weight_lepSF_down = -13;
+    float         weight_lepSF_up = -13;
     float         weight_vetoLepSF = -13;
     float         weight_ISR = -13;
+    float         weight_ISRdown = -13;
+    float         weight_ISRup = -13;
     float         weight_ISRnjets = -13;
+    float         weight_ISRnjets_UP = -13;
+    float         weight_ISRnjets_DN = -13;
+    float         pdf_down_weight = -13;
+    float         pdf_up_weight = -13;
     float         lep1_mass = -13;
     float         lep2_passVeto = -13;
     float         lep1_eta = -13;
@@ -566,18 +580,46 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent)
     #ifdef USE_WEIGHTS
     if(theTree->GetListOfBranches()->FindObject("weight_PU"))
         theTree->SetBranchAddress("weight_PU",                  &(myEvent->weight_PU));
+    if(theTree->GetListOfBranches()->FindObject("weight_PUup"))
+        theTree->SetBranchAddress("weight_PUup",                  &(myEvent->weight_PUup));
+    if(theTree->GetListOfBranches()->FindObject("weight_PUdown"))
+        theTree->SetBranchAddress("weight_PUdown",                  &(myEvent->weight_PUdown));
     if(theTree->GetListOfBranches()->FindObject("genweights"))
         theTree->SetBranchAddress("genweights",                  &(myEvent->genweights));
     if(theTree->GetListOfBranches()->FindObject("weight_btagsf"))
         theTree->SetBranchAddress("weight_btagsf",                  &(myEvent->weight_btagsf));
+    if(theTree->GetListOfBranches()->FindObject("weight_btagsf_heavy_DN"))
+        theTree->SetBranchAddress("weight_btagsf_heavy_DN",                  &(myEvent->weight_btagsf_heavy_DN));
+    if(theTree->GetListOfBranches()->FindObject("weight_btagsf_heavy_UP"))
+        theTree->SetBranchAddress("weight_btagsf_heavy_UP",                  &(myEvent->weight_btagsf_heavy_UP));
+    if(theTree->GetListOfBranches()->FindObject("weight_btagsf_light_DN"))
+        theTree->SetBranchAddress("weight_btagsf_light_DN",                  &(myEvent->weight_btagsf_light_DN));
+    if(theTree->GetListOfBranches()->FindObject("weight_btagsf_light_UP"))
+        theTree->SetBranchAddress("weight_btagsf_light_UP",                  &(myEvent->weight_btagsf_light_UP));
     if(theTree->GetListOfBranches()->FindObject("weight_lepSF"))
         theTree->SetBranchAddress("weight_lepSF",                  &(myEvent->weight_lepSF));
+    if(theTree->GetListOfBranches()->FindObject("weight_lepSF_down"))
+        theTree->SetBranchAddress("weight_lepSF_down",                  &(myEvent->weight_lepSF_down));
+    if(theTree->GetListOfBranches()->FindObject("weight_lepSF_up"))
+        theTree->SetBranchAddress("weight_lepSF_up",                  &(myEvent->weight_lepSF_up));
     if(theTree->GetListOfBranches()->FindObject("weight_vetoLepSF"))
         theTree->SetBranchAddress("weight_vetoLepSF",                  &(myEvent->weight_vetoLepSF));
     if(theTree->GetListOfBranches()->FindObject("weight_ISR"))
         theTree->SetBranchAddress("weight_ISR",                  &(myEvent->weight_ISR));
+    if(theTree->GetListOfBranches()->FindObject("weight_ISRdown"))
+        theTree->SetBranchAddress("weight_ISRdown",                  &(myEvent->weight_ISRdown));
+    if(theTree->GetListOfBranches()->FindObject("weight_ISRup"))
+        theTree->SetBranchAddress("weight_ISRup",                  &(myEvent->weight_ISRup));
     if(theTree->GetListOfBranches()->FindObject("weight_ISRnjets"))
         theTree->SetBranchAddress("weight_ISRnjets",                  &(myEvent->weight_ISRnjets));
+    if(theTree->GetListOfBranches()->FindObject("weight_ISRnjets_DN"))
+        theTree->SetBranchAddress("weight_ISRnjets_DN",                  &(myEvent->weight_ISRnjets_DN));
+    if(theTree->GetListOfBranches()->FindObject("weight_ISRnjets_UP"))
+        theTree->SetBranchAddress("weight_ISRnjets_UP",                  &(myEvent->weight_ISRnjets_UP));
+    if(theTree->GetListOfBranches()->FindObject("pdf_down_weight"))
+        theTree->SetBranchAddress("pdf_down_weight",                  &(myEvent->pdf_down_weight));
+    if(theTree->GetListOfBranches()->FindObject("pdf_up_weight"))
+        theTree->SetBranchAddress("pdf_up_weight",                  &(myEvent->pdf_up_weight));
     #endif
 
     #ifdef USE_VAR_BASELINE

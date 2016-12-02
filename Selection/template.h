@@ -10,7 +10,7 @@ bool OneLep(){ return (myEvent.ngoodleps == 1 && myEvent.PassTrackVeto && myEven
 bool TwoLep(){ return ( (myEvent.ngoodleps+myEvent.nvetoleps)==2  && myEvent.PassTauVeto); }
 
 void CheckTrigger(bool data, string dataset){
-        if(dataset == "")
+       /* if(dataset == "")
             throw std::runtime_error("dataset for using the trigger info not specified");
 
 	bool passMETMHTTrigger = false;
@@ -47,6 +47,6 @@ void CheckTrigger(bool data, string dataset){
          else
          {
              trigged = true;
-         }
+         }*/
 }
 
