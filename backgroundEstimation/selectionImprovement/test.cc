@@ -8,6 +8,8 @@
 #include "Math/GenVector/LorentzVector.h"
 
 #define USE_VAR_BASELINE
+//#define USE_VAR_BASELINE_UP
+//#define USE_VAR_BASELINE_DOWN
 #define USE_LEP1
 #define USE_LEP2
 //#define USE_SKIMMING_VAR
@@ -92,9 +94,10 @@ void BabyScrewdriver::Init()
     AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
    // 	AddDataset("ttZ","rare",0,0.7826);
     //	AddDataset("tZq","rare",0,0.0758);
-    	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ", 0, 0);
+    	AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZ", 0, 0);
     //	AddDataset("WZ","rare",0,3.06);
 
+    //AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
     //AddProcessClass("throw", "throw", "signal", kBlue);
      	//AddDataset("T2tt_400to1200", "throw", 0, 0 );
      	//AddDataset("T2tt_mStop_850_mLSP_100_25ns", "throw", 0, 0 );
@@ -350,6 +353,9 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         }
     }
 
+    if( currentProcessClass == "ttZ" && !(myEvent.isZtoNuNu) )
+         currentProcessClass = "";
+
     float weightLumi = getWeight(currentProcessType, GetLumi()); //@MJ@ TODO cross section form file?!
     //@MJ@ TODO I hate myself for this, but no better solution foud
     //computation of up/down weights
@@ -456,6 +462,16 @@ void BabyScrewdriver::PostProcessingStep()
 vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET250to350PUdown" , "SR1l2j_MET250to350PUup" , "SR1l2j_MET250to350LSFdown" , "SR1l2j_MET250to350LSFup" , "SR1l2j_MET250to350BTdown" , "SR1l2j_MET250to350BTup" , "SR1l2j_MET250to350PDFdown" , "SR1l2j_MET250to350PDFup" , "SR1l2j_MET350to450" , "SR1l2j_MET350to450PUdown" , "SR1l2j_MET350to450PUup" , "SR1l2j_MET350to450LSFdown" , "SR1l2j_MET350to450LSFup" , "SR1l2j_MET350to450BTdown" , "SR1l2j_MET350to450BTup" , "SR1l2j_MET350to450PDFdown" , "SR1l2j_MET350to450PDFup" , "SR1l2j_MET450toInf" , "SR1l2j_MET450toInfPUdown" , "SR1l2j_MET450toInfPUup" , "SR1l2j_MET450toInfLSFdown" , "SR1l2j_MET450toInfLSFup" , "SR1l2j_MET450toInfBTdown" , "SR1l2j_MET450toInfBTup" , "SR1l2j_MET450toInfPDFdown" , "SR1l2j_MET450toInfPDFup" , "SR1l3j_MET250to350" , "SR1l3j_MET250to350PUdown" , "SR1l3j_MET250to350PUup" , "SR1l3j_MET250to350LSFdown" , "SR1l3j_MET250to350LSFup" , "SR1l3j_MET250to350BTdown" , "SR1l3j_MET250to350BTup" , "SR1l3j_MET250to350PDFdown" , "SR1l3j_MET250to350PDFup" , "SR1l3j_MET350to450" , "SR1l3j_MET350to450PUdown" , "SR1l3j_MET350to450PUup" , "SR1l3j_MET350to450LSFdown" , "SR1l3j_MET350to450LSFup" , "SR1l3j_MET350to450BTdown" , "SR1l3j_MET350to450BTup" , "SR1l3j_MET350to450PDFdown" , "SR1l3j_MET350to450PDFup" , "SR1l3j_MET450to550" , "SR1l3j_MET450to550PUdown" , "SR1l3j_MET450to550PUup" , "SR1l3j_MET450to550LSFdown" , "SR1l3j_MET450to550LSFup" , "SR1l3j_MET450to550BTdown" , "SR1l3j_MET450to550BTup" , "SR1l3j_MET450to550PDFdown" , "SR1l3j_MET450to550PDFup" , "SR1l3j_MET550toInf" , "SR1l3j_MET550toInfPUdown" , "SR1l3j_MET550toInfPUup" , "SR1l3j_MET550toInfLSFdown" , "SR1l3j_MET550toInfLSFup" , "SR1l3j_MET550toInfBTdown" , "SR1l3j_MET550toInfBTup" , "SR1l3j_MET550toInfPDFdown" , "SR1l3j_MET550toInfPDFup" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET250to350PUdown" , "SR1l4jLow_MET250to350PUup" , "SR1l4jLow_MET250to350LSFdown" , "SR1l4jLow_MET250to350LSFup" , "SR1l4jLow_MET250to350BTdown" , "SR1l4jLow_MET250to350BTup" , "SR1l4jLow_MET250to350PDFdown" , "SR1l4jLow_MET250to350PDFup" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET350to450PUdown" , "SR1l4jLow_MET350to450PUup" , "SR1l4jLow_MET350to450LSFdown" , "SR1l4jLow_MET350to450LSFup" , "SR1l4jLow_MET350to450BTdown" , "SR1l4jLow_MET350to450BTup" , "SR1l4jLow_MET350to450PDFdown" , "SR1l4jLow_MET350to450PDFup" , "SR1l4jLow_MET450toInf" , "SR1l4jLow_MET450toInfPUdown" , "SR1l4jLow_MET450toInfPUup" , "SR1l4jLow_MET450toInfLSFdown" , "SR1l4jLow_MET450toInfLSFup" , "SR1l4jLow_MET450toInfBTdown" , "SR1l4jLow_MET450toInfBTup" , "SR1l4jLow_MET450toInfPDFdown" , "SR1l4jLow_MET450toInfPDFup" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET250to350PUdown" , "SR1l4jHighMT2W_MET250to350PUup" , "SR1l4jHighMT2W_MET250to350LSFdown" , "SR1l4jHighMT2W_MET250to350LSFup" , "SR1l4jHighMT2W_MET250to350BTdown" , "SR1l4jHighMT2W_MET250to350BTup" , "SR1l4jHighMT2W_MET250to350PDFdown" , "SR1l4jHighMT2W_MET250to350PDFup" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET350to450PUdown" , "SR1l4jHighMT2W_MET350to450PUup" , "SR1l4jHighMT2W_MET350to450LSFdown" , "SR1l4jHighMT2W_MET350to450LSFup" , "SR1l4jHighMT2W_MET350to450BTdown" , "SR1l4jHighMT2W_MET350to450BTup" , "SR1l4jHighMT2W_MET350to450PDFdown" , "SR1l4jHighMT2W_MET350to450PDFup" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET450to550PUdown" , "SR1l4jHighMT2W_MET450to550PUup" , "SR1l4jHighMT2W_MET450to550LSFdown" , "SR1l4jHighMT2W_MET450to550LSFup" , "SR1l4jHighMT2W_MET450to550BTdown" , "SR1l4jHighMT2W_MET450to550BTup" , "SR1l4jHighMT2W_MET450to550PDFdown" , "SR1l4jHighMT2W_MET450to550PDFup" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET550to650PUdown" , "SR1l4jHighMT2W_MET550to650PUup" , "SR1l4jHighMT2W_MET550to650LSFdown" , "SR1l4jHighMT2W_MET550to650LSFup" , "SR1l4jHighMT2W_MET550to650BTdown" , "SR1l4jHighMT2W_MET550to650BTup" , "SR1l4jHighMT2W_MET550to650PDFdown" , "SR1l4jHighMT2W_MET550to650PDFup" , "SR1l4jHighMT2W_MET650toInf" , "SR1l4jHighMT2W_MET650toInfPUdown" , "SR1l4jHighMT2W_MET650toInfPUup" , "SR1l4jHighMT2W_MET650toInfLSFdown" , "SR1l4jHighMT2W_MET650toInfLSFup" , "SR1l4jHighMT2W_MET650toInfBTdown" , "SR1l4jHighMT2W_MET650toInfBTup" , "SR1l4jHighMT2W_MET650toInfPDFdown" , "SR1l4jHighMT2W_MET650toInfPDFup"};
     TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yield.tab", 4);
     TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yield.tex", 4);
+
+    ofstream sigfile("signalReg.txt");
+    if (sigfile.is_open())
+    {
+        for(uint32_t r=0; r<totYield.size(); r++)
+        {
+            sigfile << totYield.at(r) << endl;
+        }
+            sigfile.close();
+    }
 
 
     vector <string> tfreg{};

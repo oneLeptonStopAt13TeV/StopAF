@@ -158,22 +158,10 @@ class Selection:
 	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
-	       dump="AddRegion(\""+name+"PUdown"+"\",\""+name+"PUdown"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"PUup"+"\",\""+name+"PUup"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"LSFdown"+"\",\""+name+"LSFdown"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"LSFup"+"\",\""+name+"LSFup"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"BTdown"+"\",\""+name+"BTdown"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"BTup"+"\",\""+name+"BTup"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"PDFdown"+"\",\""+name+"PDFdown"+"\",&"+name+");\n"
-	       myfile.write(dump)
-	       dump="AddRegion(\""+name+"PDFup"+"\",\""+name+"PDFup"+"\",&"+name+");\n"
-	       myfile.write(dump)
+               systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTdown", "BTup", "PDFdown", "PDFup"]
+               for syst in systs:
+	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
+	           myfile.write(dump)
 
 
    def DumpAllRegionsVectors(self,ofilename):
