@@ -7,21 +7,22 @@
 #include "../sonicScrewdriver/interface/Table.h"
 
 //usage
-//./ttZUnctTable yield.tab signalReg.txt nUnc+1(=nparameters per one signal region)
+//./ttZUnctTable yield.tab signalReg.txt statNames.txt nUnc+1(=nparameters per one signal region)
 
 using namespace std;
 using namespace theDoctor;
 
 int main(int argc, char *argv[]){
 
-        if(argc != 4)
+        if(argc != 5)
             throw std::runtime_error("Bad number of arguments!");
          
          
 
         string inputTab = argv[1];
         string inputFile = argv[2];
-        TString nUncs = argv[3];
+        string uncNames = argv[3];
+        TString nUncs = argv[4];
         int nUnc = nUncs.Atoi();
 
         vector<string> regions;
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]){
             regfile.close();
         }
       
-       if(((regions.size())%9) != 0)
+       if(((regions.size())%nUnc) != 0)
            throw std::runtime_error("wrong number of regions");
 
        TH1::SetDefaultSumw2();
@@ -46,7 +47,21 @@ int main(int argc, char *argv[]){
        Table tab(inputTab);
 
   
-        vector<string> colI = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}; //@MJ@ TODO real names //@MJ@ TODO do some checks taht I am not owerflowing the table
+        vector<string> colI;
+        
+	string line2;
+        ifstream systfile(uncNames);
+        if (systfile.is_open())
+        {
+            colI.push_back("value");
+            while ( getline (systfile,line2) )
+            { 
+                if(colI.size() == nUnc)
+                    break;
+                colI.push_back(line2);
+            }
+            systfile.close();
+        }
         uint32_t rowIdI = 0;
         vector<Double_t> error;
         Double_t result;

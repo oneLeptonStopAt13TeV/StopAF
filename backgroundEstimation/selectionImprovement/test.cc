@@ -59,6 +59,7 @@ bool lepChannel()
     return true; 
 }
     
+ofstream statnames("statNames.txt");
 //Add this as a global variable 
 
 void BabyScrewdriver::Init()
@@ -92,9 +93,13 @@ void BabyScrewdriver::Init()
     // ------------------
     //AddProcessClass("rare", "rare", "background", kBlue);//@MJ@ TODO K-factor?
     AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
-   // 	AddDataset("ttZ","rare",0,0.7826);
+    	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
+    	AddDataset("TTTo2L2Nu_powheg_25ns","ttZ",0,0);
+    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","ttZ",0,0);
+    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","ttZ",0,0);
+    	AddDataset("WWTo2l2Nu_powheg_25ns","ttZ",0,0);
     //	AddDataset("tZq","rare",0,0.0758);
-    	AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZ", 0, 0);
+  ///  	AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZ", 0, 0);
     //	AddDataset("WZ","rare",0,3.06);
 
     //AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
@@ -294,7 +299,7 @@ AddRegion("SR1l4jHighMT2W_MET650toInfPDFup","SR1l4jHighMT2W_MET650toInfPDFup",&S
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    SetLumi(12.9);
+    SetLumi(36.46);
 
     Create1DHistos();
     //Add2DHisto("nJets","MET");
@@ -371,33 +376,47 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         //normal
         weightV.push_back(weightLumi);
         //PUdown
+        if(counter == 1) statnames << "PUdown" << endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_PUdown;
         weightV.push_back(w);
         //PUup
+        if(counter == 1) statnames << "PUup"<< endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_PUup;
         weightV.push_back(w);
         //LSFdown
+        if(counter == 1) statnames << "LSFdown" << endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
         weightV.push_back(w);
         //LSFup
+        if(counter == 1) statnames << "LSFup" << endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF_up * myEvent.weight_vetoLepSF;
         weightV.push_back(w);
-        //BTdown
-        btagmax = myEvent.weight_btagsf_heavy_DN > myEvent.weight_btagsf_light_DN ? myEvent.weight_btagsf_heavy_DN : myEvent.weight_btagsf_light_DN;
-        w = GetLumi() *  myEvent.scale1fb * btagmax * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        //BTlightdown
+        if(counter == 1) statnames << "BTligtdown" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_DN * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
         weightV.push_back(w);
-        //BTup
-        btagmax = myEvent.weight_btagsf_heavy_UP > myEvent.weight_btagsf_light_UP ? myEvent.weight_btagsf_heavy_UP : myEvent.weight_btagsf_light_UP;
-        w = GetLumi() *  myEvent.scale1fb * btagmax * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        //BTlightup
+        if(counter == 1) statnames << "BTligtup" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_UP * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        weightV.push_back(w);
+        //BTheabydown
+        if(counter == 1) statnames << "BTheavydown" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_DN * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        weightV.push_back(w);
+        //BTheavyup
+        if(counter == 1) statnames << "BTheavyup" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_UP * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
         weightV.push_back(w);
         //PDFdown
+        if(counter == 1) statnames << "PDFup" << endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.pdf_down_weight;
         weightV.push_back(w);
         //PDFup
+        if(counter == 1) statnames << "PDFdown" << endl;
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.pdf_up_weight;
         weightV.push_back(w);
     }
-   
+
     vector<string> theReg;
     GetRegionTagList(&theReg);
     if( weightV.size() != theReg.size())
@@ -436,6 +455,7 @@ void BabyScrewdriver::PostProcessingStep()
     //SchedulePlots("2D");
 
     // Config plots
+    statnames.close();
 
     SetGlobalStringOption("Plot", "infoTopRight", "CMS Simulation");
     SetGlobalStringOption("Plot", "infoTopLeft",  "#sqrt{s} = 13 TeV");
@@ -558,4 +578,5 @@ vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET250to350PUdown" , 
             all_weights = lumi * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_ISR ;
         return all_weights;
     }
+
 

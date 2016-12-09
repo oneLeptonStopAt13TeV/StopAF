@@ -78,31 +78,52 @@ void BabyScrewdriver::Init()
     // Variables
     // ------------------
     // fixed binning
+    int trackveto = (int) myEvent.PassTrackVeto; 
+    int tauveto = (int) myEvent.PassTauVeto; 
     AddVariable("MET", "MET",  "MET", 100 ,200,1000,  &(myEvent.pfmet), "noUnderflowInFirstBin");
     AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,500,  &(myEvent.MT2W), "noUnderflowInFirstBin");
     AddVariable("MT", "MT",  "MT", 100 ,100,1000,  &(myEvent.mt_met_lep), "noUnderflowInFirstBin");
     AddVariable("nJets","nJets","nJets",5,1,5,&(myEvent.ngoodjets),"noUnderflowInFirstBin");
+    AddVariable("nBJets","nBJets","nBJets",5,1,5,&(myEvent.ngoodbtags),"noUnderflowInFirstBin");
+    AddVariable("topnessMod","topnessMod","topnessMod",20,-20,20,&(myEvent.topnessMod),"noUnderflowInFirstBin");
     AddVariable("dphi","dphi","dphi", 100,0,3.5,&(myEvent.dphi_ak4pfjets_met),"noUnderflowInFirstBin");
     AddVariable("nvertex","nvertex","nvertex",50,0,50,&(myEvent.nvertex),"noUnderflowInFirstBin");
+    AddVariable("trackveto","trackveto","trackveto",3,0,3,&(trackveto),"noUnderflowInFirstBin");
+    AddVariable("tauveto","tauveto","tauveto",3,0,3,&(tauveto),"noUnderflowInFirstBin");
+
 
     // ------------------
     // Datasets
     // ------------------
     //AddProcessClass("rare", "rare", "background", kBlue);//@MJ@ TODO K-factor?
-    AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
+    AddProcessClass("Znunu", "Znunu", "background", kBlue);//@MJ@ TODO K-factor?
+    	AddDataset("ttZJets_13TeV_madgraphMLM","Znunu",0,0);
+    	AddDataset("TTTo2L2Nu_powheg_25ns","Znunu",0,0);
+    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","Znunu",0,0);
+    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","Znunu",0,0);
+    	AddDataset("WWTo2l2Nu_powheg_25ns","Znunu",0,0);
    // 	AddDataset("ttZ","rare",0,0.7826);
     //	AddDataset("tZq","rare",0,0.0758);
-    	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ", 0, 0);
     //	AddDataset("WZ","rare",0,3.06);
 
-    AddProcessClass("throw", "throw", "signal", kBlue);
+    //AddProcessClass("throw", "throw", "signal", kBlue);
      	//AddDataset("T2tt_400to1200", "throw", 0, 0 );
-     	AddDataset("T2tt_mStop_850_mLSP_100_25ns", "throw", 0, 0 );
+     	//AddDataset("T2tt_mStop_850_mLSP_100_25ns", "throw", 0, 0 );
     //
     //
-    
+   
+    AddProcessClass("tt2l", "tt2l", "background", kGreen);//@MJ@ TODO K-factor?
+    	AddDataset("ttbar_diLept_madgraph_pythia8_25ns", "tt2l",0,0);
+    	AddDataset("ttbar_diLept_madgraph_pythia8_ext1_25ns", "tt2l",0,0);
+
+    AddProcessClass("tt1l", "tt1l", "background", kBlue);//@MJ@ TODO K-factor?
+    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_25ns", "tt1l",0,0);
+    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns", "tt1l",0,0);
+    	AddDataset("ttbar_singleLeptFromT_madgraph_pythia8_25ns", "tt1l",0,0);
+
+
     //signal examples
-    AddProcessClass( "850_100", "850_100", "signal", kBlue);
+    //AddProcessClass( "850_100", "850_100", "signal", kBlue);
     //AddProcessClass( "1000_1", "1000_1", "signal", kBlue);
 
     //AddProcessClass( "grouped", "grouped", "signal", kBlue);
@@ -134,9 +155,9 @@ void BabyScrewdriver::Init()
     //	AddDataset("VV","test",0,12.05*0.9917);
 
     
-    AddProcessClass("lostLepton", "lostLepton", "background", kPink);
-    AddProcessClass("singleLepton", "singleLepton", "background", kGreen);
-    AddProcessClass("singleLeptonFromT", "singleLeptonFromT", "background", kGreen);
+    //AddProcessClass("lostLepton", "lostLepton", "background", kPink);
+    //AddProcessClass("singleLepton", "singleLepton", "background", kGreen);
+    //AddProcessClass("singleLeptonFromT", "singleLeptonFromT", "background", kGreen);
     
     // ------------------
     // Regions
@@ -189,7 +210,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     vector<string> classLabels;
     GetProcessClassLabelList(&classLabels);
 
-    if(currentProcessType == "blablabla" )//normally background
+    /*if(currentProcessType == "blablabla" )//normally background
     {
     string PC = currentProcessClass;
     PC = distingusihClassBkg(currentProcessClass, classLabels);
@@ -209,11 +230,13 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
             throw std::runtime_error("no class to atribute process to was not found");
         }
     }
-    }
+    }*/
 
+    if( currentProcessClass == "Znunu" && !(myEvent.isZtoNuNu) )
+         currentProcessClass = "";
      //cout << " stop " << myEvent.mass_stop << " lsp " << myEvent.mass_lsp << endl; //@MJ@ TODO why these MASSES ARE 0
 
-    for(uint32_t s= 0; s<myEvent.gensusy_id->size(); s++)
+    /*for(uint32_t s= 0; s<myEvent.gensusy_id->size(); s++)
     {
         if(currentProcessType == "signal" && ( myEvent.gensusy_id->at(s) == 1000006 && sqrt(abs(myEvent.gensusy_p4->at(s).M2())) == 850))
         {
@@ -226,15 +249,25 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
                  }
             }
         }
-    }
+    }*/
+
+    if( myEvent.lep1_pt < 10) cout << "weird pt of lepton" << endl;
+
+    //cout << "track veto "<< myEvent.PassTrackVeto << " tau veto " << myEvent.PassTauVeto << " dphhi " <<myEvent.dphi_ak4pfjets_met << endl;
 
     float weightLumi = getWeight(currentProcessType, GetLumi()); //@MJ@ TODO cross section form file?!
     
 
+    if( currentProcessClass == "tt2l")
+        weightLumi *= 0.5;
+    if( currentProcessClass == "tt1l" && ( currentDataset== "ttbar_singleLeptFromTbar_madgraph_pythia8_25ns"|| currentDataset == "ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns"))
+        weightLumi *= 0.5;
+
     float weight     = weightLumi;
     if (currentProcessType == "data") weight = 1.0;
     //if (currentProcessType == "signal") weight = 1;
-    AutoFillProcessClass(currentProcessClass, weight);
+    vector<float> dummy;
+    AutoFillProcessClass(currentProcessClass, weight, dummy, false);
 
     //cout << "weight for process " << currentProcessType << " is " << weight << endl;
 
@@ -286,19 +319,19 @@ void BabyScrewdriver::PostProcessingStep()
 
     //vector<string> totYield = { "SR1l23jLowMlb_MET250to350" , "SR1l23jLowMlb_MET350to450" , "SR1l23jLowMlb_MET450to550" , "SR1l23jLowMlb_MET550toInf" , "SR1l23jHighMlb_MET250to350" , "SR1l23jHighMlb_MET350to450" , "SR1l23jHighMlb_MET450to550" , "SR1l23jHighMlb_MET550toInf" , "SR1l4jLowMT2WLowMlb_MET250to350" , "SR1l4jLowMT2WLowMlb_MET350to450" , "SR1l4jLowMT2WLowMlb_MET450to550" , "SR1l4jLowMT2WLowMlb_MET550to650" , "SR1l4jLowMT2WLowMlb_MET650toInf" , "SR1l4jLowMT2WHighMlb_MET250to350" , "SR1l4jLowMT2WHighMlb_MET350to450" , "SR1l4jLowMT2WHighMlb_MET450to550" , "SR1l4jLowMT2WHighMlb_MET550toInf" , "SR1l4jMidMT2WLowMlb_MET250to350" , "SR1l4jMidMT2WLowMlb_MET350to450" , "SR1l4jMidMT2WLowMlb_MET450toInf" , "SR1l4jMidMT2WHighMlb_MET250to400" , "SR1l4jMidMT2WHighMlb_MET400toInf" , "SR1l4jHighMT2WLowMlb_MET250to350" , "SR1l4jHighMT2WLowMlb_MET350to450" , "SR1l4jHighMT2WLowMlb_MET450to600" , "SR1l4jHighMT2WLowMlb_MET600toInf" , "SR1l4jHighMT2WHighMlb_MET250to400" , "SR1l4jHighMT2WHighMlb_MET400to650" , "SR1l4jHighMT2WHighMlb_MET650toInf"};
     vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET350to450" , "SR1l2j_MET450toInf" , "SR1l3j_MET250to350" , "SR1l3j_MET350to450" , "SR1l3j_MET450to550" , "SR1l3j_MET550toInf" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET450toInf" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET650toInf" };;
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yield.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yield.tex", 4);
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldICHEP.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldICHEP.tex", 4);
 
 
     vector <string> tfreg{};
 
 
     TFProducer prod(tfreg, "lostLepton", "CR2l");
-    prod.produceTFTable("yield.tab", "lostLeptonTF");
+    prod.produceTFTable("yieldICHEP.tab", "lostLeptonTF");
     TFProducer prod2(tfreg, "singleLepton", "CR1l");
-    prod2.produceTFTable("yield.tab", "singleLeptonTF");
+    prod2.produceTFTable("yieldICHEP.tab", "singleLeptonTF");
     TFProducer prod3(tfreg, "singleLeptonFromT", "CR1l");
-    prod3.produceTFTable("yield.tab", "singleLeptonFromTTF");
+    prod3.produceTFTable("yieldICHEP.tab", "singleLeptonFromTTF");
 
     cout << "end of processing" << endl;
  }
@@ -366,12 +399,12 @@ void BabyScrewdriver::PostProcessingStep()
 
     float getWeight(string currentProcessType, float lumi)
     {
-        //float all_weights = myEvent.crossSection * lumi * myEvent.kfactor * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF;
-        //all_weights = myEvent.crossSection * lumi * myEvent.kfactor * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_ISR ;
-        float all_weights = lumi*  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF;
+        float nEvents =  myEvent.wNormalization.at(22);
+        float all_weights = lumi*  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
         //cout << "cs: " << myEvent.crossSection << "scale 1 fb " << myEvent.scale1fb << " weight total: " << all_weights << endl;
         if(currentProcessType == "signal")
-            all_weights = lumi * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_ISR ;
+             throw std::runtime_error("weight for signal still waitning to be implemented!");
+            //all_weights = lumi * myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) * myEvent.weight_ISR*( nEvents / myEvent.wNormalization.at(19) ) ;
         return all_weights;
     }
 

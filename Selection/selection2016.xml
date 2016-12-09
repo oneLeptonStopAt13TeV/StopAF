@@ -11,7 +11,9 @@
    <Variable name="lep1_MediumID" babyTuple="lep1_passMediumID" />
    <Variable name="lep1_TightID" babyTuple="lep1_passTightID" />
    <Variable name="lep1_pdgid" babyTuple="lep1_pdgid" />
+   <Variable name="nveto" babyTuple="nvetoleps"/>
  </Variables>
+
  <Baseline  name="baseline" selection="MET>=250 and Mt>=150 and Njets>=2 and DPhi_jmet>=0.8" />
  <Regions>
   <Region name="SR1l" selection="Nbjets>=1 and OneLep() and ( (lep1_MediumID and abs(lep1_pdgid)==11) or (lep1_TightID and abs(lep1_pdgid)==13)) "/>
