@@ -7,14 +7,15 @@
 #include "../sonicScrewdriver/interface/Table.h"
 
 //usage
-//./ttZUnctTable yield.tab signalReg.txt statNames.txt nUnc+1(=nparameters per one signal region)
+//./ttZUnctTable yield.tab signalReg.txt statNames.txt nUnc+1 yieldJECDown.tab yieldJECUp.tab(=nparameters per one signal region, nUnc+1 = 16 currently)
+//./ttZUnctTable yieldMor.tab signalRegMor.txt statNames.txt nUnc+1 yieldJECDownMor.tab yieldJECUpMor.tab(=nparameters per one signal region, nUnc+1 = 16 currently)
 
 using namespace std;
 using namespace theDoctor;
 
 int main(int argc, char *argv[]){
 
-        if(argc != 5)
+        if(argc != 7)
             throw std::runtime_error("Bad number of arguments!");
          
          
@@ -23,10 +24,12 @@ int main(int argc, char *argv[]){
         string inputFile = argv[2];
         string uncNames = argv[3];
         TString nUncs = argv[4];
+        string JECDownTab = argv[5];
+        string JECUpTab = argv[6];
         int nUnc = nUncs.Atoi();
 
         vector<string> regions;
-        vector<string> datasets = {"ttZ"}; //@MJ@ TODO change the datasets to meaningful ones
+        vector<string> datasets = {"Znunu"}; //@MJ@ TODO change the datasets to meaningful ones
 
 	string line;
         ifstream regfile(inputFile);
@@ -46,6 +49,10 @@ int main(int argc, char *argv[]){
        //theDoctor::SonicScrewdriver sonic;
        Table tab(inputTab);
 
+       Table tJECdown(JECDownTab);
+       Table tJECup(JECUpTab);
+       
+
   
         vector<string> colI;
         
@@ -60,6 +67,8 @@ int main(int argc, char *argv[]){
                     break;
                 colI.push_back(line2);
             }
+            colI.push_back("JECdown");
+            colI.push_back("JECup");
             systfile.close();
         }
         uint32_t rowIdI = 0;
@@ -81,6 +90,7 @@ int main(int argc, char *argv[]){
        uint32_t uncLine = 0;
        float uncTot = 0;
        float uncBef = 0;      
+       float uncHigher = 0;      
        float binValue = 0;
 
        for(uint32_t r=0; r<regions.size();r++)
@@ -92,7 +102,9 @@ int main(int argc, char *argv[]){
                uncLine++;
                histo.at(0)->SetBinContent(uncLine,resall.value());
                if(r != 0)
-                   histo.at(0)->SetBinError(uncLine-1,uncTot); //fill preceeding error
+                   histo.at(0)->SetBinError(uncLine-1,uncTot);
+               uncTot = 0;
+ 
            }
            else
            {
@@ -101,17 +113,29 @@ int main(int argc, char *argv[]){
                    uncBef = resall.value();
                }
                else
-               {
-                   uncTot += (abs(resall.value() - uncBef)* abs(resall.value() - uncBef)) ;//@MJ@TODO now average unc, change to maximal?!
+               { 
+                   binValue = histo.at(0)->GetBinContent(uncLine);
+                   uncHigher = abs(uncBef-binValue) > abs(resall.value() - binValue) ? abs(uncBef-binValue): abs(resall.value() - binValue);   
+                   uncTot += uncHigher*uncHigher ;//@MJ@TODO now average unc, change to maximal?!
                    uncBef = 0;
                }
            }
-           cout << "colI " << r-((uncLine-1)*(nUnc)) << endl;
+           cout << "colI " << colI.at(r-((uncLine-1)*(nUnc))) << endl;
            tI.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), resall);
            cout << realReg.at(uncLine-1) << " value " <<  colI.at(r-((uncLine-1)*(nUnc)))<< endl;
        }
-        tI.Print(static_cast<string>("tableUnc.tab"));
-        tI.PrintLatex(static_cast<string>("tableUnc.tex"));
+       //fill JEC
+       for(uint32_t j = 0; j<realReg.size(); j++)
+       {     
+           theDoctor::Figure JECd = tJECdown.Get(realReg.at(j), datasets.at(0));
+           theDoctor::Figure JECu = tJECup.Get(realReg.at(j), datasets.at(0)).value();
+           cout << "JEC down value " << JECd.value() << endl;
+ 
+           tI.Set("JECdown", realReg.at(j), JECd);
+           tI.Set("JECup", realReg.at(j), JECu);
+       }
+        tI.Print(static_cast<string>("tableUncMor.tab"));
+        tI.PrintLatex(static_cast<string>("tableUncMor.tex"));
 
        //TCanvas *can = new TCanvas("can","can");
        //can->cd();

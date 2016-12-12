@@ -158,7 +158,8 @@ class Selection:
 	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
-               systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTdown", "BTup", "PDFdown", "PDFup"]
+               #systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "lumi" ]
+               systs = []
                for syst in systs:
 	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
 	           myfile.write(dump)
@@ -305,7 +306,7 @@ class Selection:
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
-                 systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTdown", "BTup", "PDFdown", "PDFup"]
+                 systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "lumi" ]
                  for syst in systs:
 	             dump= "\"" +name+syst+"\""
 	             myfile.write(dump)

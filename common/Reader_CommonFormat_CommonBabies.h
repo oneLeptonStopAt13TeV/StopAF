@@ -56,6 +56,7 @@ typedef struct
     int          HLT_DiEl;
     int          HLT_DiMu;
     int          HLT_MuE;
+    bool         trigger = 0;
     //vector<float> ak8pfjets_phi;
     //vector<float> ak10pfjets_phi;
     float         lep1_passMediumID = -13;
@@ -148,6 +149,10 @@ typedef struct
     float         weight_ISRnjets_DN = -13;
     float         pdf_down_weight = -13;
     float         pdf_up_weight = -13;
+    float         weight_q2_down = -13;
+    float         weight_q2_up = -13;
+    float         weight_alphas_down = -13;
+    float         weight_alphas_up = -13;
     float         lep1_mass = -13;
     float         lep2_passVeto = -13;
     float         lep1_eta = -13;
@@ -180,7 +185,7 @@ typedef struct
     float         mass_stop = -13;
 
     //@MJ@ TODO fill these
-    float         pfmet_rl_jup = -13;
+    /*float         pfmet_rl_jup = -13;
     float         pfmet_rl_jdown = -13;
     float         MT2W_rl_jup = -13; //dphi?
     float         MT2W_rl_jdown = -13;
@@ -194,7 +199,7 @@ typedef struct
     float         jup_ngoodbtags = -13;
     float         jdown_ngoodjets = -13;
     float         jdown_ngoodbtags = -13;
-
+*/
     vector<float> wNormalization;
 
 
@@ -672,36 +677,36 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
 
     #ifdef USE_VAR_BASELINE_UP
     if(theTree->GetListOfBranches()->FindObject("pfmet_rl_jup"))
-        theTree->SetBranchAddress("pfmet_rl_jup",                   &(myEvent->pfmet_rl_jup));
+        theTree->SetBranchAddress("pfmet_rl_jup",                   &(myEvent->pfmet));
     if(theTree->GetListOfBranches()->FindObject("MT2W_rl_jup"))
-        theTree->SetBranchAddress("MT2W_rl_jup",                    &(myEvent->MT2W_rl_jup));
+        theTree->SetBranchAddress("MT2W_rl_jup",                    &(myEvent->MT2W));
     if(theTree->GetListOfBranches()->FindObject("mt_met_lep_rl_jup"))
-        theTree->SetBranchAddress("mt_met_lep_rl_jup",              &(myEvent->mt_met_lep_rl_jup));
+        theTree->SetBranchAddress("mt_met_lep_rl_jup",              &(myEvent->mt_met_lep));
     if(theTree->GetListOfBranches()->FindObject("topnessMod_rl_jup"))
-        theTree->SetBranchAddress("topnessMod_rl_jup",                 &(myEvent->topnessMod_rl_jup));
+        theTree->SetBranchAddress("topnessMod_rl_jup",                 &(myEvent->topnessMod));
     if(theTree->GetListOfBranches()->FindObject("jup_ngoodjets"))
-        theTree->SetBranchAddress("jup_ngoodjets",               &(myEvent->jup_ngoodjets));
+        theTree->SetBranchAddress("jup_ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("jup_ngoodbtags"))
-        theTree->SetBranchAddress("jup_ngoodbtags",              &(myEvent->jup_ngoodbtags));
+        theTree->SetBranchAddress("jup_ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jup"))
-        theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jup",      &(myEvent->dphi_ak4pfjets_met_rl_jup));
+        theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jup",      &(myEvent->dphi_ak4pfjets_met));
     #endif
 
     #ifdef USE_VAR_BASELINE_DOWN
-    if(theTree->GetListOfBranches()->FindObject("pfmet_jdown"))
-        theTree->SetBranchAddress("pfmet_jdown",                   &(myEvent->pfmet_jdown));
-    if(theTree->GetListOfBranches()->FindObject("MT2W_jdown"))
-        theTree->SetBranchAddress("MT2W_jdown",                    &(myEvent->MT2W_jdown));
-    if(theTree->GetListOfBranches()->FindObject("mt_met_lep_jdown"))
-        theTree->SetBranchAddress("mt_met_lep_jdown",              &(myEvent->mt_met_lep_jdown));
-    if(theTree->GetListOfBranches()->FindObject("topnessMod_jdown"))
-        theTree->SetBranchAddress("topnessMod_jdown",                 &(myEvent->topnessMod_jdown));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_rl_jdown"))
+        theTree->SetBranchAddress("pfmet_rl_jdown",                   &(myEvent->pfmet));
+    if(theTree->GetListOfBranches()->FindObject("MT2W_rl_jdown"))
+        theTree->SetBranchAddress("MT2W_rl_jdown",                    &(myEvent->MT2W));
+    if(theTree->GetListOfBranches()->FindObject("mt_met_lep_rl_jdown"))
+        theTree->SetBranchAddress("mt_met_lep_rl_jdown",              &(myEvent->mt_met_lep));
+    if(theTree->GetListOfBranches()->FindObject("topnessMod_rl_jdown"))
+        theTree->SetBranchAddress("topnessMod_rl_jdown",                 &(myEvent->topnessMod));
     if(theTree->GetListOfBranches()->FindObject("jdown_ngoodjets"))
-        theTree->SetBranchAddress("jdown_ngoodjets",               &(myEvent->jdown_ngoodjets));
+        theTree->SetBranchAddress("jdown_ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("jdown_ngoodbtags"))
-        theTree->SetBranchAddress("jdown_ngoodbtags",              &(myEvent->jdown_ngoodbtags));
-    if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_jdown"))
-        theTree->SetBranchAddress("mindphi_met_j1_j2_jdown",      &(myEvent->dphi_ak4pfjets_met_jdown));
+        theTree->SetBranchAddress("jdown_ngoodbtags",              &(myEvent->ngoodbtags));
+    if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jdown"))
+        theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jdown",      &(myEvent->dphi_ak4pfjets_met));
     #endif
 
     #ifdef USE_GLOBAL_VAR
@@ -853,6 +858,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
 void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
 {
     theTree->GetEntry(i);
+
+    if(myEvent->genweights->size()>109)
+    {
+        myEvent->weight_q2_down = myEvent->genweights->at(8)/myEvent->genweights->at(0);
+        myEvent->weight_q2_up = myEvent->genweights->at(4)/myEvent->genweights->at(0);
+        myEvent->weight_alphas_down = myEvent->genweights->at(110)/myEvent->genweights->at(0);
+        myEvent->weight_alphas_up = myEvent->genweights->at(109)/myEvent->genweights->at(0);
+    }
+    else
+        cout << "gen weights not properly set, the size is: " << myEvent->genweights->size() << endl;
 
     #ifdef USE_LEP1
     myEvent->lep1_p4 = *(myEvent->p4lep1_p4);

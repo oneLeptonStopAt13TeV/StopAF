@@ -8,9 +8,9 @@ import os
 ###################################
 # should become a parameter
 ###################################
-ifilename='selection2016.xml'
+ifilename='selectionDEC2016.xml'
 template='template.h'
-ofilename='test.h'
+ofilename='moriond.h'
 
 tree = ET.parse(ifilename)
 #tree = ET.parse('selection2016.xml')
@@ -52,12 +52,12 @@ for regions in root.iter("Region"):
 # Create selection region
 ###################################
 template='template.h'
-ofilename='test.h'
-ofilename2="test2.cc"
-ofilename3="yieldStr.h"
-ofilename4="SRStr.h"
-ofilename5="TFStr.h"
-ofilename6="Syst.h"
+ofilename='moriond.h'
+ofilename2="moriond.cc"
+ofilename3="yieldStrM.h"
+ofilename4="SRStrM.h"
+ofilename5="TFStrM.h"
+ofilename6="SystM.h"
 command = "rm " + " " + ofilename +" " + ofilename2 +" " + ofilename3 +" " + ofilename4 +" " + ofilename5+" " + ofilename6
 os.system(command)
 command = "cp "+template+" "+ofilename

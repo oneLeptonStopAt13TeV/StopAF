@@ -7,7 +7,7 @@
 #include "TLorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
 
-#define USE_VAR_BASELINE
+#define USE_VAR_BASELINE_UP
 #define USE_LEP1
 #define USE_LEP2
 //#define USE_SKIMMING_VAR
@@ -100,87 +100,6 @@ void BabyScrewdriver::Init()
     	AddDataset("ttZJets_13TeV_madgraphMLM","Znunu",0,0);
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","Znunu",0,0);
 
-//@MJ@ TODO for sync, still some samples are missing
-/*    AddProcessClass("other", "other", "background", kRed);//@MJ@ TODO K-factor?
-    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","other",0,0);
-    	AddDataset("ttbar_diLept_madgraph_pythia8_25ns", "other",0,0);
-    	AddDataset("ttbar_diLept_madgraph_pythia8_ext1_25ns", "other",0,0);
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_25ns", "other",0,0);
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns", "other",0,0);
-    	AddDataset("ttbar_singleLeptFromT_madgraph_pythia8_25ns", "other",0,0);
-    	AddDataset("t_sch_4f_amcnlo_pythia8_25ns","other",0,10.11*0.364176);
-    	AddDataset("t_tW_5f_powheg_pythia8_noHadDecays_25ns","other",0,38.09*0.5135);
-    	AddDataset("t_tbarW_5f_powheg_pythia8_noHadDecays_25ns","other",0,38.09*0.5135);
-    	AddDataset("t_tch_4f_powheg_pythia8_25ns","other",0,80.95*0.324);
-
-
-    AddProcessClass("data", "data", "data", kBlack);//@MJ@ TODO K-factor?*/
-
-    	//AddDataset("WWTo2l2Nu_powheg_25ns","Znunu",0,0);
-   // 	AddDataset("ttZ","rare",0,0.7826);
-    //	AddDataset("tZq","rare",0,0.0758);
-    //	AddDataset("WZ","rare",0,3.06);
-
-    //AddProcessClass("throw", "throw", "signal", kBlue);
-     	//AddDataset("T2tt_400to1200", "throw", 0, 0 );
-     	//AddDataset("T2tt_mStop_850_mLSP_100_25ns", "throw", 0, 0 );
-    //
-    //
-   
-   /* AddProcessClass("tt2l", "tt2l", "background", kGreen);//@MJ@ TODO K-factor?
-    	AddDataset("ttbar_diLept_madgraph_pythia8_25ns", "tt2l",0,0);
-    	AddDataset("ttbar_diLept_madgraph_pythia8_ext1_25ns", "tt2l",0,0);
-
-    AddProcessClass("tt1l", "tt1l", "background", kBlue);//@MJ@ TODO K-factor?
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_25ns", "tt1l",0,0);
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns", "tt1l",0,0);
-    	AddDataset("ttbar_singleLeptFromT_madgraph_pythia8_25ns", "tt1l",0,0);
-
-
-    //signal examples
-    //AddProcessClass( "850_100", "850_100", "signal", kBlue);
-    //AddProcessClass( "1000_1", "1000_1", "signal", kBlue);
-
-    //AddProcessClass( "grouped", "grouped", "signal", kBlue);
-    //AddProcessClass("data", "data", "data", kViolet);
-    	//AddDataset("SE_0", "data", 0, 0 );
-    	//AddDataset("SE_1", "data", 0, 0 );
-       // AddDataset("SM_0", "data", 0, 0 );
-       // AddDataset("SM_1", "data", 0, 0 );
-        //AddDataset("MET_0", "data", 0, 0 );
-        //AddDataset("MET_1", "data", 0, 0 );
-    
-    AddProcessClass("ST", "ST", "background", kRed);
-    	AddDataset("t_sch_4f_amcnlo_pythia8_25ns","ST",0,10.11*0.364176);
-    	AddDataset("t_tW_5f_powheg_pythia8_noHadDecays_25ns","ST",0,38.09*0.5135);
-    	AddDataset("t_tbarW_5f_powheg_pythia8_noHadDecays_25ns","ST",0,38.09*0.5135);
-    	AddDataset("t_tch_4f_powheg_pythia8_25ns","ST",0,80.95*0.324);
-    */	
-	//AddDataset("TTJetsSLtop", "test", 0, 114.6*1.594 );
-    	//AddDataset("TTJetsSLatopv1","test",0,114.6*1.594);
-    	//AddDataset("TTJetsDLv0v4","test",0, 57.35*1.5225);
-    	//AddDataset("WJetsToLNuTune","test",0,60781.5*1.01);
-    //	AddDataset("W1JetsToLNuTune","test",0, 9493*1.238);
-    //	AddDataset("W2JetsToLNuTune","test",0, 3120*1.231);
-    //	AddDataset("W3JetsToLNuTune","test",0, 942.3*1.231);
-    //	AddDataset("W4JetsToLNuTune","test",0, 524.2*1.114);
-   // 	AddDataset("TTWtoQQ","test",0,0.4062);
-    //	AddDataset("TTWtoLNu","test",0,0.2043);
-    //	AddDataset("TTT","test",0,1.0);
-    //	AddDataset("VV","test",0,12.05*0.9917);
-
-    
-    //AddProcessClass("lostLepton", "lostLepton", "background", kPink);
-    //AddProcessClass("singleLepton", "singleLepton", "background", kGreen);
-    //AddProcessClass("singleLeptonFromT", "singleLeptonFromT", "background", kGreen);
-    
-    // ------------------
-    // Regions
-    // ------------------
-    
-//    AddRegion("SR1l","SR1l",&SR1l);
-//    AddRegion("CR1l","CR1l",&CR1l);
-//    AddRegion("CR2l","CR2l",&CR2l);
 
 AddRegion("SR1l2j_MET250to350","SR1l2j_MET250to350",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET350to450","SR1l2j_MET350to450",&SR1l2j_MET350to450);
@@ -249,7 +168,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
     myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
     if( currentProcessClass == "Znunu" && !(myEvent.isZtoNuNu) )
-         currentProcessClass = "other";
+         currentProcessClass = "";
      //cout << " stop " << myEvent.mass_stop << " lsp " << myEvent.mass_lsp << endl; //@MJ@ TODO why these MASSES ARE 0
 
     /*for(uint32_t s= 0; s<myEvent.gensusy_id->size(); s++)
@@ -334,9 +253,16 @@ void BabyScrewdriver::PostProcessingStep()
 
 
     //vector<string> totYield = { "SR1l23jLowMlb_MET250to350" , "SR1l23jLowMlb_MET350to450" , "SR1l23jLowMlb_MET450to550" , "SR1l23jLowMlb_MET550toInf" , "SR1l23jHighMlb_MET250to350" , "SR1l23jHighMlb_MET350to450" , "SR1l23jHighMlb_MET450to550" , "SR1l23jHighMlb_MET550toInf" , "SR1l4jLowMT2WLowMlb_MET250to350" , "SR1l4jLowMT2WLowMlb_MET350to450" , "SR1l4jLowMT2WLowMlb_MET450to550" , "SR1l4jLowMT2WLowMlb_MET550to650" , "SR1l4jLowMT2WLowMlb_MET650toInf" , "SR1l4jLowMT2WHighMlb_MET250to350" , "SR1l4jLowMT2WHighMlb_MET350to450" , "SR1l4jLowMT2WHighMlb_MET450to550" , "SR1l4jLowMT2WHighMlb_MET550toInf" , "SR1l4jMidMT2WLowMlb_MET250to350" , "SR1l4jMidMT2WLowMlb_MET350to450" , "SR1l4jMidMT2WLowMlb_MET450toInf" , "SR1l4jMidMT2WHighMlb_MET250to400" , "SR1l4jMidMT2WHighMlb_MET400toInf" , "SR1l4jHighMT2WLowMlb_MET250to350" , "SR1l4jHighMT2WLowMlb_MET350to450" , "SR1l4jHighMT2WLowMlb_MET450to600" , "SR1l4jHighMT2WLowMlb_MET600toInf" , "SR1l4jHighMT2WHighMlb_MET250to400" , "SR1l4jHighMT2WHighMlb_MET400to650" , "SR1l4jHighMT2WHighMlb_MET650toInf"};
-    vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET350to450" , "SR1l2j_MET450toInf" , "SR1l3j_MET250to350" , "SR1l3j_MET350to450" , "SR1l3j_MET450to550" , "SR1l3j_MET550toInf" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET450toInf" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET650toInf" };;
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldICHEP.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldICHEP.tex", 4);
+    vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET350to450" , "SR1l2j_MET450toInf" , "SR1l3j_MET250to350" , "SR1l3j_MET350to450" , "SR1l3j_MET450to550" , "SR1l3j_MET550toInf" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET450toInf" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET650toInf" };
+    #ifdef USE_VAR_BASELINE_DOWN
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECDown.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECdown.tex", 4);
+    #endif
+    #ifdef USE_VAR_BASELINE_UP
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECUp.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECUp.tex", 4);
+    #endif
+
 
 
     vector <string> tfreg{};
