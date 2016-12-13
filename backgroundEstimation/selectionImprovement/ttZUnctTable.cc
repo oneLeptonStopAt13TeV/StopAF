@@ -128,7 +128,7 @@ int main(int argc, char *argv[]){
        for(uint32_t j = 0; j<realReg.size(); j++)
        {     
            theDoctor::Figure JECd = tJECdown.Get(realReg.at(j), datasets.at(0));
-           theDoctor::Figure JECu = tJECup.Get(realReg.at(j), datasets.at(0)).value();
+           theDoctor::Figure JECu = tJECup.Get(realReg.at(j), datasets.at(0));
            cout << "JEC down value " << JECd.value() << endl;
  
            tI.Set("JECdown", realReg.at(j), JECd);

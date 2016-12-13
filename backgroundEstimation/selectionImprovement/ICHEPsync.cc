@@ -46,6 +46,11 @@ TH2D *h2 = NULL;
 TAxis *xaxis = NULL;
 TAxis *yaxis = NULL;
 
+float weighttt1l = 0;
+float weighttt1lext = 0;
+float weighttt2l = 0;
+float weighttt2lext = 0;
+
     string distingusihClassBkg(string currentProcessClass, vector<string> classLabels); // class, type, list of labels, ...
     void linkTheNameWithProcessClass(string PC);
     void distingusihcClassSig( string currentprocessclass, string currentprocesstype, vector<string> classlabels); // class, type, list of labels, ...
@@ -57,6 +62,8 @@ bool lepChannel()
     return true; 
 }
     
+int trackveto; 
+int tauveto; 
 //Add this as a global variable 
 
 void BabyScrewdriver::Init()
@@ -78,10 +85,8 @@ void BabyScrewdriver::Init()
     // Variables
     // ------------------
     // fixed binning
-    int trackveto = (int) myEvent.PassTrackVeto; 
-    int tauveto = (int) myEvent.PassTauVeto; 
     AddVariable("MET", "MET",  "MET", 100 ,200,1000,  &(myEvent.pfmet), "noUnderflowInFirstBin");
-    AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,500,  &(myEvent.MT2W), "noUnderflowInFirstBin");
+    AddVariable("MT2W", "MT2W",  "MT2W", 100 ,0,1000,  &(myEvent.MT2W), "noUnderflowInFirstBin");
     AddVariable("MT", "MT",  "MT", 100 ,100,1000,  &(myEvent.mt_met_lep), "noUnderflowInFirstBin");
     AddVariable("nJets","nJets","nJets",5,1,5,&(myEvent.ngoodjets),"noUnderflowInFirstBin");
     AddVariable("nBJets","nBJets","nBJets",5,1,5,&(myEvent.ngoodbtags),"noUnderflowInFirstBin");
@@ -90,6 +95,7 @@ void BabyScrewdriver::Init()
     AddVariable("nvertex","nvertex","nvertex",50,0,50,&(myEvent.nvertex),"noUnderflowInFirstBin");
     AddVariable("trackveto","trackveto","trackveto",3,0,3,&(trackveto),"noUnderflowInFirstBin");
     AddVariable("tauveto","tauveto","tauveto",3,0,3,&(tauveto),"noUnderflowInFirstBin");
+ 
 
 
     // ------------------
@@ -101,73 +107,32 @@ void BabyScrewdriver::Init()
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","Znunu",0,0);
 
 //@MJ@ TODO for sync, still some samples are missing
-/*    AddProcessClass("other", "other", "background", kRed);//@MJ@ TODO K-factor?
-    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","other",0,0);
+     AddProcessClass("other", "other", "background", kRed);//@MJ@ TODO K-factor?
     	AddDataset("ttbar_diLept_madgraph_pythia8_25ns", "other",0,0);
     	AddDataset("ttbar_diLept_madgraph_pythia8_ext1_25ns", "other",0,0);
     	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_25ns", "other",0,0);
     	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns", "other",0,0);
     	AddDataset("ttbar_singleLeptFromT_madgraph_pythia8_25ns", "other",0,0);
     	AddDataset("t_sch_4f_amcnlo_pythia8_25ns","other",0,10.11*0.364176);
-    	AddDataset("t_tW_5f_powheg_pythia8_noHadDecays_25ns","other",0,38.09*0.5135);
-    	AddDataset("t_tbarW_5f_powheg_pythia8_noHadDecays_25ns","other",0,38.09*0.5135);
-    	AddDataset("t_tch_4f_powheg_pythia8_25ns","other",0,80.95*0.324);
+    	AddDataset("t_tW_5f_powheg_pythia8_noHadDecays_25ns","other",0,0);
+    	AddDataset("t_tbarW_5f_powheg_pythia8_noHadDecays_25ns","other",0,0);
+    	AddDataset("t_tch_4f_powheg_pythia8_25ns","other",0,0);
+    	AddDataset("W1JetsToLNu_madgraph_pythia8_25ns","other",0,0);
+    	AddDataset("W2JetsToLNu_madgraph_pythia8_25ns","other",0,0);
+    	AddDataset("W3JetsToLNu_madgraph_pythia8_25ns","other",0,0);
+    	AddDataset("W4JetsToLNu_madgraph_pythia8_25ns","other",0,0);
+    	AddDataset("TTWJetsToLNu_amcnlo_pythia8_25ns","other",0,0);
+    	AddDataset("TTWJetsToQQ_amcnlo_pythia8_25ns","other",0,0);
+    	AddDataset("TTTo2L2Nu_powheg_25ns","other",0,0);
+    	AddDataset("WW_pythia8_25ns","other",0,0);
+    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","other",0,0);
+        //@MJ@ TODO tZq missing
 
+    AddProcessClass("data", "data", "data", kBlack);//@MJ@ TODO K-f
+        AddDataset("data_single_electron_Run2016B_MINIAOD_PromptReco-v2re","data",0,0);
+    	AddDataset("data_single_muon_Run2016B_MINIAOD_PromptReco-v2re","data",0,0);
+    	AddDataset("data_met_Run2016B_MINIAOD_PromptReco-v2re","data",0,0);
 
-    AddProcessClass("data", "data", "data", kBlack);//@MJ@ TODO K-factor?*/
-
-    	//AddDataset("WWTo2l2Nu_powheg_25ns","Znunu",0,0);
-   // 	AddDataset("ttZ","rare",0,0.7826);
-    //	AddDataset("tZq","rare",0,0.0758);
-    //	AddDataset("WZ","rare",0,3.06);
-
-    //AddProcessClass("throw", "throw", "signal", kBlue);
-     	//AddDataset("T2tt_400to1200", "throw", 0, 0 );
-     	//AddDataset("T2tt_mStop_850_mLSP_100_25ns", "throw", 0, 0 );
-    //
-    //
-   
-   /* AddProcessClass("tt2l", "tt2l", "background", kGreen);//@MJ@ TODO K-factor?
-    	AddDataset("ttbar_diLept_madgraph_pythia8_25ns", "tt2l",0,0);
-    	AddDataset("ttbar_diLept_madgraph_pythia8_ext1_25ns", "tt2l",0,0);
-
-    AddProcessClass("tt1l", "tt1l", "background", kBlue);//@MJ@ TODO K-factor?
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_25ns", "tt1l",0,0);
-    	AddDataset("ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns", "tt1l",0,0);
-    	AddDataset("ttbar_singleLeptFromT_madgraph_pythia8_25ns", "tt1l",0,0);
-
-
-    //signal examples
-    //AddProcessClass( "850_100", "850_100", "signal", kBlue);
-    //AddProcessClass( "1000_1", "1000_1", "signal", kBlue);
-
-    //AddProcessClass( "grouped", "grouped", "signal", kBlue);
-    //AddProcessClass("data", "data", "data", kViolet);
-    	//AddDataset("SE_0", "data", 0, 0 );
-    	//AddDataset("SE_1", "data", 0, 0 );
-       // AddDataset("SM_0", "data", 0, 0 );
-       // AddDataset("SM_1", "data", 0, 0 );
-        //AddDataset("MET_0", "data", 0, 0 );
-        //AddDataset("MET_1", "data", 0, 0 );
-    
-    AddProcessClass("ST", "ST", "background", kRed);
-    	AddDataset("t_sch_4f_amcnlo_pythia8_25ns","ST",0,10.11*0.364176);
-    	AddDataset("t_tW_5f_powheg_pythia8_noHadDecays_25ns","ST",0,38.09*0.5135);
-    	AddDataset("t_tbarW_5f_powheg_pythia8_noHadDecays_25ns","ST",0,38.09*0.5135);
-    	AddDataset("t_tch_4f_powheg_pythia8_25ns","ST",0,80.95*0.324);
-    */	
-	//AddDataset("TTJetsSLtop", "test", 0, 114.6*1.594 );
-    	//AddDataset("TTJetsSLatopv1","test",0,114.6*1.594);
-    	//AddDataset("TTJetsDLv0v4","test",0, 57.35*1.5225);
-    	//AddDataset("WJetsToLNuTune","test",0,60781.5*1.01);
-    //	AddDataset("W1JetsToLNuTune","test",0, 9493*1.238);
-    //	AddDataset("W2JetsToLNuTune","test",0, 3120*1.231);
-    //	AddDataset("W3JetsToLNuTune","test",0, 942.3*1.231);
-    //	AddDataset("W4JetsToLNuTune","test",0, 524.2*1.114);
-   // 	AddDataset("TTWtoQQ","test",0,0.4062);
-    //	AddDataset("TTWtoLNu","test",0,0.2043);
-    //	AddDataset("TTT","test",0,1.0);
-    //	AddDataset("VV","test",0,12.05*0.9917);
 
     
     //AddProcessClass("lostLepton", "lostLepton", "background", kPink);
@@ -225,6 +190,8 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     vector<string> classLabels;
     GetProcessClassLabelList(&classLabels);
 
+
+
     /*if(currentProcessType == "blablabla" )//normally background
     {
     string PC = currentProcessClass;
@@ -248,6 +215,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     }*/
 
     myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
+   // myEvent.trigger = CheckTrigger( false, currentDataset);
     if( currentProcessClass == "Znunu" && !(myEvent.isZtoNuNu) )
          currentProcessClass = "other";
      //cout << " stop " << myEvent.mass_stop << " lsp " << myEvent.mass_lsp << endl; //@MJ@ TODO why these MASSES ARE 0
@@ -269,15 +237,59 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
     if( myEvent.lep1_pt < 10) cout << "weird pt of lepton" << endl;
 
-    //cout << "track veto "<< myEvent.PassTrackVeto << " tau veto " << myEvent.PassTauVeto << " dphhi " <<myEvent.dphi_ak4pfjets_met << endl;
+    cout << "track veto "<< myEvent.PassTrackVeto << " tau veto " << myEvent.PassTauVeto << " dphhi " <<myEvent.dphi_ak4pfjets_met << " track veto var " << trackveto << " tauvetovar " << tauveto << endl;
+   
+    trackveto = myEvent.PassTrackVeto; 
+    tauveto = myEvent.PassTauVeto; 
 
     float weightLumi = getWeight(currentProcessType, GetLumi()); //@MJ@ TODO cross section form file?!
     
 
-    if( currentProcessClass == "tt2l")
-        weightLumi *= 0.5;
-    if( currentProcessClass == "tt1l" && ( currentDataset== "ttbar_singleLeptFromTbar_madgraph_pythia8_25ns"|| currentDataset == "ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns"))
-        weightLumi *= 0.5;
+    //first non-ext must be run
+    //weight for ext
+    if( currentDataset == "ttbar_diLept_madgraph_pythia8_25ns")
+    {
+        if(currentDataset != storedDataset)
+        {
+            weighttt2l = myEvent.scale1fb;
+            
+            TFile fle((babyTuplePath+"/ttbar_diLept_madgraph_pythia8_ext1_25ns.root").c_str());
+            TTree* tr = NULL;
+            tr = (TTree*) fle.Get("t");
+            tr->SetBranchAddress("scale1fb", &(weighttt2lext));
+            tr->GetEntry(1);
+            fle.Close();
+            cout << "tt2l " << weighttt2l << "tt2l ext " << weighttt2lext << endl;
+        }
+        myEvent.scale1fb =myEvent.scale1fb* ( weighttt2l/(weighttt2l+weighttt2lext));
+    }
+    else if(currentDataset == "ttbar_diLept_madgraph_pythia8_ext1_25ns")
+    {
+        myEvent.scale1fb = myEvent.scale1fb* (weighttt2lext/(weighttt2l+weighttt2lext));
+    }
+    else if(currentDataset== "ttbar_singleLeptFromTbar_madgraph_pythia8_25ns")
+    {
+        if(currentDataset != storedDataset)
+        {
+            weighttt1l = myEvent.scale1fb;
+            
+            TFile fle((babyTuplePath+"/ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns.root").c_str());
+            TTree* tr = NULL;
+            tr = (TTree*) fle.Get("t");
+            tr->SetBranchAddress("scale1fb", &(weighttt1lext));
+            tr->GetEntry(1);
+            fle.Close();
+            cout << "tt1l " << weighttt1l << "tt1l ext " << weighttt1lext << endl;
+        }
+        myEvent.scale1fb = myEvent.scale1fb * (weighttt1l/(weighttt1l+weighttt1lext));
+    }
+    else if(currentDataset == "ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns")
+    {
+        myEvent.scale1fb =myEvent.scale1fb* (weighttt1lext/(weighttt1l+weighttt1lext));
+    }
+    else
+    {
+    }
 
     float weight     = weightLumi;
     if (currentProcessType == "data") weight = 1.0;
@@ -287,6 +299,10 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
     //cout << "weight for process " << currentProcessType << " is " << weight << endl;
 
+    if(currentDataset != storedDataset)
+    {
+        storedDataset = currentDataset;
+    }
     if(counter % 10000 == 0)
     {
         cout << counter << endl;
@@ -306,7 +322,7 @@ void BabyScrewdriver::PostProcessingStep()
     // Schedule plots
     //
 
-    SchedulePlots("1DSuperimposed");
+    SchedulePlots("1DDataMCComparison");
     //SchedulePlots("1DSuperimposedNoNorm");
     //SchedulePlots("1DStack");
     //SchedulePlots("2D");

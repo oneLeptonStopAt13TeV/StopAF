@@ -2,7 +2,7 @@
 <Variables>
 <Variable tag="yield" label="Yield" unit="" nbins="1" min="-0.5" max="0.5"/>
 <Variable tag="MET" label="MET" unit="MET" nbins="100" min="200" max="1000"/>
-<Variable tag="MT2W" label="MT2W" unit="MT2W" nbins="100" min="0" max="500"/>
+<Variable tag="MT2W" label="MT2W" unit="MT2W" nbins="100" min="0" max="1000"/>
 <Variable tag="MT" label="MT" unit="MT" nbins="100" min="100" max="1000"/>
 <Variable tag="nJets" label="nJets" unit="nJets" nbins="5" min="0.5" max="5.5"/>
 <Variable tag="nBJets" label="nBJets" unit="nBJets" nbins="5" min="0.5" max="5.5"/>
@@ -34,23 +34,29 @@
 </Channels>
 <ProcessClasses>
 <ProcessClass tag="Znunu" label="Znunu" type="background" color="600" />
-<ProcessClass tag="tt2l" label="tt2l" type="background" color="416" />
-<ProcessClass tag="tt1l" label="tt1l" type="background" color="600" />
-<ProcessClass tag="ST" label="ST" type="background" color="632" />
+<ProcessClass tag="other" label="other" type="background" color="632" />
+<ProcessClass tag="data" label="data" type="data" color="1" />
 </ProcessClasses>
 <Datasets>
 <Dataset tag="ttZJets_13TeV_madgraphMLM" label="Znunu" processClass="Znunu" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="TTTo2L2Nu_powheg_25ns" label="Znunu" processClass="Znunu" XsecOrLumi="0" getTrueNumberOfEvents="0" />
 <Dataset tag="WZTo1L3Nu_amcnlo_pythia8_25ns" label="Znunu" processClass="Znunu" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ZZTo2L2Nu_powheg_pythia8_25ns" label="Znunu" processClass="Znunu" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="WWTo2l2Nu_powheg_25ns" label="Znunu" processClass="Znunu" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ttbar_diLept_madgraph_pythia8_25ns" label="tt2l" processClass="tt2l" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ttbar_diLept_madgraph_pythia8_ext1_25ns" label="tt2l" processClass="tt2l" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ttbar_singleLeptFromTbar_madgraph_pythia8_25ns" label="tt1l" processClass="tt1l" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ttbar_singleLeptFromTbar_madgraph_pythia8_ext1_25ns" label="tt1l" processClass="tt1l" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="ttbar_singleLeptFromT_madgraph_pythia8_25ns" label="tt1l" processClass="tt1l" XsecOrLumi="0" getTrueNumberOfEvents="0" />
-<Dataset tag="t_sch_4f_amcnlo_pythia8_25ns" label="ST" processClass="ST" XsecOrLumi="3.68182" getTrueNumberOfEvents="0" />
-<Dataset tag="t_tW_5f_powheg_pythia8_noHadDecays_25ns" label="ST" processClass="ST" XsecOrLumi="19.5592" getTrueNumberOfEvents="0" />
-<Dataset tag="t_tbarW_5f_powheg_pythia8_noHadDecays_25ns" label="ST" processClass="ST" XsecOrLumi="19.5592" getTrueNumberOfEvents="0" />
-<Dataset tag="t_tch_4f_powheg_pythia8_25ns" label="ST" processClass="ST" XsecOrLumi="26.2278" getTrueNumberOfEvents="0" />
+<Dataset tag="ttbar_diLept_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="ttbar_singleLeptFromTbar_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="ttbar_singleLeptFromT_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="t_sch_4f_amcnlo_pythia8_25ns" label="other" processClass="other" XsecOrLumi="3.68182" getTrueNumberOfEvents="0" />
+<Dataset tag="t_tW_5f_powheg_pythia8_noHadDecays_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="t_tbarW_5f_powheg_pythia8_noHadDecays_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="t_tch_4f_powheg_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="W1JetsToLNu_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="W2JetsToLNu_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="W3JetsToLNu_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="W4JetsToLNu_madgraph_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="TTWJetsToLNu_amcnlo_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="TTWJetsToQQ_amcnlo_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="TTTo2L2Nu_powheg_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="WW_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="ZZTo2L2Nu_powheg_pythia8_25ns" label="other" processClass="other" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="data_single_electron_Run2016B_MINIAOD_PromptReco-v2re" label="data" processClass="data" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="data_single_muon_Run2016B_MINIAOD_PromptReco-v2re" label="data" processClass="data" XsecOrLumi="0" getTrueNumberOfEvents="0" />
+<Dataset tag="data_met_Run2016B_MINIAOD_PromptReco-v2re" label="data" processClass="data" XsecOrLumi="0" getTrueNumberOfEvents="0" />
 </Datasets>

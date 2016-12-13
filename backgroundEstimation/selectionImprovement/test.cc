@@ -92,12 +92,11 @@ void BabyScrewdriver::Init()
     // Datasets
     // ------------------
     //AddProcessClass("rare", "rare", "background", kBlue);//@MJ@ TODO K-factor?
-    AddProcessClass("ttZ", "ttZ", "background", kBlue);//@MJ@ TODO K-factor?
-    	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
-    	AddDataset("TTTo2L2Nu_powheg_25ns","ttZ",0,0);
-    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","ttZ",0,0);
-    	AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","ttZ",0,0);
-    	AddDataset("WWTo2l2Nu_powheg_25ns","ttZ",0,0);
+    AddProcessClass("Znunu", "Znunu", "background", kBlue);//@MJ@ TODO K-factor?
+    	AddDataset("ttZJets_13TeV_madgraphMLM","Znunu",0,0);
+    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","Znunu",0,0);
+    	//AddDataset("ZZTo2L2Nu_powheg_pythia8_25ns","ttZ",0,0);
+    	//AddDataset("WWTo2l2Nu_powheg_25ns","ttZ",0,0);
     //	AddDataset("tZq","rare",0,0.0758);
   ///  	AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZ", 0, 0);
     //	AddDataset("WZ","rare",0,3.06);
@@ -155,142 +154,247 @@ void BabyScrewdriver::Init()
 //    AddRegion("CR2l","CR2l",&CR2l);
 
 
-//135 regions
+//240 regions
 AddRegion("SR1l2j_MET250to350","SR1l2j_MET250to350",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350PUdown","SR1l2j_MET250to350PUdown",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350PUup","SR1l2j_MET250to350PUup",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350LSFdown","SR1l2j_MET250to350LSFdown",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350LSFup","SR1l2j_MET250to350LSFup",&SR1l2j_MET250to350);
-AddRegion("SR1l2j_MET250to350BTdown","SR1l2j_MET250to350BTdown",&SR1l2j_MET250to350);
-AddRegion("SR1l2j_MET250to350BTup","SR1l2j_MET250to350BTup",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350BTlightDown","SR1l2j_MET250to350BTlightDown",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350BTlightUp","SR1l2j_MET250to350BTlightUp",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350BTheavyDown","SR1l2j_MET250to350BTheavyDown",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350BTheavyUp","SR1l2j_MET250to350BTheavyUp",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350PDFdown","SR1l2j_MET250to350PDFdown",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET250to350PDFup","SR1l2j_MET250to350PDFup",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350alphaSdown","SR1l2j_MET250to350alphaSdown",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350alphaSup","SR1l2j_MET250to350alphaSup",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350Q2down","SR1l2j_MET250to350Q2down",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350Q2up","SR1l2j_MET250to350Q2up",&SR1l2j_MET250to350);
+AddRegion("SR1l2j_MET250to350lumi","SR1l2j_MET250to350lumi",&SR1l2j_MET250to350);
 AddRegion("SR1l2j_MET350to450","SR1l2j_MET350to450",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450PUdown","SR1l2j_MET350to450PUdown",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450PUup","SR1l2j_MET350to450PUup",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450LSFdown","SR1l2j_MET350to450LSFdown",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450LSFup","SR1l2j_MET350to450LSFup",&SR1l2j_MET350to450);
-AddRegion("SR1l2j_MET350to450BTdown","SR1l2j_MET350to450BTdown",&SR1l2j_MET350to450);
-AddRegion("SR1l2j_MET350to450BTup","SR1l2j_MET350to450BTup",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450BTlightDown","SR1l2j_MET350to450BTlightDown",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450BTlightUp","SR1l2j_MET350to450BTlightUp",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450BTheavyDown","SR1l2j_MET350to450BTheavyDown",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450BTheavyUp","SR1l2j_MET350to450BTheavyUp",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450PDFdown","SR1l2j_MET350to450PDFdown",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET350to450PDFup","SR1l2j_MET350to450PDFup",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450alphaSdown","SR1l2j_MET350to450alphaSdown",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450alphaSup","SR1l2j_MET350to450alphaSup",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450Q2down","SR1l2j_MET350to450Q2down",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450Q2up","SR1l2j_MET350to450Q2up",&SR1l2j_MET350to450);
+AddRegion("SR1l2j_MET350to450lumi","SR1l2j_MET350to450lumi",&SR1l2j_MET350to450);
 AddRegion("SR1l2j_MET450toInf","SR1l2j_MET450toInf",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfPUdown","SR1l2j_MET450toInfPUdown",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfPUup","SR1l2j_MET450toInfPUup",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfLSFdown","SR1l2j_MET450toInfLSFdown",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfLSFup","SR1l2j_MET450toInfLSFup",&SR1l2j_MET450toInf);
-AddRegion("SR1l2j_MET450toInfBTdown","SR1l2j_MET450toInfBTdown",&SR1l2j_MET450toInf);
-AddRegion("SR1l2j_MET450toInfBTup","SR1l2j_MET450toInfBTup",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfBTlightDown","SR1l2j_MET450toInfBTlightDown",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfBTlightUp","SR1l2j_MET450toInfBTlightUp",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfBTheavyDown","SR1l2j_MET450toInfBTheavyDown",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfBTheavyUp","SR1l2j_MET450toInfBTheavyUp",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfPDFdown","SR1l2j_MET450toInfPDFdown",&SR1l2j_MET450toInf);
 AddRegion("SR1l2j_MET450toInfPDFup","SR1l2j_MET450toInfPDFup",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfalphaSdown","SR1l2j_MET450toInfalphaSdown",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfalphaSup","SR1l2j_MET450toInfalphaSup",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfQ2down","SR1l2j_MET450toInfQ2down",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInfQ2up","SR1l2j_MET450toInfQ2up",&SR1l2j_MET450toInf);
+AddRegion("SR1l2j_MET450toInflumi","SR1l2j_MET450toInflumi",&SR1l2j_MET450toInf);
 AddRegion("SR1l3j_MET250to350","SR1l3j_MET250to350",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350PUdown","SR1l3j_MET250to350PUdown",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350PUup","SR1l3j_MET250to350PUup",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350LSFdown","SR1l3j_MET250to350LSFdown",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350LSFup","SR1l3j_MET250to350LSFup",&SR1l3j_MET250to350);
-AddRegion("SR1l3j_MET250to350BTdown","SR1l3j_MET250to350BTdown",&SR1l3j_MET250to350);
-AddRegion("SR1l3j_MET250to350BTup","SR1l3j_MET250to350BTup",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350BTlightDown","SR1l3j_MET250to350BTlightDown",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350BTlightUp","SR1l3j_MET250to350BTlightUp",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350BTheavyDown","SR1l3j_MET250to350BTheavyDown",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350BTheavyUp","SR1l3j_MET250to350BTheavyUp",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350PDFdown","SR1l3j_MET250to350PDFdown",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET250to350PDFup","SR1l3j_MET250to350PDFup",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350alphaSdown","SR1l3j_MET250to350alphaSdown",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350alphaSup","SR1l3j_MET250to350alphaSup",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350Q2down","SR1l3j_MET250to350Q2down",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350Q2up","SR1l3j_MET250to350Q2up",&SR1l3j_MET250to350);
+AddRegion("SR1l3j_MET250to350lumi","SR1l3j_MET250to350lumi",&SR1l3j_MET250to350);
 AddRegion("SR1l3j_MET350to450","SR1l3j_MET350to450",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450PUdown","SR1l3j_MET350to450PUdown",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450PUup","SR1l3j_MET350to450PUup",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450LSFdown","SR1l3j_MET350to450LSFdown",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450LSFup","SR1l3j_MET350to450LSFup",&SR1l3j_MET350to450);
-AddRegion("SR1l3j_MET350to450BTdown","SR1l3j_MET350to450BTdown",&SR1l3j_MET350to450);
-AddRegion("SR1l3j_MET350to450BTup","SR1l3j_MET350to450BTup",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450BTlightDown","SR1l3j_MET350to450BTlightDown",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450BTlightUp","SR1l3j_MET350to450BTlightUp",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450BTheavyDown","SR1l3j_MET350to450BTheavyDown",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450BTheavyUp","SR1l3j_MET350to450BTheavyUp",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450PDFdown","SR1l3j_MET350to450PDFdown",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET350to450PDFup","SR1l3j_MET350to450PDFup",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450alphaSdown","SR1l3j_MET350to450alphaSdown",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450alphaSup","SR1l3j_MET350to450alphaSup",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450Q2down","SR1l3j_MET350to450Q2down",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450Q2up","SR1l3j_MET350to450Q2up",&SR1l3j_MET350to450);
+AddRegion("SR1l3j_MET350to450lumi","SR1l3j_MET350to450lumi",&SR1l3j_MET350to450);
 AddRegion("SR1l3j_MET450to550","SR1l3j_MET450to550",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550PUdown","SR1l3j_MET450to550PUdown",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550PUup","SR1l3j_MET450to550PUup",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550LSFdown","SR1l3j_MET450to550LSFdown",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550LSFup","SR1l3j_MET450to550LSFup",&SR1l3j_MET450to550);
-AddRegion("SR1l3j_MET450to550BTdown","SR1l3j_MET450to550BTdown",&SR1l3j_MET450to550);
-AddRegion("SR1l3j_MET450to550BTup","SR1l3j_MET450to550BTup",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550BTlightDown","SR1l3j_MET450to550BTlightDown",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550BTlightUp","SR1l3j_MET450to550BTlightUp",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550BTheavyDown","SR1l3j_MET450to550BTheavyDown",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550BTheavyUp","SR1l3j_MET450to550BTheavyUp",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550PDFdown","SR1l3j_MET450to550PDFdown",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET450to550PDFup","SR1l3j_MET450to550PDFup",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550alphaSdown","SR1l3j_MET450to550alphaSdown",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550alphaSup","SR1l3j_MET450to550alphaSup",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550Q2down","SR1l3j_MET450to550Q2down",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550Q2up","SR1l3j_MET450to550Q2up",&SR1l3j_MET450to550);
+AddRegion("SR1l3j_MET450to550lumi","SR1l3j_MET450to550lumi",&SR1l3j_MET450to550);
 AddRegion("SR1l3j_MET550toInf","SR1l3j_MET550toInf",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfPUdown","SR1l3j_MET550toInfPUdown",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfPUup","SR1l3j_MET550toInfPUup",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfLSFdown","SR1l3j_MET550toInfLSFdown",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfLSFup","SR1l3j_MET550toInfLSFup",&SR1l3j_MET550toInf);
-AddRegion("SR1l3j_MET550toInfBTdown","SR1l3j_MET550toInfBTdown",&SR1l3j_MET550toInf);
-AddRegion("SR1l3j_MET550toInfBTup","SR1l3j_MET550toInfBTup",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfBTlightDown","SR1l3j_MET550toInfBTlightDown",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfBTlightUp","SR1l3j_MET550toInfBTlightUp",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfBTheavyDown","SR1l3j_MET550toInfBTheavyDown",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfBTheavyUp","SR1l3j_MET550toInfBTheavyUp",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfPDFdown","SR1l3j_MET550toInfPDFdown",&SR1l3j_MET550toInf);
 AddRegion("SR1l3j_MET550toInfPDFup","SR1l3j_MET550toInfPDFup",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfalphaSdown","SR1l3j_MET550toInfalphaSdown",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfalphaSup","SR1l3j_MET550toInfalphaSup",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfQ2down","SR1l3j_MET550toInfQ2down",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInfQ2up","SR1l3j_MET550toInfQ2up",&SR1l3j_MET550toInf);
+AddRegion("SR1l3j_MET550toInflumi","SR1l3j_MET550toInflumi",&SR1l3j_MET550toInf);
 AddRegion("SR1l4jLow_MET250to350","SR1l4jLow_MET250to350",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350PUdown","SR1l4jLow_MET250to350PUdown",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350PUup","SR1l4jLow_MET250to350PUup",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350LSFdown","SR1l4jLow_MET250to350LSFdown",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350LSFup","SR1l4jLow_MET250to350LSFup",&SR1l4jLow_MET250to350);
-AddRegion("SR1l4jLow_MET250to350BTdown","SR1l4jLow_MET250to350BTdown",&SR1l4jLow_MET250to350);
-AddRegion("SR1l4jLow_MET250to350BTup","SR1l4jLow_MET250to350BTup",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350BTlightDown","SR1l4jLow_MET250to350BTlightDown",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350BTlightUp","SR1l4jLow_MET250to350BTlightUp",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350BTheavyDown","SR1l4jLow_MET250to350BTheavyDown",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350BTheavyUp","SR1l4jLow_MET250to350BTheavyUp",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350PDFdown","SR1l4jLow_MET250to350PDFdown",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET250to350PDFup","SR1l4jLow_MET250to350PDFup",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350alphaSdown","SR1l4jLow_MET250to350alphaSdown",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350alphaSup","SR1l4jLow_MET250to350alphaSup",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350Q2down","SR1l4jLow_MET250to350Q2down",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350Q2up","SR1l4jLow_MET250to350Q2up",&SR1l4jLow_MET250to350);
+AddRegion("SR1l4jLow_MET250to350lumi","SR1l4jLow_MET250to350lumi",&SR1l4jLow_MET250to350);
 AddRegion("SR1l4jLow_MET350to450","SR1l4jLow_MET350to450",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450PUdown","SR1l4jLow_MET350to450PUdown",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450PUup","SR1l4jLow_MET350to450PUup",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450LSFdown","SR1l4jLow_MET350to450LSFdown",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450LSFup","SR1l4jLow_MET350to450LSFup",&SR1l4jLow_MET350to450);
-AddRegion("SR1l4jLow_MET350to450BTdown","SR1l4jLow_MET350to450BTdown",&SR1l4jLow_MET350to450);
-AddRegion("SR1l4jLow_MET350to450BTup","SR1l4jLow_MET350to450BTup",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450BTlightDown","SR1l4jLow_MET350to450BTlightDown",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450BTlightUp","SR1l4jLow_MET350to450BTlightUp",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450BTheavyDown","SR1l4jLow_MET350to450BTheavyDown",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450BTheavyUp","SR1l4jLow_MET350to450BTheavyUp",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450PDFdown","SR1l4jLow_MET350to450PDFdown",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET350to450PDFup","SR1l4jLow_MET350to450PDFup",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450alphaSdown","SR1l4jLow_MET350to450alphaSdown",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450alphaSup","SR1l4jLow_MET350to450alphaSup",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450Q2down","SR1l4jLow_MET350to450Q2down",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450Q2up","SR1l4jLow_MET350to450Q2up",&SR1l4jLow_MET350to450);
+AddRegion("SR1l4jLow_MET350to450lumi","SR1l4jLow_MET350to450lumi",&SR1l4jLow_MET350to450);
 AddRegion("SR1l4jLow_MET450toInf","SR1l4jLow_MET450toInf",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfPUdown","SR1l4jLow_MET450toInfPUdown",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfPUup","SR1l4jLow_MET450toInfPUup",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfLSFdown","SR1l4jLow_MET450toInfLSFdown",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfLSFup","SR1l4jLow_MET450toInfLSFup",&SR1l4jLow_MET450toInf);
-AddRegion("SR1l4jLow_MET450toInfBTdown","SR1l4jLow_MET450toInfBTdown",&SR1l4jLow_MET450toInf);
-AddRegion("SR1l4jLow_MET450toInfBTup","SR1l4jLow_MET450toInfBTup",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfBTlightDown","SR1l4jLow_MET450toInfBTlightDown",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfBTlightUp","SR1l4jLow_MET450toInfBTlightUp",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfBTheavyDown","SR1l4jLow_MET450toInfBTheavyDown",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfBTheavyUp","SR1l4jLow_MET450toInfBTheavyUp",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfPDFdown","SR1l4jLow_MET450toInfPDFdown",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jLow_MET450toInfPDFup","SR1l4jLow_MET450toInfPDFup",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfalphaSdown","SR1l4jLow_MET450toInfalphaSdown",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfalphaSup","SR1l4jLow_MET450toInfalphaSup",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfQ2down","SR1l4jLow_MET450toInfQ2down",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInfQ2up","SR1l4jLow_MET450toInfQ2up",&SR1l4jLow_MET450toInf);
+AddRegion("SR1l4jLow_MET450toInflumi","SR1l4jLow_MET450toInflumi",&SR1l4jLow_MET450toInf);
 AddRegion("SR1l4jHighMT2W_MET250to350","SR1l4jHighMT2W_MET250to350",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350PUdown","SR1l4jHighMT2W_MET250to350PUdown",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350PUup","SR1l4jHighMT2W_MET250to350PUup",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350LSFdown","SR1l4jHighMT2W_MET250to350LSFdown",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350LSFup","SR1l4jHighMT2W_MET250to350LSFup",&SR1l4jHighMT2W_MET250to350);
-AddRegion("SR1l4jHighMT2W_MET250to350BTdown","SR1l4jHighMT2W_MET250to350BTdown",&SR1l4jHighMT2W_MET250to350);
-AddRegion("SR1l4jHighMT2W_MET250to350BTup","SR1l4jHighMT2W_MET250to350BTup",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350BTlightDown","SR1l4jHighMT2W_MET250to350BTlightDown",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350BTlightUp","SR1l4jHighMT2W_MET250to350BTlightUp",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350BTheavyDown","SR1l4jHighMT2W_MET250to350BTheavyDown",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350BTheavyUp","SR1l4jHighMT2W_MET250to350BTheavyUp",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350PDFdown","SR1l4jHighMT2W_MET250to350PDFdown",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET250to350PDFup","SR1l4jHighMT2W_MET250to350PDFup",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350alphaSdown","SR1l4jHighMT2W_MET250to350alphaSdown",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350alphaSup","SR1l4jHighMT2W_MET250to350alphaSup",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350Q2down","SR1l4jHighMT2W_MET250to350Q2down",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350Q2up","SR1l4jHighMT2W_MET250to350Q2up",&SR1l4jHighMT2W_MET250to350);
+AddRegion("SR1l4jHighMT2W_MET250to350lumi","SR1l4jHighMT2W_MET250to350lumi",&SR1l4jHighMT2W_MET250to350);
 AddRegion("SR1l4jHighMT2W_MET350to450","SR1l4jHighMT2W_MET350to450",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450PUdown","SR1l4jHighMT2W_MET350to450PUdown",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450PUup","SR1l4jHighMT2W_MET350to450PUup",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450LSFdown","SR1l4jHighMT2W_MET350to450LSFdown",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450LSFup","SR1l4jHighMT2W_MET350to450LSFup",&SR1l4jHighMT2W_MET350to450);
-AddRegion("SR1l4jHighMT2W_MET350to450BTdown","SR1l4jHighMT2W_MET350to450BTdown",&SR1l4jHighMT2W_MET350to450);
-AddRegion("SR1l4jHighMT2W_MET350to450BTup","SR1l4jHighMT2W_MET350to450BTup",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450BTlightDown","SR1l4jHighMT2W_MET350to450BTlightDown",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450BTlightUp","SR1l4jHighMT2W_MET350to450BTlightUp",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450BTheavyDown","SR1l4jHighMT2W_MET350to450BTheavyDown",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450BTheavyUp","SR1l4jHighMT2W_MET350to450BTheavyUp",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450PDFdown","SR1l4jHighMT2W_MET350to450PDFdown",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET350to450PDFup","SR1l4jHighMT2W_MET350to450PDFup",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450alphaSdown","SR1l4jHighMT2W_MET350to450alphaSdown",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450alphaSup","SR1l4jHighMT2W_MET350to450alphaSup",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450Q2down","SR1l4jHighMT2W_MET350to450Q2down",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450Q2up","SR1l4jHighMT2W_MET350to450Q2up",&SR1l4jHighMT2W_MET350to450);
+AddRegion("SR1l4jHighMT2W_MET350to450lumi","SR1l4jHighMT2W_MET350to450lumi",&SR1l4jHighMT2W_MET350to450);
 AddRegion("SR1l4jHighMT2W_MET450to550","SR1l4jHighMT2W_MET450to550",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550PUdown","SR1l4jHighMT2W_MET450to550PUdown",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550PUup","SR1l4jHighMT2W_MET450to550PUup",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550LSFdown","SR1l4jHighMT2W_MET450to550LSFdown",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550LSFup","SR1l4jHighMT2W_MET450to550LSFup",&SR1l4jHighMT2W_MET450to550);
-AddRegion("SR1l4jHighMT2W_MET450to550BTdown","SR1l4jHighMT2W_MET450to550BTdown",&SR1l4jHighMT2W_MET450to550);
-AddRegion("SR1l4jHighMT2W_MET450to550BTup","SR1l4jHighMT2W_MET450to550BTup",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550BTlightDown","SR1l4jHighMT2W_MET450to550BTlightDown",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550BTlightUp","SR1l4jHighMT2W_MET450to550BTlightUp",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550BTheavyDown","SR1l4jHighMT2W_MET450to550BTheavyDown",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550BTheavyUp","SR1l4jHighMT2W_MET450to550BTheavyUp",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550PDFdown","SR1l4jHighMT2W_MET450to550PDFdown",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET450to550PDFup","SR1l4jHighMT2W_MET450to550PDFup",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550alphaSdown","SR1l4jHighMT2W_MET450to550alphaSdown",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550alphaSup","SR1l4jHighMT2W_MET450to550alphaSup",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550Q2down","SR1l4jHighMT2W_MET450to550Q2down",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550Q2up","SR1l4jHighMT2W_MET450to550Q2up",&SR1l4jHighMT2W_MET450to550);
+AddRegion("SR1l4jHighMT2W_MET450to550lumi","SR1l4jHighMT2W_MET450to550lumi",&SR1l4jHighMT2W_MET450to550);
 AddRegion("SR1l4jHighMT2W_MET550to650","SR1l4jHighMT2W_MET550to650",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650PUdown","SR1l4jHighMT2W_MET550to650PUdown",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650PUup","SR1l4jHighMT2W_MET550to650PUup",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650LSFdown","SR1l4jHighMT2W_MET550to650LSFdown",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650LSFup","SR1l4jHighMT2W_MET550to650LSFup",&SR1l4jHighMT2W_MET550to650);
-AddRegion("SR1l4jHighMT2W_MET550to650BTdown","SR1l4jHighMT2W_MET550to650BTdown",&SR1l4jHighMT2W_MET550to650);
-AddRegion("SR1l4jHighMT2W_MET550to650BTup","SR1l4jHighMT2W_MET550to650BTup",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650BTlightDown","SR1l4jHighMT2W_MET550to650BTlightDown",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650BTlightUp","SR1l4jHighMT2W_MET550to650BTlightUp",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650BTheavyDown","SR1l4jHighMT2W_MET550to650BTheavyDown",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650BTheavyUp","SR1l4jHighMT2W_MET550to650BTheavyUp",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650PDFdown","SR1l4jHighMT2W_MET550to650PDFdown",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET550to650PDFup","SR1l4jHighMT2W_MET550to650PDFup",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650alphaSdown","SR1l4jHighMT2W_MET550to650alphaSdown",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650alphaSup","SR1l4jHighMT2W_MET550to650alphaSup",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650Q2down","SR1l4jHighMT2W_MET550to650Q2down",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650Q2up","SR1l4jHighMT2W_MET550to650Q2up",&SR1l4jHighMT2W_MET550to650);
+AddRegion("SR1l4jHighMT2W_MET550to650lumi","SR1l4jHighMT2W_MET550to650lumi",&SR1l4jHighMT2W_MET550to650);
 AddRegion("SR1l4jHighMT2W_MET650toInf","SR1l4jHighMT2W_MET650toInf",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfPUdown","SR1l4jHighMT2W_MET650toInfPUdown",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfPUup","SR1l4jHighMT2W_MET650toInfPUup",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfLSFdown","SR1l4jHighMT2W_MET650toInfLSFdown",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfLSFup","SR1l4jHighMT2W_MET650toInfLSFup",&SR1l4jHighMT2W_MET650toInf);
-AddRegion("SR1l4jHighMT2W_MET650toInfBTdown","SR1l4jHighMT2W_MET650toInfBTdown",&SR1l4jHighMT2W_MET650toInf);
-AddRegion("SR1l4jHighMT2W_MET650toInfBTup","SR1l4jHighMT2W_MET650toInfBTup",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfBTlightDown","SR1l4jHighMT2W_MET650toInfBTlightDown",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfBTlightUp","SR1l4jHighMT2W_MET650toInfBTlightUp",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfBTheavyDown","SR1l4jHighMT2W_MET650toInfBTheavyDown",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfBTheavyUp","SR1l4jHighMT2W_MET650toInfBTheavyUp",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfPDFdown","SR1l4jHighMT2W_MET650toInfPDFdown",&SR1l4jHighMT2W_MET650toInf);
 AddRegion("SR1l4jHighMT2W_MET650toInfPDFup","SR1l4jHighMT2W_MET650toInfPDFup",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfalphaSdown","SR1l4jHighMT2W_MET650toInfalphaSdown",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfalphaSup","SR1l4jHighMT2W_MET650toInfalphaSup",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfQ2down","SR1l4jHighMT2W_MET650toInfQ2down",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInfQ2up","SR1l4jHighMT2W_MET650toInfQ2up",&SR1l4jHighMT2W_MET650toInf);
+AddRegion("SR1l4jHighMT2W_MET650toInflumi","SR1l4jHighMT2W_MET650toInflumi",&SR1l4jHighMT2W_MET650toInf);
                                                                                                                        
 
     // ------------------
@@ -299,7 +403,7 @@ AddRegion("SR1l4jHighMT2W_MET650toInfPDFup","SR1l4jHighMT2W_MET650toInfPDFup",&S
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    SetLumi(36.46);
+    SetLumi(12.9);
 
     Create1DHistos();
     //Add2DHisto("nJets","MET");
@@ -319,7 +423,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     vector<string> classLabels;
     GetProcessClassLabelList(&classLabels);
 
-    if(currentProcessType == "blablabla" )//normally background
+    /*if(currentProcessType == "blablabla" )//normally background
     {
     string PC = currentProcessClass;
     PC = distingusihClassBkg(currentProcessClass, classLabels);
@@ -357,8 +461,9 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
             }
         }
     }
-
-    if( currentProcessClass == "ttZ" && !(myEvent.isZtoNuNu) )
+    */
+    myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
+    if( currentProcessClass == "Znunu" && !(myEvent.isZtoNuNu) )
          currentProcessClass = "";
 
     float weightLumi = getWeight(currentProcessType, GetLumi()); //@MJ@ TODO cross section form file?!
@@ -368,8 +473,9 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
     vector<float> weightV;
     weightV.clear();
+    float nEvents =  myEvent.wNormalization.at(22);
     //for number of SR
-    for(uint32_t SR=0; SR<15; SR++)
+    for(uint32_t SR=0; SR<15; SR++) //@MJ@ TODO nr of sig regions changes
     {
         float w = 0;
         float btagmax = 0;
@@ -377,43 +483,63 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         weightV.push_back(weightLumi);
         //PUdown
         if(counter == 1) statnames << "PUdown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_PUdown;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * myEvent.weight_PUdown; //@MJ@ TODO PU without any normalization?!
         weightV.push_back(w);
         //PUup
         if(counter == 1) statnames << "PUup"<< endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_PUup;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * myEvent.weight_PUup;
         weightV.push_back(w);
         //LSFdown
         if(counter == 1) statnames << "LSFdown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF_down*( nEvents / myEvent.wNormalization.at(30) );
         weightV.push_back(w);
         //LSFup
         if(counter == 1) statnames << "LSFup" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF_up * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF_up*( nEvents / myEvent.wNormalization.at(29) );
         weightV.push_back(w);
         //BTlightdown
         if(counter == 1) statnames << "BTligtdown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_DN * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_DN*( nEvents / myEvent.wNormalization.at(18) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) );
         weightV.push_back(w);
         //BTlightup
         if(counter == 1) statnames << "BTligtup" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_UP * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_UP*( nEvents / myEvent.wNormalization.at(16) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) ;
         weightV.push_back(w);
         //BTheabydown
         if(counter == 1) statnames << "BTheavydown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_DN * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_DN*( nEvents / myEvent.wNormalization.at(17) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) );
         weightV.push_back(w);
         //BTheavyup
         if(counter == 1) statnames << "BTheavyup" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_UP * myEvent.weight_lepSF_down * myEvent.weight_vetoLepSF;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_UP*( nEvents / myEvent.wNormalization.at(15) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) ;
         weightV.push_back(w);
         //PDFdown
-        if(counter == 1) statnames << "PDFup" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.pdf_down_weight;
+        if(counter == 1) statnames << "PDFdown" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.pdf_down_weight*( nEvents / myEvent.wNormalization.at(11) );
         weightV.push_back(w);
         //PDFup
-        if(counter == 1) statnames << "PDFdown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.pdf_up_weight;
+        if(counter == 1) statnames << "PDFup" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * myEvent.pdf_up_weight*( nEvents / myEvent.wNormalization.at(10) );
+        weightV.push_back(w);
+        //alphaSdown
+        if(counter == 1) statnames << "alphaSdown" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_alphas_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(13)) ; //TODO
+        weightV.push_back(w);
+        //alphaSup
+        if(counter == 1) statnames << "alphaSup" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* myEvent.weight_alphas_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(12))  ; //TODO
+        weightV.push_back(w);
+        //Q2down
+        if(counter == 1) statnames << "Q2down" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* myEvent.weight_q2_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(9))  ; //TODO
+        weightV.push_back(w);
+        //Q2up
+        if(counter == 1) statnames << "Q2up" << endl;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28)) * myEvent.weight_q2_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(5))  ; //TODO
+        weightV.push_back(w);
+        //lumi //for ICHEP now
+        if(counter == 1) statnames << "lumi" << endl;
+        w = GetLumi()*1.062 *  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  ; //TODO
         weightV.push_back(w);
     }
 
@@ -477,9 +603,8 @@ void BabyScrewdriver::PostProcessingStep()
     // ######################
 
 
-    //vector<string> totYield = { "SR1l23jLowMlb_MET250to350" , "SR1l23jLowMlb_MET350to450" , "SR1l23jLowMlb_MET450to550" , "SR1l23jLowMlb_MET550toInf" , "SR1l23jHighMlb_MET250to350" , "SR1l23jHighMlb_MET350to450" , "SR1l23jHighMlb_MET450to550" , "SR1l23jHighMlb_MET550toInf" , "SR1l4jLowMT2WLowMlb_MET250to350" , "SR1l4jLowMT2WLowMlb_MET350to450" , "SR1l4jLowMT2WLowMlb_MET450to550" , "SR1l4jLowMT2WLowMlb_MET550to650" , "SR1l4jLowMT2WLowMlb_MET650toInf" , "SR1l4jLowMT2WHighMlb_MET250to350" , "SR1l4jLowMT2WHighMlb_MET350to450" , "SR1l4jLowMT2WHighMlb_MET450to550" , "SR1l4jLowMT2WHighMlb_MET550toInf" , "SR1l4jMidMT2WLowMlb_MET250to350" , "SR1l4jMidMT2WLowMlb_MET350to450" , "SR1l4jMidMT2WLowMlb_MET450toInf" , "SR1l4jMidMT2WHighMlb_MET250to400" , "SR1l4jMidMT2WHighMlb_MET400toInf" , "SR1l4jHighMT2WLowMlb_MET250to350" , "SR1l4jHighMT2WLowMlb_MET350to450" , "SR1l4jHighMT2WLowMlb_MET450to600" , "SR1l4jHighMT2WLowMlb_MET600toInf" , "SR1l4jHighMT2WHighMlb_MET250to400" , "SR1l4jHighMT2WHighMlb_MET400to650" , "SR1l4jHighMT2WHighMlb_MET650toInf"};
-//    vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET350to450" , "SR1l2j_MET450toInf" , "SR1l3j_MET250to350" , "SR1l3j_MET350to450" , "SR1l3j_MET450to550" , "SR1l3j_MET550toInf" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET450toInf" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET650toInf" };
-vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET250to350PUdown" , "SR1l2j_MET250to350PUup" , "SR1l2j_MET250to350LSFdown" , "SR1l2j_MET250to350LSFup" , "SR1l2j_MET250to350BTdown" , "SR1l2j_MET250to350BTup" , "SR1l2j_MET250to350PDFdown" , "SR1l2j_MET250to350PDFup" , "SR1l2j_MET350to450" , "SR1l2j_MET350to450PUdown" , "SR1l2j_MET350to450PUup" , "SR1l2j_MET350to450LSFdown" , "SR1l2j_MET350to450LSFup" , "SR1l2j_MET350to450BTdown" , "SR1l2j_MET350to450BTup" , "SR1l2j_MET350to450PDFdown" , "SR1l2j_MET350to450PDFup" , "SR1l2j_MET450toInf" , "SR1l2j_MET450toInfPUdown" , "SR1l2j_MET450toInfPUup" , "SR1l2j_MET450toInfLSFdown" , "SR1l2j_MET450toInfLSFup" , "SR1l2j_MET450toInfBTdown" , "SR1l2j_MET450toInfBTup" , "SR1l2j_MET450toInfPDFdown" , "SR1l2j_MET450toInfPDFup" , "SR1l3j_MET250to350" , "SR1l3j_MET250to350PUdown" , "SR1l3j_MET250to350PUup" , "SR1l3j_MET250to350LSFdown" , "SR1l3j_MET250to350LSFup" , "SR1l3j_MET250to350BTdown" , "SR1l3j_MET250to350BTup" , "SR1l3j_MET250to350PDFdown" , "SR1l3j_MET250to350PDFup" , "SR1l3j_MET350to450" , "SR1l3j_MET350to450PUdown" , "SR1l3j_MET350to450PUup" , "SR1l3j_MET350to450LSFdown" , "SR1l3j_MET350to450LSFup" , "SR1l3j_MET350to450BTdown" , "SR1l3j_MET350to450BTup" , "SR1l3j_MET350to450PDFdown" , "SR1l3j_MET350to450PDFup" , "SR1l3j_MET450to550" , "SR1l3j_MET450to550PUdown" , "SR1l3j_MET450to550PUup" , "SR1l3j_MET450to550LSFdown" , "SR1l3j_MET450to550LSFup" , "SR1l3j_MET450to550BTdown" , "SR1l3j_MET450to550BTup" , "SR1l3j_MET450to550PDFdown" , "SR1l3j_MET450to550PDFup" , "SR1l3j_MET550toInf" , "SR1l3j_MET550toInfPUdown" , "SR1l3j_MET550toInfPUup" , "SR1l3j_MET550toInfLSFdown" , "SR1l3j_MET550toInfLSFup" , "SR1l3j_MET550toInfBTdown" , "SR1l3j_MET550toInfBTup" , "SR1l3j_MET550toInfPDFdown" , "SR1l3j_MET550toInfPDFup" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET250to350PUdown" , "SR1l4jLow_MET250to350PUup" , "SR1l4jLow_MET250to350LSFdown" , "SR1l4jLow_MET250to350LSFup" , "SR1l4jLow_MET250to350BTdown" , "SR1l4jLow_MET250to350BTup" , "SR1l4jLow_MET250to350PDFdown" , "SR1l4jLow_MET250to350PDFup" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET350to450PUdown" , "SR1l4jLow_MET350to450PUup" , "SR1l4jLow_MET350to450LSFdown" , "SR1l4jLow_MET350to450LSFup" , "SR1l4jLow_MET350to450BTdown" , "SR1l4jLow_MET350to450BTup" , "SR1l4jLow_MET350to450PDFdown" , "SR1l4jLow_MET350to450PDFup" , "SR1l4jLow_MET450toInf" , "SR1l4jLow_MET450toInfPUdown" , "SR1l4jLow_MET450toInfPUup" , "SR1l4jLow_MET450toInfLSFdown" , "SR1l4jLow_MET450toInfLSFup" , "SR1l4jLow_MET450toInfBTdown" , "SR1l4jLow_MET450toInfBTup" , "SR1l4jLow_MET450toInfPDFdown" , "SR1l4jLow_MET450toInfPDFup" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET250to350PUdown" , "SR1l4jHighMT2W_MET250to350PUup" , "SR1l4jHighMT2W_MET250to350LSFdown" , "SR1l4jHighMT2W_MET250to350LSFup" , "SR1l4jHighMT2W_MET250to350BTdown" , "SR1l4jHighMT2W_MET250to350BTup" , "SR1l4jHighMT2W_MET250to350PDFdown" , "SR1l4jHighMT2W_MET250to350PDFup" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET350to450PUdown" , "SR1l4jHighMT2W_MET350to450PUup" , "SR1l4jHighMT2W_MET350to450LSFdown" , "SR1l4jHighMT2W_MET350to450LSFup" , "SR1l4jHighMT2W_MET350to450BTdown" , "SR1l4jHighMT2W_MET350to450BTup" , "SR1l4jHighMT2W_MET350to450PDFdown" , "SR1l4jHighMT2W_MET350to450PDFup" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET450to550PUdown" , "SR1l4jHighMT2W_MET450to550PUup" , "SR1l4jHighMT2W_MET450to550LSFdown" , "SR1l4jHighMT2W_MET450to550LSFup" , "SR1l4jHighMT2W_MET450to550BTdown" , "SR1l4jHighMT2W_MET450to550BTup" , "SR1l4jHighMT2W_MET450to550PDFdown" , "SR1l4jHighMT2W_MET450to550PDFup" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET550to650PUdown" , "SR1l4jHighMT2W_MET550to650PUup" , "SR1l4jHighMT2W_MET550to650LSFdown" , "SR1l4jHighMT2W_MET550to650LSFup" , "SR1l4jHighMT2W_MET550to650BTdown" , "SR1l4jHighMT2W_MET550to650BTup" , "SR1l4jHighMT2W_MET550to650PDFdown" , "SR1l4jHighMT2W_MET550to650PDFup" , "SR1l4jHighMT2W_MET650toInf" , "SR1l4jHighMT2W_MET650toInfPUdown" , "SR1l4jHighMT2W_MET650toInfPUup" , "SR1l4jHighMT2W_MET650toInfLSFdown" , "SR1l4jHighMT2W_MET650toInfLSFup" , "SR1l4jHighMT2W_MET650toInfBTdown" , "SR1l4jHighMT2W_MET650toInfBTup" , "SR1l4jHighMT2W_MET650toInfPDFdown" , "SR1l4jHighMT2W_MET650toInfPDFup"};
+vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET250to350PUdown" , "SR1l2j_MET250to350PUup" , "SR1l2j_MET250to350LSFdown" , "SR1l2j_MET250to350LSFup" , "SR1l2j_MET250to350BTlightDown" , "SR1l2j_MET250to350BTlightUp" , "SR1l2j_MET250to350BTheavyDown" , "SR1l2j_MET250to350BTheavyUp" , "SR1l2j_MET250to350PDFdown" , "SR1l2j_MET250to350PDFup" , "SR1l2j_MET250to350alphaSdown" , "SR1l2j_MET250to350alphaSup" , "SR1l2j_MET250to350Q2down" , "SR1l2j_MET250to350Q2up" , "SR1l2j_MET250to350lumi" , "SR1l2j_MET350to450" , "SR1l2j_MET350to450PUdown" , "SR1l2j_MET350to450PUup" , "SR1l2j_MET350to450LSFdown" , "SR1l2j_MET350to450LSFup" , "SR1l2j_MET350to450BTlightDown" , "SR1l2j_MET350to450BTlightUp" , "SR1l2j_MET350to450BTheavyDown" , "SR1l2j_MET350to450BTheavyUp" , "SR1l2j_MET350to450PDFdown" , "SR1l2j_MET350to450PDFup" , "SR1l2j_MET350to450alphaSdown" , "SR1l2j_MET350to450alphaSup" , "SR1l2j_MET350to450Q2down" , "SR1l2j_MET350to450Q2up" , "SR1l2j_MET350to450lumi" , "SR1l2j_MET450toInf" , "SR1l2j_MET450toInfPUdown" , "SR1l2j_MET450toInfPUup" , "SR1l2j_MET450toInfLSFdown" , "SR1l2j_MET450toInfLSFup" , "SR1l2j_MET450toInfBTlightDown" , "SR1l2j_MET450toInfBTlightUp" , "SR1l2j_MET450toInfBTheavyDown" , "SR1l2j_MET450toInfBTheavyUp" , "SR1l2j_MET450toInfPDFdown" , "SR1l2j_MET450toInfPDFup" , "SR1l2j_MET450toInfalphaSdown" , "SR1l2j_MET450toInfalphaSup" , "SR1l2j_MET450toInfQ2down" , "SR1l2j_MET450toInfQ2up" , "SR1l2j_MET450toInflumi" , "SR1l3j_MET250to350" , "SR1l3j_MET250to350PUdown" , "SR1l3j_MET250to350PUup" , "SR1l3j_MET250to350LSFdown" , "SR1l3j_MET250to350LSFup" , "SR1l3j_MET250to350BTlightDown" , "SR1l3j_MET250to350BTlightUp" , "SR1l3j_MET250to350BTheavyDown" , "SR1l3j_MET250to350BTheavyUp" , "SR1l3j_MET250to350PDFdown" , "SR1l3j_MET250to350PDFup" , "SR1l3j_MET250to350alphaSdown" , "SR1l3j_MET250to350alphaSup" , "SR1l3j_MET250to350Q2down" , "SR1l3j_MET250to350Q2up" , "SR1l3j_MET250to350lumi" , "SR1l3j_MET350to450" , "SR1l3j_MET350to450PUdown" , "SR1l3j_MET350to450PUup" , "SR1l3j_MET350to450LSFdown" , "SR1l3j_MET350to450LSFup" , "SR1l3j_MET350to450BTlightDown" , "SR1l3j_MET350to450BTlightUp" , "SR1l3j_MET350to450BTheavyDown" , "SR1l3j_MET350to450BTheavyUp" , "SR1l3j_MET350to450PDFdown" , "SR1l3j_MET350to450PDFup" , "SR1l3j_MET350to450alphaSdown" , "SR1l3j_MET350to450alphaSup" , "SR1l3j_MET350to450Q2down" , "SR1l3j_MET350to450Q2up" , "SR1l3j_MET350to450lumi" , "SR1l3j_MET450to550" , "SR1l3j_MET450to550PUdown" , "SR1l3j_MET450to550PUup" , "SR1l3j_MET450to550LSFdown" , "SR1l3j_MET450to550LSFup" , "SR1l3j_MET450to550BTlightDown" , "SR1l3j_MET450to550BTlightUp" , "SR1l3j_MET450to550BTheavyDown" , "SR1l3j_MET450to550BTheavyUp" , "SR1l3j_MET450to550PDFdown" , "SR1l3j_MET450to550PDFup" , "SR1l3j_MET450to550alphaSdown" , "SR1l3j_MET450to550alphaSup" , "SR1l3j_MET450to550Q2down" , "SR1l3j_MET450to550Q2up" , "SR1l3j_MET450to550lumi" , "SR1l3j_MET550toInf" , "SR1l3j_MET550toInfPUdown" , "SR1l3j_MET550toInfPUup" , "SR1l3j_MET550toInfLSFdown" , "SR1l3j_MET550toInfLSFup" , "SR1l3j_MET550toInfBTlightDown" , "SR1l3j_MET550toInfBTlightUp" , "SR1l3j_MET550toInfBTheavyDown" , "SR1l3j_MET550toInfBTheavyUp" , "SR1l3j_MET550toInfPDFdown" , "SR1l3j_MET550toInfPDFup" , "SR1l3j_MET550toInfalphaSdown" , "SR1l3j_MET550toInfalphaSup" , "SR1l3j_MET550toInfQ2down" , "SR1l3j_MET550toInfQ2up" , "SR1l3j_MET550toInflumi" , "SR1l4jLow_MET250to350" , "SR1l4jLow_MET250to350PUdown" , "SR1l4jLow_MET250to350PUup" , "SR1l4jLow_MET250to350LSFdown" , "SR1l4jLow_MET250to350LSFup" , "SR1l4jLow_MET250to350BTlightDown" , "SR1l4jLow_MET250to350BTlightUp" , "SR1l4jLow_MET250to350BTheavyDown" , "SR1l4jLow_MET250to350BTheavyUp" , "SR1l4jLow_MET250to350PDFdown" , "SR1l4jLow_MET250to350PDFup" , "SR1l4jLow_MET250to350alphaSdown" , "SR1l4jLow_MET250to350alphaSup" , "SR1l4jLow_MET250to350Q2down" , "SR1l4jLow_MET250to350Q2up" , "SR1l4jLow_MET250to350lumi" , "SR1l4jLow_MET350to450" , "SR1l4jLow_MET350to450PUdown" , "SR1l4jLow_MET350to450PUup" , "SR1l4jLow_MET350to450LSFdown" , "SR1l4jLow_MET350to450LSFup" , "SR1l4jLow_MET350to450BTlightDown" , "SR1l4jLow_MET350to450BTlightUp" , "SR1l4jLow_MET350to450BTheavyDown" , "SR1l4jLow_MET350to450BTheavyUp" , "SR1l4jLow_MET350to450PDFdown" , "SR1l4jLow_MET350to450PDFup" , "SR1l4jLow_MET350to450alphaSdown" , "SR1l4jLow_MET350to450alphaSup" , "SR1l4jLow_MET350to450Q2down" , "SR1l4jLow_MET350to450Q2up" , "SR1l4jLow_MET350to450lumi" , "SR1l4jLow_MET450toInf" , "SR1l4jLow_MET450toInfPUdown" , "SR1l4jLow_MET450toInfPUup" , "SR1l4jLow_MET450toInfLSFdown" , "SR1l4jLow_MET450toInfLSFup" , "SR1l4jLow_MET450toInfBTlightDown" , "SR1l4jLow_MET450toInfBTlightUp" , "SR1l4jLow_MET450toInfBTheavyDown" , "SR1l4jLow_MET450toInfBTheavyUp" , "SR1l4jLow_MET450toInfPDFdown" , "SR1l4jLow_MET450toInfPDFup" , "SR1l4jLow_MET450toInfalphaSdown" , "SR1l4jLow_MET450toInfalphaSup" , "SR1l4jLow_MET450toInfQ2down" , "SR1l4jLow_MET450toInfQ2up" , "SR1l4jLow_MET450toInflumi" , "SR1l4jHighMT2W_MET250to350" , "SR1l4jHighMT2W_MET250to350PUdown" , "SR1l4jHighMT2W_MET250to350PUup" , "SR1l4jHighMT2W_MET250to350LSFdown" , "SR1l4jHighMT2W_MET250to350LSFup" , "SR1l4jHighMT2W_MET250to350BTlightDown" , "SR1l4jHighMT2W_MET250to350BTlightUp" , "SR1l4jHighMT2W_MET250to350BTheavyDown" , "SR1l4jHighMT2W_MET250to350BTheavyUp" , "SR1l4jHighMT2W_MET250to350PDFdown" , "SR1l4jHighMT2W_MET250to350PDFup" , "SR1l4jHighMT2W_MET250to350alphaSdown" , "SR1l4jHighMT2W_MET250to350alphaSup" , "SR1l4jHighMT2W_MET250to350Q2down" , "SR1l4jHighMT2W_MET250to350Q2up" , "SR1l4jHighMT2W_MET250to350lumi" , "SR1l4jHighMT2W_MET350to450" , "SR1l4jHighMT2W_MET350to450PUdown" , "SR1l4jHighMT2W_MET350to450PUup" , "SR1l4jHighMT2W_MET350to450LSFdown" , "SR1l4jHighMT2W_MET350to450LSFup" , "SR1l4jHighMT2W_MET350to450BTlightDown" , "SR1l4jHighMT2W_MET350to450BTlightUp" , "SR1l4jHighMT2W_MET350to450BTheavyDown" , "SR1l4jHighMT2W_MET350to450BTheavyUp" , "SR1l4jHighMT2W_MET350to450PDFdown" , "SR1l4jHighMT2W_MET350to450PDFup" , "SR1l4jHighMT2W_MET350to450alphaSdown" , "SR1l4jHighMT2W_MET350to450alphaSup" , "SR1l4jHighMT2W_MET350to450Q2down" , "SR1l4jHighMT2W_MET350to450Q2up" , "SR1l4jHighMT2W_MET350to450lumi" , "SR1l4jHighMT2W_MET450to550" , "SR1l4jHighMT2W_MET450to550PUdown" , "SR1l4jHighMT2W_MET450to550PUup" , "SR1l4jHighMT2W_MET450to550LSFdown" , "SR1l4jHighMT2W_MET450to550LSFup" , "SR1l4jHighMT2W_MET450to550BTlightDown" , "SR1l4jHighMT2W_MET450to550BTlightUp" , "SR1l4jHighMT2W_MET450to550BTheavyDown" , "SR1l4jHighMT2W_MET450to550BTheavyUp" , "SR1l4jHighMT2W_MET450to550PDFdown" , "SR1l4jHighMT2W_MET450to550PDFup" , "SR1l4jHighMT2W_MET450to550alphaSdown" , "SR1l4jHighMT2W_MET450to550alphaSup" , "SR1l4jHighMT2W_MET450to550Q2down" , "SR1l4jHighMT2W_MET450to550Q2up" , "SR1l4jHighMT2W_MET450to550lumi" , "SR1l4jHighMT2W_MET550to650" , "SR1l4jHighMT2W_MET550to650PUdown" , "SR1l4jHighMT2W_MET550to650PUup" , "SR1l4jHighMT2W_MET550to650LSFdown" , "SR1l4jHighMT2W_MET550to650LSFup" , "SR1l4jHighMT2W_MET550to650BTlightDown" , "SR1l4jHighMT2W_MET550to650BTlightUp" , "SR1l4jHighMT2W_MET550to650BTheavyDown" , "SR1l4jHighMT2W_MET550to650BTheavyUp" , "SR1l4jHighMT2W_MET550to650PDFdown" , "SR1l4jHighMT2W_MET550to650PDFup" , "SR1l4jHighMT2W_MET550to650alphaSdown" , "SR1l4jHighMT2W_MET550to650alphaSup" , "SR1l4jHighMT2W_MET550to650Q2down" , "SR1l4jHighMT2W_MET550to650Q2up" , "SR1l4jHighMT2W_MET550to650lumi" , "SR1l4jHighMT2W_MET650toInf" , "SR1l4jHighMT2W_MET650toInfPUdown" , "SR1l4jHighMT2W_MET650toInfPUup" , "SR1l4jHighMT2W_MET650toInfLSFdown" , "SR1l4jHighMT2W_MET650toInfLSFup" , "SR1l4jHighMT2W_MET650toInfBTlightDown" , "SR1l4jHighMT2W_MET650toInfBTlightUp" , "SR1l4jHighMT2W_MET650toInfBTheavyDown" , "SR1l4jHighMT2W_MET650toInfBTheavyUp" , "SR1l4jHighMT2W_MET650toInfPDFdown" , "SR1l4jHighMT2W_MET650toInfPDFup" , "SR1l4jHighMT2W_MET650toInfalphaSdown" , "SR1l4jHighMT2W_MET650toInfalphaSup" , "SR1l4jHighMT2W_MET650toInfQ2down" , "SR1l4jHighMT2W_MET650toInfQ2up" , "SR1l4jHighMT2W_MET650toInflumi"};
+
     TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yield.tab", 4);
     TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yield.tex", 4);
 
@@ -570,12 +695,11 @@ vector<string> totYield = { "SR1l2j_MET250to350" , "SR1l2j_MET250to350PUdown" , 
 
     float getWeight(string currentProcessType, float lumi)
     {
-        //float all_weights = myEvent.crossSection * lumi * myEvent.kfactor * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF;
-        //all_weights = myEvent.crossSection * lumi * myEvent.kfactor * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_ISR ;
-        float all_weights = lumi*  myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF;
+        float nEvents =  myEvent.wNormalization.at(22);
+        float all_weights = lumi*  myEvent.scale1fb * myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
         //cout << "cs: " << myEvent.crossSection << "scale 1 fb " << myEvent.scale1fb << " weight total: " << all_weights << endl;
         if(currentProcessType == "signal")
-            all_weights = lumi * myEvent.scale1fb * myEvent.weight_btagsf * myEvent.weight_lepSF * myEvent.weight_vetoLepSF * myEvent.weight_ISR ;
+             throw std::runtime_error("weight for signal still waitning to be implemented!");
         return all_weights;
     }
 
