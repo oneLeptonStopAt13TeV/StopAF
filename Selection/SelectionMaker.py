@@ -115,13 +115,13 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       selection = region['name']+"() && "+bin['selection']+" && "+METbabytuple+">="+METbins[i]
 	       if METbins[i+1]!="inf" :
 	         selection+=" && "+METbabytuple+"<"+METbins[i+1]  
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	       
 	       #replace the variable label by their babytuple name
 	       for var in self.variables:
@@ -149,17 +149,19 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       if METbins[i+1]!="inf" :
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	      	 
 	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
-               #systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "lumi" ]
-               systs = []
+               #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
+               systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+               #systs = ["PUdown", "PUup"]
+               #systs = []
                for syst in systs:
 	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
 	           myfile.write(dump)
@@ -185,11 +187,11 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       if METbins[i+1]!="inf" :
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	      	 
 	       dump= "\""+ name + "\""
 	       myfile.write(dump)
@@ -220,11 +222,11 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       if METbins[i+1]!="inf" :
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	      
                substring = "SR1l"	 
                if substring in name:
@@ -257,11 +259,11 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       if METbins[i+1]!="inf" :
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	      
                substring = "SR1l"	 
                if substring in name:
@@ -294,11 +296,11 @@ class Selection:
 	     ################################
 	     for i  in range(len(METbins)-1):
 	       #if i!=len(METbins)-1:
-	       name=region['name']+bin['name']+"_MET"+METbins[i]
+	       name=region['name']+bin['name']+METbins[i]
 	       if METbins[i+1]!="inf" :
-		 name+="to"+METbins[i+1]
+		 name+="lessMETless"+METbins[i+1]
 	       else: 
-	         name+="toInf"
+	         name+="lessMETlessInf"
 	      
                substring = "SR1l"	 
                if substring in name:
@@ -306,7 +308,9 @@ class Selection:
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
-                 systs = ["PUdown", "PUup", "LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "lumi" ]
+                 #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
+                 systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+                 #systs = ["PUdown", "PUup"]
                  for syst in systs:
 	             dump= "\"" +name+syst+"\""
 	             myfile.write(dump)

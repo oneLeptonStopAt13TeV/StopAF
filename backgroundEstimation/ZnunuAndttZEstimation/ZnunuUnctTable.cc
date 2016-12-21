@@ -7,8 +7,7 @@
 #include "../sonicScrewdriver/interface/Table.h"
 
 //usage
-//./ttZUnctTable yield.tab signalReg.txt statNames.txt nUnc+1 yieldJECDown.tab yieldJECUp.tab(=nparameters per one signal region, nUnc+1 = 16 currently)
-//./ttZUnctTable yieldMor.tab signalRegMor.txt statNames.txt nUnc+1 yieldJECDownMor.tab yieldJECUpMor.tab(=nparameters per one signal region, nUnc+1 = 15 currently)
+//./ZnunuUnctTable yieldMor.tab signalRegMor.txt statNames.txt 13 yieldJECDownMor.tab yieldJECUpMor.tab(=nparameters per one signal region, nUnc+1 = 15 currently)
 
 using namespace std;
 using namespace theDoctor;
@@ -72,10 +71,10 @@ int main(int argc, char *argv[]){
                 colI.push_back(line2);
                 myfile2 << line2 << endl;
             }
-            colI.push_back("JECdown");
-            myfile2 << "JECdown" << endl;
-            colI.push_back("JECup");
-            myfile2 << "JECup" << endl;
+            colI.push_back("jesDN");
+            myfile2 << "jesDN" << endl;
+            colI.push_back("jesUP");
+            myfile2 << "jesUP" << endl;
             systfile.close();
         }
         //get nemaes of signal regions without regions for systematics
@@ -105,7 +104,8 @@ int main(int argc, char *argv[]){
        vector<string> systOutNames;
        for(uint32_t s=0; s<colI.size(); s++)
        {
-           if(s%2 == 1)
+               //systOutNames.push_back("yield");
+           if(s==0 || s%2 == 1)
                systOutNames.push_back(colI.at(s));
        }
        //tables for higher uncertainty and summary table
@@ -142,6 +142,8 @@ int main(int argc, char *argv[]){
                uncTot = 0;
                uncBef = 0;
  
+               thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure((resall.error()/resall.value())*100, 0));
+               l++;
            }
            //then all systematics
            else
@@ -155,11 +157,19 @@ int main(int argc, char *argv[]){
                    binValue = histo.at(0)->GetBinContent(uncLine);
                    uncHigher = abs(uncBef-binValue) > abs(resall.value() - binValue) ? abs(uncBef-binValue): abs(resall.value() - binValue);   
                    uncTot += uncHigher*uncHigher ;//@MJ@TODO now average unc, change to maximal?!
-                   uncBef = 0;
 
-                   //fill higher
-                   thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((uncHigher/binValue)*100, 0));
+                
+                   if(systOutNames.at(l) == "lepSFDN" || systOutNames.at(l) == "topPtModeling" )
+                       thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((uncHigher/binValue)*100, 0));
+        	   else
+                   {
+                   
+                   float center = (2*abs(uncBef-resall.value()))/(uncBef+resall.value());
+                   thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((center)*100, 0));
+
+                   }
                    l++;
+                   uncBef = 0;
 
 
                }
@@ -171,6 +181,7 @@ int main(int argc, char *argv[]){
            if(r == 0 || r%nUnc == 0)
            {
                trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(abs(yieldVal.error()/yieldVal.value())*100,abs(0)));
+               //thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure((abs(yieldVal.error()/yieldVal.value())*100, 0)));
            }
            else
            {
@@ -183,14 +194,13 @@ int main(int argc, char *argv[]){
        {     
            theDoctor::Figure JECd = tJECdown.Get(realReg.at(j),"totalSM" );
            theDoctor::Figure JECu = tJECup.Get(realReg.at(j), "totalSM");
-           cout << "JEC down value " << JECd.value() << endl;
  
-           tI.Set("JECdown", realReg.at(j), JECd);
-           tI.Set("JECup", realReg.at(j), JECu);
+           tI.Set("jesDN", realReg.at(j), JECd);
+           tI.Set("jesUP", realReg.at(j), JECu);
            Figure a = (JECd - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
-           trel.Set("JECdown", realReg.at(j), Figure(abs(a.value())*100,abs(0)));
+           trel.Set("jesDN", realReg.at(j), Figure(abs(a.value())*100,abs(0)));
            Figure c = (JECu - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
-           trel.Set("JECup", realReg.at(j), Figure(abs(c.value())*100,abs(0)));
+           trel.Set("jesUP", realReg.at(j), Figure(abs(c.value())*100,abs(0)));
            float higherJEC = a.value() > c.value()? a.value(): c.value();
            uint32_t lastElement = systOutNames.size() -1;
            thigher.Set(systOutNames.at(lastElement), realReg.at(j), Figure(higherJEC*100, 0));
@@ -221,36 +231,7 @@ int main(int argc, char *argv[]){
         tsummary.PrintLatex(static_cast<string>("tableUncZunuRelSummaryTab.tex"),2);
 
 
-       //TCanvas *can = new TCanvas("can","can");
-       //can->cd();
-       TFile fi2("ttZuncertainties.root","RECREATE");
+       TFile fi2("Znunuuncertainties.root","RECREATE");
        histo.at(0)->Write();
-       /*for(uint32_t c=0; c<histo.size(); c++)
-       {
-           histo.at(c)->SetTitle("LowPU/HighPU");
-           histoH.at(c)->SetTitle("HighPU/all");
-           histoL.at(c)->SetTitle("LowPU/all");
-           for(uint32_t b=0; b<regions.size(); b++)
-           {
-               histo.at(c)->GetXaxis()->SetBinLabel(b+1,regions.at(b).c_str());
-               histoH.at(c)->GetXaxis()->SetBinLabel(b+1,regions.at(b).c_str());
-               histoL.at(c)->GetXaxis()->SetBinLabel(b+1,regions.at(b).c_str());
-           }
-           //if(c==0)
-           //{
-           //   histo.at(c)->Draw("hist e");
-           //}
-           //else
-           //{               
-           //histo.at(c)->SetLineColor(c+4);
-           //histoL.at(c)->SetLineColor(c+4);
-           //histoH.at(c)->SetLineColor(c+4);
-              //histo.at(c)->Draw("same hist e");
-           //}
-           histo.at(c)->Write();
-           histoH.at(c)->Write();
-           histoL.at(c)->Write();
-       }*/
        fi2.Close();
-       //can->SaveAs("plotPUyield.eps"); //@MJ@ TODO svae to root file
 }

@@ -106,6 +106,7 @@ void BabyScrewdriver::Init()
 
 
 AddRegion("SR1l_A_250lessMETless350","SR1l_A_250lessMETless350",&SR1l_A_250lessMETless350);
+AddRegion("SR1l_A_250lessMETless350test","SR1l_A_250lessMETless350test",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_350lessMETless450","SR1l_A_350lessMETless450",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_450lessMETless600","SR1l_A_450lessMETless600",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_600lessMETlessInf","SR1l_A_600lessMETlessInf",&SR1l_A_600lessMETlessInf);
@@ -238,19 +239,8 @@ void BabyScrewdriver::PostProcessingStep()
     // ######################
 vector<string> totYield = { "SR1l_A_250lessMETless350" , "SR1l_A_350lessMETless450" , "SR1l_A_450lessMETless600" , "SR1l_A_600lessMETlessInf" , "SR1l_B_250lessMETless450" , "SR1l_B_450lessMETless600" , "SR1l_B_600lessMETlessInf" , "SR1l_C_250lessMETless350" , "SR1l_C_350lessMETless450" , "SR1l_C_450lessMETless550" , "SR1l_C_550lessMETless650" , "SR1l_C_650lessMETlessInf" , "SR1l_D_250lessMETless350" , "SR1l_D_350lessMETless450" , "SR1l_D_450lessMETless550" , "SR1l_D_550lessMETlessInf" , "SR1l_E_250lessMETless350" , "SR1l_E_350lessMETless550" , "SR1l_E_550lessMETlessInf" , "SR1l_F_250lessMETless450" , "SR1l_F_450lessMETlessInf" , "SR1l_G_250lessMETless350" , "SR1l_G_350lessMETless450" , "SR1l_G_450lessMETless600" , "SR1l_G_600lessMETlessInf" , "SR1l_H_250lessMETless450" , "SR1l_H_450lessMETlessInf"};
 
-
-    #ifdef USE_VAR_BASELINE_DOWN
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECDownMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECdownMor.tex", 4);
-    #endif
-    #ifdef USE_VAR_BASELINE_UP
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECUpMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECUpMor.tex", 4);
-    #endif
-    #ifdef USE_VAR_BASELINE
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldSRMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldSRMor.tex", 4);
-    #endif
+    TableSRToCR(this, totYield,"SR1l_A_250lessMETless350test" ,"lepChannel",  "includeSignal" ).Print("yieldSRCRMor.tab", 4);
+    TableSRToCR(this, totYield,"SR1l_A_250lessMETless350test" ,"lepChannel", "includeSignal" ).PrintLatex("yieldSRCRMor.tex", 4);
 
 
 

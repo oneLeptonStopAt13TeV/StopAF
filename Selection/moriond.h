@@ -46,7 +46,7 @@ bool tightCSVV2()
 }
 
 bool baseline(){ return myEvent.pfmet>=250 && myEvent.mt_met_lep>=150 && myEvent.ngoodjets>=2 && myEvent.dphi_ak4pfjets_met>=0.8 && myEvent.trigger && myEvent.topnessMod>-1000 && myEvent.Mlb>=0;}
-bool SR1l() { return ( baseline() && myEvent.ngoodbtags>=1 && myEvent.ngoodleps==1 && myEvent.PassTrackVeto && myEvent.PassTauVeto && ( (myEvent.lep1_passMediumID && abs(myEvent.lep1_pdgid)==11) || (myEvent.lep1_passTightID && abs(myEvent.lep1_pdgid)==13) ) ); }
+bool SR1l() { return ( baseline() && myEvent.ngoodbtags>=1 && myEvent.ngoodleps==1 && myEvent.nvetoleps==1 && myEvent.PassTrackVeto && myEvent.PassTauVeto && ( (myEvent.lep1_passMediumID && abs(myEvent.lep1_pdgid)==11) || (myEvent.lep1_passTightID && abs(myEvent.lep1_pdgid)==13) ) ); }
 bool SR1l_A_250lessMETless350() { return (SR1l() && myEvent.ngoodjets<=3 && myEvent.topnessMod>=10 && myEvent.Mlb<=175 && myEvent.pfmet>=250 && myEvent.pfmet<350);}
 bool SR1l_A_350lessMETless450() { return (SR1l() && myEvent.ngoodjets<=3 && myEvent.topnessMod>=10 && myEvent.Mlb<=175 && myEvent.pfmet>=350 && myEvent.pfmet<450);}
 bool SR1l_A_450lessMETless600() { return (SR1l() && myEvent.ngoodjets<=3 && myEvent.topnessMod>=10 && myEvent.Mlb<=175 && myEvent.pfmet>=450 && myEvent.pfmet<600);}

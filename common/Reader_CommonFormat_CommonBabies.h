@@ -183,6 +183,12 @@ typedef struct
     float         mass_lsp = -13;
     float         mass_chargino = -13;
     float         mass_stop = -13;
+    uint32_t      nentries = 0;
+    vector<int>*   genqs_id;
+    vector<int>*   genqs_status;
+    float         top_pt = -13;
+    float         atop_pt = -13;
+    //uint32_t      nthentry = 0;
 
     //@MJ@ TODO fill these
     /*float         pfmet_rl_jup = -13;
@@ -217,6 +223,8 @@ typedef struct
     ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4lep1_p4 = NULL;
     ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > lep2_p4;
     ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4lep2_p4 = NULL;
+    vector< ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > genqs_p4;
+    vector< ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >* p4genqs_p4 = NULL;
 
     bool PassTrackVeto = -13;
     bool PassTauVeto = -13;
@@ -414,6 +422,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     cout << "normalization size " << myEvent->wNormalization.size() << endl;
 
 
+   //entries in tree
+   myEvent->nentries = theTree->GetEntries();
+
+
     if(theTree->GetListOfBranches()->FindObject("xsec"))
         theTree->SetBranchAddress("xsec",            &(myEvent->crossSection));
     if(theTree->GetListOfBranches()->FindObject("kfactor"))
@@ -448,14 +460,13 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("is1lep",               &(myEvent->is1lep));
     if(theTree->GetListOfBranches()->FindObject("is2lep"))
         theTree->SetBranchAddress("is2lep",               &(myEvent->is2lep));
-    
-    
-    //gen info
     if(theTree->GetListOfBranches()->FindObject("is1lepFromW"))
         theTree->SetBranchAddress("is1lepFromW",          &(myEvent->is1lepFromW));
     if(theTree->GetListOfBranches()->FindObject("is1lepFromTop"))
         theTree->SetBranchAddress("is1lepFromTop",          &(myEvent->is1lepFromTop));
-    
+    if(theTree->GetListOfBranches()->FindObject("isZtoNuNu"))
+        theTree->SetBranchAddress("isZtoNuNu",                &(myEvent->isZtoNuNu));
+
     //trigger
     if(theTree->GetListOfBranches()->FindObject("HLT_SingleEl"))
         theTree->SetBranchAddress("HLT_SingleEl",               &(myEvent->HLT_SingleEl));
@@ -724,8 +735,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("mass_chargino",                  &(myEvent->mass_chargino));
     if(theTree->GetListOfBranches()->FindObject("mass_stop"))
         theTree->SetBranchAddress("mass_stop",                  &(myEvent->mass_stop));
-    if(theTree->GetListOfBranches()->FindObject("isZtoNuNu"))
-        theTree->SetBranchAddress("isZtoNuNu",                  &(myEvent->isZtoNuNu));
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
         theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
     if(theTree->GetListOfBranches()->FindObject("Mlb_closestb"))
@@ -736,7 +745,14 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     //theTree->SetBranchAddress("leadingLeptonId",         &(myEvent->leadingLeptonId));
     //theTree->SetBranchAddress("numberOfGeneratedLeptons",&(myEvent->numberOfGeneratedLeptons));
     #endif
-    
+    //generated info
+    //
+    if(theTree->GetListOfBranches()->FindObject("genqs_p4"))
+        theTree->SetBranchAddress("genqs_p4",                 &(myEvent->p4genqs_p4));
+    if(theTree->GetListOfBranches()->FindObject("genqs_id"))
+        theTree->SetBranchAddress("genqs_id",                 &(myEvent->genqs_id));
+    if(theTree->GetListOfBranches()->FindObject("genqs_status"))
+        theTree->SetBranchAddress("genqs_status",                 &(myEvent->genqs_status));
     #ifdef USE_NEW_VAR
     //theTree->SetBranchAddress("ST"		,&(myEvent->ST));
     //theTree->SetBranchAddress("LP"		,&(myEvent->LP));
@@ -858,6 +874,9 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
 void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
 {
     theTree->GetEntry(i);
+    //myEvent->nthentry = i;
+    //
+    cout << "new evennt" << endl;
 
     if(myEvent->genweights->size()>109)
     {
@@ -874,7 +893,7 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->lep1_pt = myEvent->lep1_p4.Pt();
     myEvent->lep1_eta = myEvent->lep1_p4.Eta();
     myEvent->lep1_phi = myEvent->lep1_p4.Phi();
-    myEvent->lep1_mass = myEvent->lep1_p4.M2();
+    myEvent->lep1_mass = sqrt(myEvent->lep1_p4.M2());
     #endif
 
     #ifdef USE_LEP2
@@ -882,8 +901,27 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->lep2_pt = myEvent->lep2_p4.Pt();
     myEvent->lep2_eta = myEvent->lep2_p4.Eta();
     myEvent->lep2_phi = myEvent->lep2_p4.Phi();
-    //myEvent->lep2_mass = myEvent->lep2_p4.M();
+    myEvent->lep2_mass = sqrt(myEvent->lep2_p4.M2());
     #endif
+
+    myEvent->genqs_p4 = *(myEvent->p4genqs_p4);
+    for(uint32_t t = 0; t<myEvent->genqs_id->size(); t++)
+    {
+        if(myEvent->genqs_id->at(t) == 6)
+        {
+            //cout << "top " << myEvent->genqs_status->at(t) << " pt " << myEvent->genqs_p4.at(t).Pt() << endl;
+            if(myEvent->genqs_status->at(t) == 22)
+                myEvent->top_pt = myEvent->genqs_p4.at(t).Pt();
+        }
+        else if(myEvent->genqs_id->at(t) == -6)
+        {
+            //cout << "atop " << myEvent->genqs_status->at(t) << " pt " << myEvent->genqs_p4.at(t).Pt() << endl;
+            if(myEvent->genqs_status->at(t) == 22)
+                myEvent->atop_pt = myEvent->genqs_p4.at(t).Pt();
+        }
+
+    }
+    
     // Put actual content of special type branches where they should be...
     ///*
 

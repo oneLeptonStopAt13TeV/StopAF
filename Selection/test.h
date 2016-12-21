@@ -16,24 +16,24 @@ bool CheckTrigger(bool data, string dataset){
 
         if(data)
         {
-          if( dataset.find("data_single_electron")!=std::string::npos &&  abs(myEvent.lep1_pdgid)==11 && myEvent.HLT_SingleEl)
+          if( dataset.find("data_single_electron")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==11 && myEvent.HLT_SingleEl)
           {
-            cout << "electron trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
+            //cout << "electron trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
             trigged = true;
           }
-          else if( dataset.find("data_single_muon")!=std::string::npos &&  abs(myEvent.lep1_pdgid)==13 && myEvent.HLT_SingleMu)
+          else if( dataset.find("data_single_muon")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==13 && myEvent.HLT_SingleMu)
           {
-            cout << "muon trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
+            //cout << "muon trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
             trigged = true;
           }
-          else if( dataset.find("data_met")!=std::string::npos &&  (myEvent.HLT_MET100_MHT100 || myEvent.HLT_MET) && ( (abs(myEvent.lep1_pdgid)==11 && !myEvent.HLT_SingleEl ) ||  (abs(myEvent.lep1_pdgid)==13 && !myEvent.HLT_SingleMu) ))
+          else if( dataset.find("data_met")!=std::string::npos &&  (myEvent.HLT_MET100_MHT100 || myEvent.HLT_MET) && ( (fabs(myEvent.lep1_pdgid)==11 && !myEvent.HLT_SingleEl ) ||  (fabs(myEvent.lep1_pdgid)==13 && !myEvent.HLT_SingleMu) ))
           {
-            cout << "HT trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
+            //cout << "HT trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
             trigged = true;
           }
           else
           {
-            cout << "no trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
+            //cout << "no trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
      
           }
 
@@ -46,7 +46,7 @@ bool CheckTrigger(bool data, string dataset){
 
 }
 
-bool baseline(){ return myEvent.pfmet>=250 && myEvent.mt_met_lep>=150 && myEvent.ngoodjets>=2 && myEvent.dphi_ak4pfjets_met>=0.8 && myEvent.trigger;}
+bool baseline(){ return myEvent.pfmet>=250 && myEvent.mt_met_lep>=150 && myEvent.ngoodjets>=2 && myEvent.dphi_ak4pfjets_met>=0.8 && myEvent.trigger && myEvent.topnessMod>-1000 && myEvent.MT2W>=0;}
 bool SR1l() { return ( baseline() && myEvent.ngoodbtags>=1 && OneLep() && ( (myEvent.lep1_passMediumID && abs(myEvent.lep1_pdgid)==11) || (myEvent.lep1_passTightID && abs(myEvent.lep1_pdgid)==13))  ); }
 bool CR1l() { return ( baseline() && myEvent.ngoodbtags==0 && OneLep() ); }
 bool CR2l() { return ( baseline() && myEvent.ngoodbtags>=1 && TwoLep() ); }

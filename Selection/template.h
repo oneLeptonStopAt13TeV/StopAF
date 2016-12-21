@@ -6,7 +6,7 @@ babyEvent myEvent;
 
 
 bool OneLep(){ return (myEvent.ngoodleps == 1 && myEvent.PassTrackVeto && myEvent.PassTauVeto); }
-bool TwoLep(){ return ( (myEvent.ngoodleps+myEvent.nvetoleps)==2  && myEvent.PassTauVeto); }
+//bool TwoLep(){ return ( (myEvent.ngoodleps+myEvent.nvetoleps)==2  && myEvent.PassTauVeto); }
 
 bool CheckTrigger(bool data, string dataset){
        if(dataset == "")
@@ -16,33 +16,32 @@ bool CheckTrigger(bool data, string dataset){
 
         if(data)
         {
-          if( dataset.find("data_single_electron")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==11 && myEvent.HLT_SingleEl)
-          {
-            //cout << "electron trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
-            trigged = true;
-          }
-          else if( dataset.find("data_single_muon")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==13 && myEvent.HLT_SingleMu)
-          {
-            //cout << "muon trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << endl; 
-            trigged = true;
-          }
-          else if( dataset.find("data_met")!=std::string::npos &&  (myEvent.HLT_MET100_MHT100 || myEvent.HLT_MET) && ( (fabs(myEvent.lep1_pdgid)==11 && !myEvent.HLT_SingleEl ) ||  (fabs(myEvent.lep1_pdgid)==13 && !myEvent.HLT_SingleMu) ))
-          {
-            //cout << "HT trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
-            trigged = true;
-          }
-          else
-          {
-            //cout << "no trigger; dataset " << dataset << " lep " << myEvent.lep1_pdgid << " el trigger " << myEvent.HLT_SingleEl << " mu trigger " << myEvent.HLT_SingleMu << " HT trigger " << myEvent.HLT_MET100_MHT100 << " MET trigger " << myEvent.HLT_MET << endl; 
-     
-          }
+            if( dataset.find("data_single_electron")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==11 && myEvent.HLT_SingleEl)
+                trigged = true;
+            else if( dataset.find("data_single_muon")!=std::string::npos &&  fabs(myEvent.lep1_pdgid)==13 && myEvent.HLT_SingleMu)
+                trigged = true;
+            else if( dataset.find("data_met")!=std::string::npos &&  (myEvent.HLT_MET100_MHT100 || myEvent.HLT_MET) && ( (fabs(myEvent.lep1_pdgid)==11 && !myEvent.HLT_SingleEl ) ||  (fabs(myEvent.lep1_pdgid)==13 && !myEvent.HLT_SingleMu) ))
+                trigged = true;
+            else
+            {
+            }
 
-         }
-         else
-         {
-             trigged = true;
-         }
-         return trigged;
+        }
+        else
+        {
+            trigged = true;
+        }
+        return trigged;
 
+}
+
+bool tightCSVV2()
+{
+    for (uint32_t j =0 ; j<myEvent.ak4pfjets_CSV->size(); j++)
+    {
+        if( myEvent.ak4pfjets_CSV->at(j) >0.935)
+            return true;
+    }
+    return false;
 }
 
