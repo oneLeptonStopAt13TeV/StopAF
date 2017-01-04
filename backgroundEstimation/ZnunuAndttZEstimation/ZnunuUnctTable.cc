@@ -141,8 +141,12 @@ int main(int argc, char *argv[]){
                    histo.at(0)->SetBinError(uncLine-1,uncTot);
                uncTot = 0;
                uncBef = 0;
- 
-               thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure((resall.error()/resall.value())*100, 0));
+
+               if(resall.value() !=0) 
+                   thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure((resall.error()/resall.value())*100, 0));
+               else
+                   thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure(-1, 0));
+      
                l++;
            }
            //then all systematics
@@ -154,18 +158,28 @@ int main(int argc, char *argv[]){
                }
                else
                { 
-                   binValue = histo.at(0)->GetBinContent(uncLine);
-                   uncHigher = abs(uncBef-binValue) > abs(resall.value() - binValue) ? abs(uncBef-binValue): abs(resall.value() - binValue);   
+                   uncHigher = abs(uncBef-yieldVal.value()) > abs(resall.value() - yieldVal.value()) ? abs(uncBef-yieldVal.value()): abs(resall.value() - yieldVal.value());   
                    uncTot += uncHigher*uncHigher ;//@MJ@TODO now average unc, change to maximal?!
 
                 
-                   if(systOutNames.at(l) == "lepSFDN" || systOutNames.at(l) == "topPtModeling" )
-                       thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((uncHigher/binValue)*100, 0));
+                   if(systOutNames.at(l) == "lepSFDN" || systOutNames.at(l) == "lepSFUP"|| systOutNames.at(l) == "topPtModeling" )
+                   {
+                       if(yieldVal.value() != 0)
+                           thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((uncHigher/yieldVal.value())*100, 0));
+                       else
+                           thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure(0, 0));
+
+                   }
         	   else
                    {
                    
-                   float center = (2*abs(uncBef-resall.value()))/(uncBef+resall.value());
-                   thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((center)*100, 0));
+                       float center;
+                       if(uncBef+resall.value() != 0)
+                           center = (2*abs(uncBef-resall.value()))/(uncBef+resall.value());
+                       else
+                           center = 0;
+
+                       thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((center)*100, 0));
 
                    }
                    l++;
@@ -180,12 +194,18 @@ int main(int argc, char *argv[]){
            Figure g = (resall-yieldVal)/yieldVal;
            if(r == 0 || r%nUnc == 0)
            {
-               trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(abs(yieldVal.error()/yieldVal.value())*100,abs(0)));
+               if(yieldVal.value() != 0)
+                   trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure((yieldVal.error()/yieldVal.value())*100, 0));
+               else
+                   trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(-1,0));
                //thigher.Set(systOutNames.at(0), realReg.at(uncLine-1), Figure((abs(yieldVal.error()/yieldVal.value())*100, 0)));
            }
            else
            {
-               trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(abs(g.value())*100,abs(0)));
+               if(yieldVal.value() != 0)
+                   trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(abs(g.value())*100,abs(0)));
+               else
+                   trel.Set(colI.at(r-((uncLine-1)*(nUnc))), realReg.at(uncLine-1), Figure(-1,0));
            }
            //cout << realReg.at(uncLine-1) << " value " <<  colI.at(r-((uncLine-1)*(nUnc)))<< endl;
        }
@@ -194,16 +214,38 @@ int main(int argc, char *argv[]){
        {     
            theDoctor::Figure JECd = tJECdown.Get(realReg.at(j),"totalSM" );
            theDoctor::Figure JECu = tJECup.Get(realReg.at(j), "totalSM");
- 
+           
+           //JES yields
            tI.Set("jesDN", realReg.at(j), JECd);
            tI.Set("jesUP", realReg.at(j), JECu);
-           Figure a = (JECd - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
-           trel.Set("jesDN", realReg.at(j), Figure(abs(a.value())*100,abs(0)));
-           Figure c = (JECu - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
-           trel.Set("jesUP", realReg.at(j), Figure(abs(c.value())*100,abs(0)));
-           float higherJEC = a.value() > c.value()? a.value(): c.value();
+
+           //relative unc
+           Figure a;
+           Figure c;
+           if(tab.Get(realReg.at(j), datasets.at(0)).value() > 0)
+           {
+               a = (JECd - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
+               c = (JECu - tab.Get(realReg.at(j), datasets.at(0)))/(tab.Get(realReg.at(j), datasets.at(0)));
+           }
+           else
+           {
+               a = -0.01;
+               c = -0.01;
+           }
+             
+           //@MJ@ TODO finish it here!!!
+           trel.Set("jesDN", realReg.at(j), Figure((a.value())*100,abs(0)));
+           trel.Set("jesUP", realReg.at(j), Figure((c.value())*100,abs(0)));
+
            uint32_t lastElement = systOutNames.size() -1;
-           thigher.Set(systOutNames.at(lastElement), realReg.at(j), Figure(higherJEC*100, 0));
+           if (a.value()>0 || c.value()>0 )
+           {
+               float higherJEC = a.value() > c.value()? a.value(): c.value();
+               thigher.Set(systOutNames.at(lastElement), realReg.at(j), Figure(higherJEC*100, 0));
+           }
+           else
+               thigher.Set(systOutNames.at(lastElement), realReg.at(j), Figure(0, 0));
+           
        }
 
         //now find the extreme values
@@ -216,19 +258,26 @@ int main(int argc, char *argv[]){
                 oneSysts.push_back(oneSyst.value());
             }
             sort(oneSysts.begin(), oneSysts.end());
-            tsummary.Set(uncRange.at(0), systOutNames.at(s), oneSysts.at(0));
+            for(uint32_t z=0; z<oneSysts.size(); z++)
+            {
+                if(oneSysts.at(z) != 0 )
+                {
+                    tsummary.Set(uncRange.at(0), systOutNames.at(s), oneSysts.at(z));
+                    break;
+                }
+            }
             tsummary.Set(uncRange.at(1), systOutNames.at(s), oneSysts.at(realReg.size()-1));
         }
 
         //write output tables
         tI.Print(static_cast<string>("tableUncZnunu.tab"),2);
         tI.PrintLatex(static_cast<string>("tableUncZnunu.tex"),2);
-        trel.Print(static_cast<string>("tableUncZnunuRel.tab"),2);
-        trel.PrintLatex(static_cast<string>("tableUncZunuRel.tex"),2);
-        thigher.Print(static_cast<string>("tableUncZnunuRelHiger.tab"),2);
-        thigher.PrintLatex(static_cast<string>("tableUncZunuRelHigher.tex"),2);
-        tsummary.Print(static_cast<string>("tableUncZnunuRelSummaryTab.tab"),2);
-        tsummary.PrintLatex(static_cast<string>("tableUncZunuRelSummaryTab.tex"),2);
+        trel.Print(static_cast<string>("tableUncZnunuRel.tab"),2, "noError");
+        trel.PrintLatex(static_cast<string>("tableUncZunuRel.tex"),2, "noError");
+        thigher.Print(static_cast<string>("tableUncZnunuRelHiger.tab"),2, "noError");
+        thigher.PrintLatex(static_cast<string>("tableUncZunuRelHigher.tex"),2, "noError");
+        tsummary.Print(static_cast<string>("tableUncZnunuRelSummaryTab.tab"),2, "noError");
+        tsummary.PrintLatex(static_cast<string>("tableUncZunuRelSummaryTab.tex"),2, "noError");
 
 
        TFile fi2("Znunuuncertainties.root","RECREATE");

@@ -159,9 +159,9 @@ class Selection:
 	       myfile.write(dump)
 	       print dump
                #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
-               systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+               #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
                #systs = ["PUdown", "PUup"]
-               #systs = []
+               systs = []
                for syst in systs:
 	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
 	           myfile.write(dump)
@@ -309,8 +309,9 @@ class Selection:
 	         dump= " , "
 	         myfile.write(dump)
                  #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
-                 systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+                 #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
                  #systs = ["PUdown", "PUup"]
+                 systs = []
                  for syst in systs:
 	             dump= "\"" +name+syst+"\""
 	             myfile.write(dump)

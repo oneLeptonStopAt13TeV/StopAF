@@ -134,8 +134,8 @@ int main(int argc, char *argv[]){
        }
         tI.Print(static_cast<string>("tableUncZnunuPU.tab"),2);
         tI.PrintLatex(static_cast<string>("tableUncZnunuPU.tex"),2);
-        trel.Print(static_cast<string>("tableUncZnunuRelPU.tab"),2);
-        trel.PrintLatex(static_cast<string>("tableUncZunuRelPU.tex"),2);
+        trel.Print(static_cast<string>("tableUncZnunuRelPU.tab"),2, "noError");
+        trel.PrintLatex(static_cast<string>("tableUncZunuRelPU.tex"),2, "noError");
 
        TFile fi2("ttZuncertaintiesPU.root","RECREATE");
        histo.at(0)->Write();

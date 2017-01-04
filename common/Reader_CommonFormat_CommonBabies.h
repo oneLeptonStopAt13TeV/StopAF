@@ -188,6 +188,7 @@ typedef struct
     vector<int>*   genqs_status;
     float         top_pt = -13;
     float         atop_pt = -13;
+    float         dphiMET = -13;
     //uint32_t      nthentry = 0;
 
     //@MJ@ TODO fill these
@@ -681,6 +682,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2"))
         theTree->SetBranchAddress("mindphi_met_j1_j2",      &(myEvent->dphi_ak4pfjets_met));
+    if(theTree->GetListOfBranches()->FindObject("dphiMET"))
+        theTree->SetBranchAddress("dphiMET",      &(myEvent->dphiMET));
     #endif
 
 
@@ -701,6 +704,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jup_ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jup"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jup",      &(myEvent->dphi_ak4pfjets_met));
+    if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jup"))
+        theTree->SetBranchAddress("dphiMET_rl_jup",      &(myEvent->dphiMET));
     #endif
 
     #ifdef USE_VAR_BASELINE_DOWN
@@ -718,6 +723,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jdown_ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jdown"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jdown",      &(myEvent->dphi_ak4pfjets_met));
+    if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jdown"))
+        theTree->SetBranchAddress("dphiMET_rl_jdown",      &(myEvent->dphiMET));
     #endif
 
     #ifdef USE_GLOBAL_VAR

@@ -60,6 +60,7 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
     babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11";
     totalNumberOfWorkers = 1;
 
@@ -514,12 +515,12 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         weightV.push_back(w);
         //PDFdown
         if(counter == 1) statnames << "pdfDN" << endl;
-        w = GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs(myEvent.pdf_down_weight* ( nEvents / myEvent.wNormalization.at(11) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        w = GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs((myEvent.pdf_down_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1) / myEvent.wNormalization.at(11) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
         //cout << "pdfd  " << pdfd << " w " << w << endl;
         weightV.push_back(w);
         //PDFup
         if(counter == 1) statnames << "pdfUP" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * abs(myEvent.pdf_up_weight*( nEvents / myEvent.wNormalization.at(10) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * abs((myEvent.pdf_up_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1)/ myEvent.wNormalization.at(10) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
         weightV.push_back(w);
         //alphaSdown
         if(counter == 1) statnames << "alphaSDN" << endl;
@@ -560,7 +561,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     if( weightV.size() != theReg.size())
         throw std::runtime_error("vector of weights does not have same size as regions, the weights will not be correctly assesed");
 
-   
+   cout << "scale 1fb " << myEvent.scale1fb << " kfactor " << myEvent.kfactor << " xsec " << myEvent.crossSection << " 1/weight " << (myEvent.scale1fb)/(myEvent.kfactor*myEvent.crossSection) << " pdf down " << abs(myEvent.pdf_down_weight* ( nEvents / myEvent.wNormalization.at(11) )) << " pdf up " << abs(myEvent.pdf_up_weight*( nEvents / myEvent.wNormalization.at(10) )) << " gen[0]" << myEvent.genweights->at(0) << endl; 
  
     float weight     = weightLumi;
     if (currentProcessType == "data") weight = 1.0;

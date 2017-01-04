@@ -77,7 +77,7 @@ void BabyScrewdriver::Init()
 AddRegion("SR1l_A_250lessMETlessInf","SR1l_A_250lessMETlessInf",&SR1l_A_250lessMETlessInf);
 AddRegion("SR1l_A_250lessMETlessInfPUdown","SR1l_A_250lessMETlessInfPUdown",&SR1l_A_250lessMETlessInf);
 AddRegion("SR1l_A_250lessMETlessInfPUup","SR1l_A_250lessMETlessInfPUup",&SR1l_A_250lessMETlessInf);
-AddRegion("SR1l_B_250lessMETlessInf","SR1l_B_250lessMETlessInf",&SR1l_B_250lessMETlessInf);
+/*AddRegion("SR1l_B_250lessMETlessInf","SR1l_B_250lessMETlessInf",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_B_250lessMETlessInfPUdown","SR1l_B_250lessMETlessInfPUdown",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_B_250lessMETlessInfPUup","SR1l_B_250lessMETlessInfPUup",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_C_250lessMETlessInf","SR1l_C_250lessMETlessInf",&SR1l_C_250lessMETlessInf);
@@ -97,7 +97,7 @@ AddRegion("SR1l_G_250lessMETlessInfPUdown","SR1l_G_250lessMETlessInfPUdown",&SR1
 AddRegion("SR1l_G_250lessMETlessInfPUup","SR1l_G_250lessMETlessInfPUup",&SR1l_G_250lessMETlessInf);
 AddRegion("SR1l_H_250lessMETlessInf","SR1l_H_250lessMETlessInf",&SR1l_H_250lessMETlessInf);
 AddRegion("SR1l_H_250lessMETlessInfPUdown","SR1l_H_250lessMETlessInfPUdown",&SR1l_H_250lessMETlessInf);
-AddRegion("SR1l_H_250lessMETlessInfPUup","SR1l_H_250lessMETlessInfPUup",&SR1l_H_250lessMETlessInf);
+AddRegion("SR1l_H_250lessMETlessInfPUup","SR1l_H_250lessMETlessInfPUup",&SR1l_H_250lessMETlessInf);*/
 
     // ------------------
     // Channels
@@ -147,7 +147,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     weightV.clear();
     float nEvents =  myEvent.wNormalization.at(22);
     //for number of SR
-    for(uint32_t SR=0; SR<8; SR++) //@MJ@ TODO nr of sig regions changes
+    for(uint32_t SR=0; SR<1; SR++) //@MJ@ TODO nr of sig regions changes
     {
 
         float w = 0;
@@ -221,7 +221,8 @@ void BabyScrewdriver::PostProcessingStep()
     //  Tables and other stuff
     // ######################
 
-vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup" , "SR1l_B_250lessMETlessInf" , "SR1l_B_250lessMETlessInfPUdown" , "SR1l_B_250lessMETlessInfPUup" , "SR1l_C_250lessMETlessInf" , "SR1l_C_250lessMETlessInfPUdown" , "SR1l_C_250lessMETlessInfPUup" , "SR1l_D_250lessMETlessInf" , "SR1l_D_250lessMETlessInfPUdown" , "SR1l_D_250lessMETlessInfPUup" , "SR1l_E_250lessMETlessInf" , "SR1l_E_250lessMETlessInfPUdown" , "SR1l_E_250lessMETlessInfPUup" , "SR1l_F_250lessMETlessInf" , "SR1l_F_250lessMETlessInfPUdown" , "SR1l_F_250lessMETlessInfPUup" , "SR1l_G_250lessMETlessInf" , "SR1l_G_250lessMETlessInfPUdown" , "SR1l_G_250lessMETlessInfPUup" , "SR1l_H_250lessMETlessInf" , "SR1l_H_250lessMETlessInfPUdown" , "SR1l_H_250lessMETlessInfPUup" };
+//vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup" , "SR1l_B_250lessMETlessInf" , "SR1l_B_250lessMETlessInfPUdown" , "SR1l_B_250lessMETlessInfPUup" , "SR1l_C_250lessMETlessInf" , "SR1l_C_250lessMETlessInfPUdown" , "SR1l_C_250lessMETlessInfPUup" , "SR1l_D_250lessMETlessInf" , "SR1l_D_250lessMETlessInfPUdown" , "SR1l_D_250lessMETlessInfPUup" , "SR1l_E_250lessMETlessInf" , "SR1l_E_250lessMETlessInfPUdown" , "SR1l_E_250lessMETlessInfPUup" , "SR1l_F_250lessMETlessInf" , "SR1l_F_250lessMETlessInfPUdown" , "SR1l_F_250lessMETlessInfPUup" , "SR1l_G_250lessMETlessInf" , "SR1l_G_250lessMETlessInfPUdown" , "SR1l_G_250lessMETlessInfPUup" , "SR1l_H_250lessMETlessInf" , "SR1l_H_250lessMETlessInfPUdown" , "SR1l_H_250lessMETlessInfPUup" };
+vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup"};
 
 
     TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldMorPU.tab", 6);
