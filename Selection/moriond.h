@@ -74,7 +74,7 @@ bool SR1l_G_450lessMETless600() { return (SR1l() && myEvent.ngoodjets>=4 && myEv
 bool SR1l_G_600lessMETlessInf() { return (SR1l() && myEvent.ngoodjets>=4 && myEvent.topnessMod>=10 && myEvent.Mlb<=175 && myEvent.dphi_ak4pfjets_met>=0.8 && myEvent.pfmet>=600);}
 bool SR1l_H_250lessMETless450() { return (SR1l() && myEvent.ngoodjets>=4 && myEvent.topnessMod>=10 && myEvent.Mlb>175 && myEvent.dphi_ak4pfjets_met>=0.8 && tightCSVV2() && myEvent.pfmet>=250 && myEvent.pfmet<450);}
 bool SR1l_H_450lessMETlessInf() { return (SR1l() && myEvent.ngoodjets>=4 && myEvent.topnessMod>=10 && myEvent.Mlb>175 && myEvent.dphi_ak4pfjets_met>=0.8 && tightCSVV2() && myEvent.pfmet>=450);}
-bool SR1l_I_250lessMETless350() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.pfmet>=250 && myEvent.pfmet<350);}
-bool SR1l_I_350lessMETless450() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.pfmet>=350 && myEvent.pfmet<450);}
-bool SR1l_I_450lessMETless550() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.pfmet>=450 && myEvent.pfmet<550);}
-bool SR1l_I_550lessMETlessInf() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.pfmet>=550);}
+bool SR1l_I_250lessMETless350() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.dphiMET<2 && myEvent.pfmet>=250 && myEvent.pfmet<350);}
+bool SR1l_I_350lessMETless450() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.dphiMET<2 && myEvent.pfmet>=350 && myEvent.pfmet<450);}
+bool SR1l_I_450lessMETless550() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.dphiMET<2 && myEvent.pfmet>=450 && myEvent.pfmet<550);}
+bool SR1l_I_550lessMETlessInf() { return (SR1l() && myEvent.ngoodjets>=5 && myEvent.lep1_pt<150 && myEvent.dphiMET<2 && myEvent.pfmet>=550);}
