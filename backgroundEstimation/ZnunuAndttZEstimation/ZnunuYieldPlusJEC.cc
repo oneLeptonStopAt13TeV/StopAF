@@ -8,15 +8,11 @@
 #include "Math/GenVector/LorentzVector.h"
 
 #define USE_VAR_BASELINE_UP
+
 #define USE_LEP1
 #define USE_LEP2
-//#define USE_SKIMMING_VAR
 #define USE_JETS
 #define USE_JETS_EXT
-//#define USE_GEN_INFO
-//#define USE_GEN_INFO_EXT
-////#define USE_LEP1_EXT
-////#define USE_LEP2_EXT
 #define USE_PV
 #define USE_WEIGHTS
 #define USE_GLOBAL_VAR
@@ -41,6 +37,7 @@ TAxis *xaxis = NULL;
 TAxis *yaxis = NULL;
 bool checkNegativeYields = false;
 uint32_t nthentry = 0;
+string outputName = "";
 
 float getWeight(string currentProcessType, float lumi);
 map< pair<uint32_t,uint32_t>, string > scanMap;
@@ -57,6 +54,7 @@ void BabyScrewdriver::Init()
     PrintBoxedMessage("Initializing babyScrewdriver");
 
     babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/";
     totalNumberOfWorkers = 1;
 
 
@@ -78,12 +76,25 @@ void BabyScrewdriver::Init()
     // ------------------
     // Datasets
     // ------------------
-    //AddProcessClass("ttZ", "ttZ", "background", kBlue);
-    	//AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
-    AddProcessClass("ZZTo2Q2nu", "ZZTo2Q2nu", "background", kBlue);
-    	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZTo2Q2nu",0,0);
+    //#ifdef USE_TTZ
+    AddProcessClass("ttZ", "ttZ", "background", kBlue);
+    	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
+    //outputName = "yieldMorTTZ";
+    //#endif
+
+    //#ifdef USE_ZZWZ
+    AddProcessClass("ZZ", "ZZ", "background", kBlue);
+    	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZ",0,0);
     AddProcessClass("WZ", "WZ", "background", kBlue);
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","WZ",0,0);
+    outputName = "yieldMorZNuNu";
+    //#endif
 
 AddRegion("SR1l_A_250lessMETless350","SR1l_A_250lessMETless350",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_350lessMETless450","SR1l_A_350lessMETless450",&SR1l_A_350lessMETless450);
@@ -112,11 +123,11 @@ AddRegion("SR1l_G_450lessMETless600","SR1l_G_450lessMETless600",&SR1l_G_450lessM
 AddRegion("SR1l_G_600lessMETlessInf","SR1l_G_600lessMETlessInf",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_H_250lessMETless450","SR1l_H_250lessMETless450",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_450lessMETlessInf","SR1l_H_450lessMETlessInf",&SR1l_H_450lessMETlessInf);
-/*AddRegion("SR1l_I_250lessMETless350","SR1l_I_250lessMETless350",&SR1l_I_250lessMETless350);
+AddRegion("SR1l_I_250lessMETless350","SR1l_I_250lessMETless350",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_350lessMETless450","SR1l_I_350lessMETless450",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_450lessMETless550","SR1l_I_450lessMETless550",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_550lessMETlessInf","SR1l_I_550lessMETlessInf",&SR1l_I_550lessMETlessInf);
-*/
+
 
 	fillYieldsVector();
                                                                                                                        
@@ -158,7 +169,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
 
     myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
-    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZTo2Q2nu" || currentProcessClass == "ttZ" || currentProcessClass == "WZ")  && ( !(myEvent.isZtoNuNu) ))
+    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZ" || currentProcessClass == "ttZ" || currentProcessClass == "WZ")  && ( !(myEvent.isZtoNuNu) ))
     {
          currentProcessClass = "";
     }
@@ -213,20 +224,20 @@ void BabyScrewdriver::PostProcessingStep()
     // ######################
     //  Tables and other stuff
     // ######################
-vector<string> totYield = { "SR1l_A_250lessMETless350" , "SR1l_A_350lessMETless450" , "SR1l_A_450lessMETless600" , "SR1l_A_600lessMETlessInf" , "SR1l_B_250lessMETless450" , "SR1l_B_450lessMETless600" , "SR1l_B_600lessMETlessInf" , "SR1l_C_250lessMETless350" , "SR1l_C_350lessMETless450" , "SR1l_C_450lessMETless550" , "SR1l_C_550lessMETless650" , "SR1l_C_650lessMETlessInf" , "SR1l_D_250lessMETless350" , "SR1l_D_350lessMETless450" , "SR1l_D_450lessMETless550" , "SR1l_D_550lessMETlessInf" , "SR1l_E_250lessMETless350" , "SR1l_E_350lessMETless550" , "SR1l_E_550lessMETlessInf" , "SR1l_F_250lessMETless450" , "SR1l_F_450lessMETlessInf" , "SR1l_G_250lessMETless350" , "SR1l_G_350lessMETless450" , "SR1l_G_450lessMETless600" , "SR1l_G_600lessMETlessInf" , "SR1l_H_250lessMETless450" , "SR1l_H_450lessMETlessInf"}; //, "SR1l_I_250lessMETless350" , "SR1l_I_350lessMETless450" , "SR1l_I_450lessMETless550" , "SR1l_I_550lessMETlessInf"};
+vector<string> totYield = { "SR1l_A_250lessMETless350" , "SR1l_A_350lessMETless450" , "SR1l_A_450lessMETless600" , "SR1l_A_600lessMETlessInf" , "SR1l_B_250lessMETless450" , "SR1l_B_450lessMETless600" , "SR1l_B_600lessMETlessInf" , "SR1l_C_250lessMETless350" , "SR1l_C_350lessMETless450" , "SR1l_C_450lessMETless550" , "SR1l_C_550lessMETless650" , "SR1l_C_650lessMETlessInf" , "SR1l_D_250lessMETless350" , "SR1l_D_350lessMETless450" , "SR1l_D_450lessMETless550" , "SR1l_D_550lessMETlessInf" , "SR1l_E_250lessMETless350" , "SR1l_E_350lessMETless550" , "SR1l_E_550lessMETlessInf" , "SR1l_F_250lessMETless450" , "SR1l_F_450lessMETlessInf" , "SR1l_G_250lessMETless350" , "SR1l_G_350lessMETless450" , "SR1l_G_450lessMETless600" , "SR1l_G_600lessMETlessInf" , "SR1l_H_250lessMETless450" , "SR1l_H_450lessMETlessInf", "SR1l_I_250lessMETless350" , "SR1l_I_350lessMETless450" , "SR1l_I_450lessMETless550" , "SR1l_I_550lessMETlessInf"};
 
 
     #ifdef USE_VAR_BASELINE_DOWN
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECDownMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECdownMor.tex", 4);
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print(outputName+ "JECDown.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex(outputName+ "JECdown.tex", 4);
     #endif
     #ifdef USE_VAR_BASELINE_UP
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldJECUpMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldJECUpMor.tex", 4);
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print(outputName+ "JECUp.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex(outputName+ "JECUp.tex", 4);
     #endif
     #ifdef USE_VAR_BASELINE
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldSRMor.tab", 4);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldSRMor.tex", 4);
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print(outputName+ "SR.tab", 4);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex(outputName+ "SR.tex", 4);
     #endif
 
     cout << "end of processing" << endl;
