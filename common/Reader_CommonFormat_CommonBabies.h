@@ -19,6 +19,8 @@
 
 #include "TLorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
+#include "TMath.h"
+#include "TVector3.h"
 
 //#define USE_GEN_INFO
 
@@ -682,8 +684,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2"))
         theTree->SetBranchAddress("mindphi_met_j1_j2",      &(myEvent->dphi_ak4pfjets_met));
-    if(theTree->GetListOfBranches()->FindObject("dphiMET"))
-        theTree->SetBranchAddress("dphiMET",      &(myEvent->dphiMET));
+    //if(theTree->GetListOfBranches()->FindObject("dphiMET"))
+        //theTree->SetBranchAddress("dphiMET",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
+        theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
     #endif
 
 
@@ -704,8 +708,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jup_ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jup"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jup",      &(myEvent->dphi_ak4pfjets_met));
-    if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jup"))
-        theTree->SetBranchAddress("dphiMET_rl_jup",      &(myEvent->dphiMET));
+    //if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jup"))
+    //    theTree->SetBranchAddress("dphiMET_rl_jup",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_phi_rl_jup"))
+        theTree->SetBranchAddress("pfmet_phi_rl_jup",               &(myEvent->pfmet_phi));
     #endif
 
     #ifdef USE_VAR_BASELINE_DOWN
@@ -723,8 +729,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jdown_ngoodbtags",              &(myEvent->ngoodbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jdown"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jdown",      &(myEvent->dphi_ak4pfjets_met));
-    if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jdown"))
-        theTree->SetBranchAddress("dphiMET_rl_jdown",      &(myEvent->dphiMET));
+    //if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jdown"))
+    //    theTree->SetBranchAddress("dphiMET_rl_jdown",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_phi_rl_jdown"))
+        theTree->SetBranchAddress("pfmet_phi_rl_jdown",               &(myEvent->pfmet_phi));
     #endif
 
     #ifdef USE_GLOBAL_VAR
@@ -742,8 +750,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("mass_chargino",                  &(myEvent->mass_chargino));
     if(theTree->GetListOfBranches()->FindObject("mass_stop"))
         theTree->SetBranchAddress("mass_stop",                  &(myEvent->mass_stop));
-    if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
-        theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
     if(theTree->GetListOfBranches()->FindObject("Mlb_closestb"))
         theTree->SetBranchAddress("Mlb_closestb",                     &(myEvent->Mlb));
     //theTree->SetBranchAddress("Mlb_leadb",               &(myEvent->Mlb_leadb));
@@ -910,6 +916,17 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->lep2_phi = myEvent->lep2_p4.Phi();
     myEvent->lep2_mass = sqrt(myEvent->lep2_p4.M2());
     #endif
+
+    myEvent->dphiMET = abs(myEvent->lep1_phi - myEvent->pfmet_phi) < TMath::Pi()  ? abs(myEvent->lep1_phi - myEvent->pfmet_phi) : 2*TMath::Pi() - abs(myEvent->lep1_phi - myEvent->pfmet_phi) ;
+    //cout << "dphimetlep " << myEvent->dphiMET << endl;
+
+    //myEvent->dphiMET = 0;
+    //cout << "dphimetlep intermediate " << myEvent->dphiMET << endl;
+
+    //TVector3 lepVec( myEvent->lep1_p4.x(),  myEvent->lep1_p4.y(),  myEvent->lep1_p4.z() );
+    //TVector3 metVec( myEvent->pfmet*cos(myEvent->pfmet_phi), myEvent->pfmet*sin(myEvent->pfmet_phi), 0 );
+    //myEvent->dphiMET = fabs( lepVec.DeltaPhi(metVec) ); 
+    //cout << "dphimetlep second try " << myEvent->dphiMET << endl;
 
     myEvent->genqs_p4 = *(myEvent->p4genqs_p4);
     for(uint32_t t = 0; t<myEvent->genqs_id->size(); t++)
