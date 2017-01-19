@@ -28,7 +28,13 @@
  </Regions>
  <Bins>
   <Bin name="_AB_" label="_AB_" selection="Njets!>=3 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
-  <Bin name="_CDEFGH_" label="_CD_" selection="Njets>=4 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_CD_" label="_CD_" selection="Njets>=4 and tmod!>0 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_EFGH_" label="_EFGH_" selection="Njets>=4 and tmod>0 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
   <Bin name="_I_" label="_I_" selection="Njets>=5 and lep1_pt!>150 and dphiML!>2" METbins="250,inf" />
+  <Bin name="_CDEFGH_" label="_CD_" selection="Njets>=4 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_NJlowTM_" label="_NJlowTM_" selection="tmod!>0 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_NJmidTM_" label="_NJmidTM_" selection="tmod>0 and tmod!>10 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_NJhighTM_" label="_NJhighTM_" selection="tmod>10 and DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
+  <Bin name="_NJ_" label="_NJ_" selection="DPhi_jmet>=0.8 and ( (Mlb>175 and tightCSVV2()) or Mlb!>=175 )" METbins="250,inf" />
  </Bins>
 </body>

@@ -23,10 +23,17 @@ int main(){
         //vector<string> systematicsUP = {"Q2up" };
         //vector<string> systematicsDN = {"Q2down"};
         //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CD_250lessMETlessInf", "SR1l_EFGH_250lessMETlessInf", "SR1l_I_250lessMETlessInf"};
-        vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf", "SR1l_I_250lessMETlessInf"};
+        //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf", "SR1l_I_250lessMETlessInf"};
+        //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf"};
+        //vector<string> regions = {"SR1l_NJlowTM_250lessMETlessInf", "SR1l_NJmidTM_250lessMETlessInf", "SR1l_NJhighTM_250lessMETlessInf"};
+        vector<string> regions = {"SR1l_NJ_250lessMETlessInf"};
         //vector<string> variable = {"METAB", "METCD", "MET3EFGHI", "MET3EFGHI"};
-        //vector<string> variable = {"Mlb", "Mlb", "Mlb", "Mlb"};
-        vector<string> variable = {"topnessMod", "topnessMod", "topnessMod" };
+        //vector<string> variable = {"MET", "MET"};
+        //vector<string> variable = {"Mlb", "Mlb"};
+        //vector<string> variable = {"Njets", "Njets","Njets"};
+        //vector<string> variable = {"Njets"};
+        vector<string> variable = {"MET"};
+        //vector<string> variable = {"topnessMod", "topnessMod" };
 
         //per each region
         for(uint32_t r =0; r<regions.size(); r++)
@@ -38,14 +45,14 @@ int main(){
                 //read systematics
                 for(uint32_t u=0; u<systematicsDN.size(); u++)
                 {
-		    vector<TH1D*> h = sonic.Get1DHistoCloneFromFile("plotsRatios", "1DSuperimposedNoNorm", variable.at(r),processes,regions.at(r)+systematicsDN.at(u),"lepChannel");
+		    vector<TH1D*> h = sonic.Get1DHistoCloneFromFile("METplotsttZplotsRatios", "1DSuperimposedNoNorm", variable.at(r),processes,regions.at(r)+systematicsDN.at(u),"lepChannel");
 		    down.push_back(h.at(0));
                     cout << "region dn " << regions.at(r)+systematicsDN.at(u) << endl;
                 }
 		
                 for(uint32_t uu=0; uu<systematicsUP.size(); uu++)
                 {
-		    vector<TH1D*> hh = sonic.Get1DHistoCloneFromFile("plotsRatios", "1DSuperimposedNoNorm",variable.at(r),processes,regions.at(r)+systematicsUP.at(uu),"lepChannel");
+		    vector<TH1D*> hh = sonic.Get1DHistoCloneFromFile("METplotsttZplotsRatios", "1DSuperimposedNoNorm",variable.at(r),processes,regions.at(r)+systematicsUP.at(uu),"lepChannel");
 		    up.push_back(hh.at(0));
                     cout << "region up " << (regions.at(r)+systematicsUP.at(uu)).c_str() << endl;
                 }
@@ -72,7 +79,7 @@ int main(){
 
                //open file and read pads
 	       TFile* f = NULL;
-               f = new TFile("plotsRatios/1DDataMCComparison.root");
+               f = new TFile("METplotsttZplotsRatios/1DDataMCComparison.root");
 	       TCanvas * c = NULL;
 	       c = dynamic_cast<TCanvas*>(f->Get(("lepChannel/"+regions.at(r)+"/"+variable.at(r)).c_str()));
 	       TList *t = NULL;
@@ -85,6 +92,8 @@ int main(){
 	       m = main->GetListOfPrimitives();
 	       cout << "m " << m << " last " << m->Last() << endl;
 	       TH1D* theHist = dynamic_cast<TH1D*>(m->At(2));
+	       THStack* theHistStack = dynamic_cast<THStack*>(m->At(1));
+               cout << "stack " << theHistStack << endl; 
 
                //ratio pad
 	       TPad *ratio = NULL;
@@ -122,19 +131,35 @@ int main(){
                    }
 
                }
+               main->cd();
+               theHist->SetFillColor(kMagenta-3);
+               theHist->SetLineColor(kMagenta-3);
+               theHist->SetFillStyle(1001);
+               theHist->SetMarkerStyle(8);
+               theHist->SetMarkerColor(kBlack);
+               //TH1* theHistStackH= theHistStack->GetHistogram();
+               //cout << "nstack hist" << theHistStack->GetNhists() << endl;
+               //theHistStackH->SetFillColor(kBlack);
+               //theHistStackH->SetFillStyle(1001);
+               //theHistStackH->Draw("same");
+               //theHistStack->Paint("noclear");
+               theHist->Draw("same E2");
+
 	       ratio->cd();
 	       theRatio->SetMarkerStyle(1);
 	       theRatio->SetFillColor(kMagenta-3);
 	       theRatio->SetFillStyle(1001);
-	       theRatio->Draw("E3");
+	       theRatio->Draw("E2");
 	       theRatioDN->Draw("same");
 	       theRatioUP->Draw("same");
 	       cout << "c " << c << " p1 " << main << " p2 " << ratio << "TH1D " << theRatio << " TH1 main " << theHist << endl;
+               
 
 	       TCanvas *can = new TCanvas((regions.at(r)+"Can").c_str(),(regions.at(r)+"Can").c_str());
 	       can->cd();
 	       main->Draw();
 	       ratio->Draw("same");
+	       can->SaveAs((regions.at(r)+variable.at(r)+"Plots.root").c_str());
 	       can->SaveAs((regions.at(r)+variable.at(r)+"Plots.eps").c_str());
                //delete main;
                //delete ratio;

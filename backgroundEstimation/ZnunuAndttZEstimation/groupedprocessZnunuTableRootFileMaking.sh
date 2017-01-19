@@ -1,0 +1,14 @@
+make ZnunuUnctTablePerProcess
+make ZnunuUnctRootFileSummed
+make ZnunuUnctSummedTables
+make ZnunuUnctTablePerProcessTheoreticalUnc
+make ZnunuSumGroupedTables
+./ZnunuUnctTablePerProcess yieldMorttZ.tab signalRegMor.txt statNames.txt 17 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ttZ notgroup
+./ZnunuUnctTablePerProcess yieldMorWZ.tab signalRegMor.txt statNames.txt 17 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab WZ notgroup
+./ZnunuUnctTablePerProcess groupRegionsttZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ttZ group
+./ZnunuUnctTablePerProcess groupRegionsWZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab WZ group
+./ZnunuSumGroupedTables ttZgrouptableUnc.tab WZgrouptableUnc.tab ZZgrouptableUnc.tab grouprealregions.txt groupuncertainties.txt groupttZWZZZ
+./ZnunuUnctTablePerProcessTheoreticalUnc ttZtableUnc.tab ttZtableUncRelHigher.tab realregions.txt uncertainties.txt groupttZWZZZsummedprocessesRelHigherZnunu.tab grouprealregions.txt groupuncertainties.txt ttZ
+./ZnunuUnctTablePerProcessTheoreticalUnc WZtableUnc.tab WZtableUncRelHigher.tab realregions.txt uncertainties.txt groupttZWZZZsummedprocessesRelHigherZnunu.tab grouprealregions.txt groupuncertainties.txt WZ
+./ZnunuUnctSummedTables recomputedttZtableUnc.tab recomputedWZtableUnc.tab recomputedZZtableUnc.tab realregions.txt uncertainties.txt group
+./ZnunuUnctRootFileSummed groupsummedprocessesZnunu.tab groupsummedprocessesRelHigherZnunu.tab realregions.txt uncertainties.txt

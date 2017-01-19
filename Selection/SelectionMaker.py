@@ -158,8 +158,9 @@ class Selection:
 	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
-               systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
-               #systs = ["PUdown", "PUup"]
+               systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+               #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
+               #systs = ["PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
                #systs = []
                for syst in systs:
 	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
@@ -307,10 +308,9 @@ class Selection:
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
-                 #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
-                 #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
-                 systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
-                 #systs = ["PUdown", "PUup"]
+                 systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
+                 #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
+                 #systs = ["PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
                  #systs = []
                  for syst in systs:
 	             dump= "\"" +name+syst+"\""

@@ -160,6 +160,12 @@ int main(int argc, char *argv[]){
            //first there is real region value
            if(r == 0 || r%nUnc == 0)
            {
+               
+               /*if(resall.error() > resall.value())
+               {
+                   Figure newF(resall.value(), resall.value());
+                   resall = newF;
+               }*/
                l=0;
                uncLine++;
                yieldVal = resall;
@@ -302,8 +308,8 @@ int main(int argc, char *argv[]){
 		   thigher.Set("normalizationDN", realReg.at(j), Figure(hn.value()*100,0));
 		   
 	       }
-
-		//recompute PU and set the normalization unc
+        }
+		/*//recompute PU and set the normalization unc
 		Figure PUDNtot(0.0);
 		Figure PUUPtot(0.0);
 		//Figure PUyieldtot(0.0);
@@ -321,14 +327,26 @@ int main(int argc, char *argv[]){
 		{
 		    
 		    PUY = tI.Get("yield", realReg.at(p));
-		    tI.Set("PUdown", realReg.at(p), PUY - (PUY*fPerDiff));
-		    tI.Set("PUup", realReg.at(p), PUY + (PUY*fPerDiff));
-		    trel.Set("PUdown", realReg.at(p), Figure(fPerDiff.value()*100,0));
-		    trel.Set("PUup", realReg.at(p),  Figure(fPerDiff.value()*100,0));
-		    thigher.Set("PUdown", realReg.at(p),  Figure(fPerDiff.value()*100,0));
+                    if(PUY.value() !=0)
+                    {
+		        tI.Set("PUdown", realReg.at(p), PUY - (PUY*fPerDiff));
+		        tI.Set("PUup", realReg.at(p), PUY + (PUY*fPerDiff));
+		        trel.Set("PUdown", realReg.at(p), Figure(fPerDiff.value()*100,0));
+		        trel.Set("PUup", realReg.at(p),  Figure(fPerDiff.value()*100,0));
+		        thigher.Set("PUdown", realReg.at(p),  Figure(fPerDiff.value()*100,0));
+                    }
+                    else
+                    {
+		        tI.Set("PUdown", realReg.at(p), Figure(0,0));
+		        tI.Set("PUup", realReg.at(p),Figure(0,0));
+		        trel.Set("PUdown", realReg.at(p), Figure(0,0));
+		        trel.Set("PUup", realReg.at(p),  Figure(0,0));
+		        thigher.Set("PUdown", realReg.at(p),  Figure(0,0));
+
+                    }
 
 		}
-        }
+        }*/
 
         //group values to compute btetter yields
         //first compute the grouped yields and put them to vector

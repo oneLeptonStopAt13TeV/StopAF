@@ -7,18 +7,15 @@
 #include "TLorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
 
+#define USE_TTZ
+//#define USE_WZ
+//#define USE_ZZ
+
 #define USE_VAR_BASELINE
-//#define USE_VAR_BASELINE_UP
-//#define USE_VAR_BASELINE_DOWN
 #define USE_LEP1
 #define USE_LEP2
-//#define USE_SKIMMING_VAR
 #define USE_JETS
 #define USE_JETS_EXT
-//#define USE_GEN_INFO
-//#define USE_GEN_INFO_EXT
-////#define USE_LEP1_EXT
-////#define USE_LEP2_EXT
 #define USE_PV
 #define USE_WEIGHTS
 #define USE_GLOBAL_VAR
@@ -47,6 +44,8 @@ TAxis *yaxis = NULL;
 bool checkNegativeYields = false;
 uint32_t nthentry = 0;
 
+string outputName = "";
+
     float getWeight(string currentProcessType, float lumi);
 map< pair<uint32_t,uint32_t>, string > scanMap;
 
@@ -62,22 +61,42 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
     totalNumberOfWorkers = 1;
 
 
 
-    AddProcessClass("Znunu", "Znunu", "background", kBlue);//@MJ@ TODO K-factor?
-    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","Znunu",0,0);
-    	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","Znunu",0,0);
-    	//AddDataset("ttZJets_13TeV_madgraphMLM","Znunu",0,0);
+    #ifdef USE_WZ
+    AddProcessClass("WZ", "WZ", "background", kBlue);
+    	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","WZ",0,0);
+    outputName = "yieldMorWZ";
+    #endif
+
+    #ifdef USE_ZZ
+    AddProcessClass("ZZ", "ZZ", "background", kBlue);
+    	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZ",0,0);
+    outputName = "yieldMorWZ";
+    #endif
+
+    #ifdef USE_TTZ
+    AddProcessClass("ttZ", "ttZ", "background", kBlue);
+        AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
+        AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
+    outputName = "yieldMorttZ";
+    #endif
 
 
-//regions
+
+//regions //@MJ@ TODO add I
 AddRegion("SR1l_A_250lessMETlessInf","SR1l_A_250lessMETlessInf",&SR1l_A_250lessMETlessInf);
 AddRegion("SR1l_A_250lessMETlessInfPUdown","SR1l_A_250lessMETlessInfPUdown",&SR1l_A_250lessMETlessInf);
 AddRegion("SR1l_A_250lessMETlessInfPUup","SR1l_A_250lessMETlessInfPUup",&SR1l_A_250lessMETlessInf);
-/*AddRegion("SR1l_B_250lessMETlessInf","SR1l_B_250lessMETlessInf",&SR1l_B_250lessMETlessInf);
+AddRegion("SR1l_B_250lessMETlessInf","SR1l_B_250lessMETlessInf",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_B_250lessMETlessInfPUdown","SR1l_B_250lessMETlessInfPUdown",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_B_250lessMETlessInfPUup","SR1l_B_250lessMETlessInfPUup",&SR1l_B_250lessMETlessInf);
 AddRegion("SR1l_C_250lessMETlessInf","SR1l_C_250lessMETlessInf",&SR1l_C_250lessMETlessInf);
@@ -97,7 +116,10 @@ AddRegion("SR1l_G_250lessMETlessInfPUdown","SR1l_G_250lessMETlessInfPUdown",&SR1
 AddRegion("SR1l_G_250lessMETlessInfPUup","SR1l_G_250lessMETlessInfPUup",&SR1l_G_250lessMETlessInf);
 AddRegion("SR1l_H_250lessMETlessInf","SR1l_H_250lessMETlessInf",&SR1l_H_250lessMETlessInf);
 AddRegion("SR1l_H_250lessMETlessInfPUdown","SR1l_H_250lessMETlessInfPUdown",&SR1l_H_250lessMETlessInf);
-AddRegion("SR1l_H_250lessMETlessInfPUup","SR1l_H_250lessMETlessInfPUup",&SR1l_H_250lessMETlessInf);*/
+AddRegion("SR1l_H_250lessMETlessInfPUup","SR1l_H_250lessMETlessInfPUup",&SR1l_H_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInf","SR1l_I_250lessMETlessInf",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfPUdown","SR1l_I_250lessMETlessInfPUdown",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfPUup","SR1l_I_250lessMETlessInfPUup",&SR1l_I_250lessMETlessInf);
 
     // ------------------
     // Channels
@@ -147,7 +169,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     weightV.clear();
     float nEvents =  myEvent.wNormalization.at(22);
     //for number of SR
-    for(uint32_t SR=0; SR<1; SR++) //@MJ@ TODO nr of sig regions changes
+    for(uint32_t SR=0; SR<8; SR++) //@MJ@ TODO nr of sig regions changes
     {
 
         float w = 0;
@@ -221,12 +243,11 @@ void BabyScrewdriver::PostProcessingStep()
     //  Tables and other stuff
     // ######################
 
-//vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup" , "SR1l_B_250lessMETlessInf" , "SR1l_B_250lessMETlessInfPUdown" , "SR1l_B_250lessMETlessInfPUup" , "SR1l_C_250lessMETlessInf" , "SR1l_C_250lessMETlessInfPUdown" , "SR1l_C_250lessMETlessInfPUup" , "SR1l_D_250lessMETlessInf" , "SR1l_D_250lessMETlessInfPUdown" , "SR1l_D_250lessMETlessInfPUup" , "SR1l_E_250lessMETlessInf" , "SR1l_E_250lessMETlessInfPUdown" , "SR1l_E_250lessMETlessInfPUup" , "SR1l_F_250lessMETlessInf" , "SR1l_F_250lessMETlessInfPUdown" , "SR1l_F_250lessMETlessInfPUup" , "SR1l_G_250lessMETlessInf" , "SR1l_G_250lessMETlessInfPUdown" , "SR1l_G_250lessMETlessInfPUup" , "SR1l_H_250lessMETlessInf" , "SR1l_H_250lessMETlessInfPUdown" , "SR1l_H_250lessMETlessInfPUup" };
-vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup"};
+vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessInfPUdown" , "SR1l_A_250lessMETlessInfPUup" , "SR1l_B_250lessMETlessInf" , "SR1l_B_250lessMETlessInfPUdown" , "SR1l_B_250lessMETlessInfPUup" , "SR1l_C_250lessMETlessInf" , "SR1l_C_250lessMETlessInfPUdown" , "SR1l_C_250lessMETlessInfPUup" , "SR1l_D_250lessMETlessInf" , "SR1l_D_250lessMETlessInfPUdown" , "SR1l_D_250lessMETlessInfPUup" , "SR1l_E_250lessMETlessInf" , "SR1l_E_250lessMETlessInfPUdown" , "SR1l_E_250lessMETlessInfPUup" , "SR1l_F_250lessMETlessInf" , "SR1l_F_250lessMETlessInfPUdown" , "SR1l_F_250lessMETlessInfPUup" , "SR1l_G_250lessMETlessInf" , "SR1l_G_250lessMETlessInfPUdown" , "SR1l_G_250lessMETlessInfPUup" , "SR1l_H_250lessMETlessInf" , "SR1l_H_250lessMETlessInfPUdown" , "SR1l_H_250lessMETlessInfPUup", "SR1l_I_250lessMETlessInf" , "SR1l_I_250lessMETlessInfPUdown" , "SR1l_I_250lessMETlessInfPUup" };
 
 
-    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print("yieldMorPU.tab", 6);
-    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex("yieldMorPU.tex", 6);
+    TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print(outputName+"PU.tab", 6);
+    TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex(outputName+"yieldMorPU.tex", 6);
 
     ofstream sigfile("signalRegMorPU.txt");
     if (sigfile.is_open())

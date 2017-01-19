@@ -8,6 +8,7 @@
 #include "Math/GenVector/LorentzVector.h"
 
 #define USE_TTZ
+//#define USE_TTZNLO
 //#define USE_WZ
 //#define USE_ZZ
 
@@ -59,8 +60,8 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
-    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11";
     totalNumberOfWorkers = 1;
 
     vector<float> METBins1 = {250,350,450,600};
@@ -68,25 +69,34 @@ void BabyScrewdriver::Init()
     vector<float> METBins3 = {250,350,450,550};
     vector<float> topnessB = {-20,0,10,20};
 
-    AddVariable("MET", "E_{T}^{miss}",  "GeV", 8 ,250, 650,  &(myEvent.pfmet), "noUnderflowInFirstBin,logY");
+    AddVariable("MET", "E_{T}^{miss}",  "GeV", 4 ,250, 650,  &(myEvent.pfmet), "noUnderflowInFirstBin,logY");
     AddVariable("METAB", "E_{T}^{miss}",  "GeV", (int) (METBins1.size()-1), METBins1.data(),  &(myEvent.pfmet), "noUnderflowInFirstBin,logY");
     AddVariable("METCD", "E_{T}^{miss}",  "GeV", (int) (METBins2.size()-1), METBins2.data(),  &(myEvent.pfmet),  "noUnderflowInFirstBin,logY");
     AddVariable("MET3EFGHI", "E_{T}^{miss}",  "GeV", (int) (METBins3.size()-1), METBins3.data(),  &(myEvent.pfmet), "noUnderflowInFirstBin,logY");
     AddVariable("Mlb", "M_{lb}", "GeV", 2 , 0, 350,  &(myEvent.Mlb), "noUnderflowInFirstBin,logY");
     AddVariable("topnessMod", "t_{mod}", "GeV", (int)(topnessB.size()-1),topnessB.data(),  &(myEvent.topnessMod), "logY");
+    AddVariable("Njets", "N_{jets}", "",5,2,7,  &(myEvent.ngoodjets));
 
     #ifdef USE_TTZ
-    AddProcessClass("ttZ", "ttZ", "background", kMagenta-3);
+    AddProcessClass("ttZ", "ttZ", "background", kWhite);
     	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
+/*    	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
+    	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);*/
         outputName = "METplotsttZ";
     #endif
-    	
+
+    #ifdef USE_TTZNLO
+    AddProcessClass("ttZ", "ttZ", "background", kWhite);
+        AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZ",0,0);
+    //outputName = "yieldZnunuMorTTZNLO";
+    outputName = "METplotsttZNLO";
+    #endif
+    
+	
     #ifdef USE_ZZWZ
     AddProcessClass("ZZWZ", "ZZWZ", "background", kBlue);
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","ZZWZ",0,0);
@@ -107,28 +117,142 @@ void BabyScrewdriver::Init()
     #endif
 
 	//regions
+
 AddRegion("SR1l_AB_250lessMETlessInf","SR1l_AB_250lessMETlessInf",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfLSFdown","SR1l_AB_250lessMETlessInfLSFdown",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfLSFup","SR1l_AB_250lessMETlessInfLSFup",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfBTlightDown","SR1l_AB_250lessMETlessInfBTlightDown",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfBTlightUp","SR1l_AB_250lessMETlessInfBTlightUp",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfBTheavyDown","SR1l_AB_250lessMETlessInfBTheavyDown",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfBTheavyUp","SR1l_AB_250lessMETlessInfBTheavyUp",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfPUdown","SR1l_AB_250lessMETlessInfPUdown",&SR1l_AB_250lessMETlessInf);
+AddRegion("SR1l_AB_250lessMETlessInfPUup","SR1l_AB_250lessMETlessInfPUup",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfPDFdown","SR1l_AB_250lessMETlessInfPDFdown",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfPDFup","SR1l_AB_250lessMETlessInfPDFup",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfalphaSdown","SR1l_AB_250lessMETlessInfalphaSdown",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfalphaSup","SR1l_AB_250lessMETlessInfalphaSup",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfQ2down","SR1l_AB_250lessMETlessInfQ2down",&SR1l_AB_250lessMETlessInf);
 AddRegion("SR1l_AB_250lessMETlessInfQ2up","SR1l_AB_250lessMETlessInfQ2up",&SR1l_AB_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInf","SR1l_CDEFGH_250lessMETlessInf",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfPDFdown","SR1l_CDEFGH_250lessMETlessInfPDFdown",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfPDFup","SR1l_CDEFGH_250lessMETlessInfPDFup",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfalphaSdown","SR1l_CDEFGH_250lessMETlessInfalphaSdown",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfalphaSup","SR1l_CDEFGH_250lessMETlessInfalphaSup",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfQ2down","SR1l_CDEFGH_250lessMETlessInfQ2down",&SR1l_CDEFGH_250lessMETlessInf);
-AddRegion("SR1l_CDEFGH_250lessMETlessInfQ2up","SR1l_CDEFGH_250lessMETlessInfQ2up",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInf","SR1l_CD_250lessMETlessInf",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfLSFdown","SR1l_CD_250lessMETlessInfLSFdown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfLSFup","SR1l_CD_250lessMETlessInfLSFup",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfBTlightDown","SR1l_CD_250lessMETlessInfBTlightDown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfBTlightUp","SR1l_CD_250lessMETlessInfBTlightUp",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfBTheavyDown","SR1l_CD_250lessMETlessInfBTheavyDown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfBTheavyUp","SR1l_CD_250lessMETlessInfBTheavyUp",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfPUdown","SR1l_CD_250lessMETlessInfPUdown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfPUup","SR1l_CD_250lessMETlessInfPUup",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfPDFdown","SR1l_CD_250lessMETlessInfPDFdown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfPDFup","SR1l_CD_250lessMETlessInfPDFup",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfalphaSdown","SR1l_CD_250lessMETlessInfalphaSdown",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfalphaSup","SR1l_CD_250lessMETlessInfalphaSup",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfQ2down","SR1l_CD_250lessMETlessInfQ2down",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_CD_250lessMETlessInfQ2up","SR1l_CD_250lessMETlessInfQ2up",&SR1l_CD_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInf","SR1l_EFGH_250lessMETlessInf",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfLSFdown","SR1l_EFGH_250lessMETlessInfLSFdown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfLSFup","SR1l_EFGH_250lessMETlessInfLSFup",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfBTlightDown","SR1l_EFGH_250lessMETlessInfBTlightDown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfBTlightUp","SR1l_EFGH_250lessMETlessInfBTlightUp",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfBTheavyDown","SR1l_EFGH_250lessMETlessInfBTheavyDown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfBTheavyUp","SR1l_EFGH_250lessMETlessInfBTheavyUp",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfPUdown","SR1l_EFGH_250lessMETlessInfPUdown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfPUup","SR1l_EFGH_250lessMETlessInfPUup",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfPDFdown","SR1l_EFGH_250lessMETlessInfPDFdown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfPDFup","SR1l_EFGH_250lessMETlessInfPDFup",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfalphaSdown","SR1l_EFGH_250lessMETlessInfalphaSdown",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfalphaSup","SR1l_EFGH_250lessMETlessInfalphaSup",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfQ2down","SR1l_EFGH_250lessMETlessInfQ2down",&SR1l_EFGH_250lessMETlessInf);
+AddRegion("SR1l_EFGH_250lessMETlessInfQ2up","SR1l_EFGH_250lessMETlessInfQ2up",&SR1l_EFGH_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInf","SR1l_I_250lessMETlessInf",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfLSFdown","SR1l_I_250lessMETlessInfLSFdown",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfLSFup","SR1l_I_250lessMETlessInfLSFup",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfBTlightDown","SR1l_I_250lessMETlessInfBTlightDown",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfBTlightUp","SR1l_I_250lessMETlessInfBTlightUp",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfBTheavyDown","SR1l_I_250lessMETlessInfBTheavyDown",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfBTheavyUp","SR1l_I_250lessMETlessInfBTheavyUp",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfPUdown","SR1l_I_250lessMETlessInfPUdown",&SR1l_I_250lessMETlessInf);
+AddRegion("SR1l_I_250lessMETlessInfPUup","SR1l_I_250lessMETlessInfPUup",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfPDFdown","SR1l_I_250lessMETlessInfPDFdown",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfPDFup","SR1l_I_250lessMETlessInfPDFup",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfalphaSdown","SR1l_I_250lessMETlessInfalphaSdown",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfalphaSup","SR1l_I_250lessMETlessInfalphaSup",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfQ2down","SR1l_I_250lessMETlessInfQ2down",&SR1l_I_250lessMETlessInf);
 AddRegion("SR1l_I_250lessMETlessInfQ2up","SR1l_I_250lessMETlessInfQ2up",&SR1l_I_250lessMETlessInf);
-
+AddRegion("SR1l_CDEFGH_250lessMETlessInf","SR1l_CDEFGH_250lessMETlessInf",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfLSFdown","SR1l_CDEFGH_250lessMETlessInfLSFdown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfLSFup","SR1l_CDEFGH_250lessMETlessInfLSFup",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfBTlightDown","SR1l_CDEFGH_250lessMETlessInfBTlightDown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfBTlightUp","SR1l_CDEFGH_250lessMETlessInfBTlightUp",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfBTheavyDown","SR1l_CDEFGH_250lessMETlessInfBTheavyDown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfBTheavyUp","SR1l_CDEFGH_250lessMETlessInfBTheavyUp",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfPUdown","SR1l_CDEFGH_250lessMETlessInfPUdown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfPUup","SR1l_CDEFGH_250lessMETlessInfPUup",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfPDFdown","SR1l_CDEFGH_250lessMETlessInfPDFdown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfPDFup","SR1l_CDEFGH_250lessMETlessInfPDFup",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfalphaSdown","SR1l_CDEFGH_250lessMETlessInfalphaSdown",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfalphaSup","SR1l_CDEFGH_250lessMETlessInfalphaSup",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfQ2down","SR1l_CDEFGH_250lessMETlessInfQ2down",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_CDEFGH_250lessMETlessInfQ2up","SR1l_CDEFGH_250lessMETlessInfQ2up",&SR1l_CDEFGH_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInf","SR1l_NJlowTM_250lessMETlessInf",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfLSFdown","SR1l_NJlowTM_250lessMETlessInfLSFdown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfLSFup","SR1l_NJlowTM_250lessMETlessInfLSFup",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfBTlightDown","SR1l_NJlowTM_250lessMETlessInfBTlightDown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfBTlightUp","SR1l_NJlowTM_250lessMETlessInfBTlightUp",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfBTheavyDown","SR1l_NJlowTM_250lessMETlessInfBTheavyDown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfBTheavyUp","SR1l_NJlowTM_250lessMETlessInfBTheavyUp",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfPUdown","SR1l_NJlowTM_250lessMETlessInfPUdown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfPUup","SR1l_NJlowTM_250lessMETlessInfPUup",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfPDFdown","SR1l_NJlowTM_250lessMETlessInfPDFdown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfPDFup","SR1l_NJlowTM_250lessMETlessInfPDFup",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfalphaSdown","SR1l_NJlowTM_250lessMETlessInfalphaSdown",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfalphaSup","SR1l_NJlowTM_250lessMETlessInfalphaSup",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfQ2down","SR1l_NJlowTM_250lessMETlessInfQ2down",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJlowTM_250lessMETlessInfQ2up","SR1l_NJlowTM_250lessMETlessInfQ2up",&SR1l_NJlowTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInf","SR1l_NJmidTM_250lessMETlessInf",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfLSFdown","SR1l_NJmidTM_250lessMETlessInfLSFdown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfLSFup","SR1l_NJmidTM_250lessMETlessInfLSFup",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfBTlightDown","SR1l_NJmidTM_250lessMETlessInfBTlightDown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfBTlightUp","SR1l_NJmidTM_250lessMETlessInfBTlightUp",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfBTheavyDown","SR1l_NJmidTM_250lessMETlessInfBTheavyDown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfBTheavyUp","SR1l_NJmidTM_250lessMETlessInfBTheavyUp",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfPUdown","SR1l_NJmidTM_250lessMETlessInfPUdown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfPUup","SR1l_NJmidTM_250lessMETlessInfPUup",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfPDFdown","SR1l_NJmidTM_250lessMETlessInfPDFdown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfPDFup","SR1l_NJmidTM_250lessMETlessInfPDFup",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfalphaSdown","SR1l_NJmidTM_250lessMETlessInfalphaSdown",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfalphaSup","SR1l_NJmidTM_250lessMETlessInfalphaSup",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfQ2down","SR1l_NJmidTM_250lessMETlessInfQ2down",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJmidTM_250lessMETlessInfQ2up","SR1l_NJmidTM_250lessMETlessInfQ2up",&SR1l_NJmidTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInf","SR1l_NJhighTM_250lessMETlessInf",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfLSFdown","SR1l_NJhighTM_250lessMETlessInfLSFdown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfLSFup","SR1l_NJhighTM_250lessMETlessInfLSFup",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfBTlightDown","SR1l_NJhighTM_250lessMETlessInfBTlightDown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfBTlightUp","SR1l_NJhighTM_250lessMETlessInfBTlightUp",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfBTheavyDown","SR1l_NJhighTM_250lessMETlessInfBTheavyDown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfBTheavyUp","SR1l_NJhighTM_250lessMETlessInfBTheavyUp",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfPUdown","SR1l_NJhighTM_250lessMETlessInfPUdown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfPUup","SR1l_NJhighTM_250lessMETlessInfPUup",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfPDFdown","SR1l_NJhighTM_250lessMETlessInfPDFdown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfPDFup","SR1l_NJhighTM_250lessMETlessInfPDFup",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfalphaSdown","SR1l_NJhighTM_250lessMETlessInfalphaSdown",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfalphaSup","SR1l_NJhighTM_250lessMETlessInfalphaSup",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfQ2down","SR1l_NJhighTM_250lessMETlessInfQ2down",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJhighTM_250lessMETlessInfQ2up","SR1l_NJhighTM_250lessMETlessInfQ2up",&SR1l_NJhighTM_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInf","SR1l_NJ_250lessMETlessInf",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfLSFdown","SR1l_NJ_250lessMETlessInfLSFdown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfLSFup","SR1l_NJ_250lessMETlessInfLSFup",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfBTlightDown","SR1l_NJ_250lessMETlessInfBTlightDown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfBTlightUp","SR1l_NJ_250lessMETlessInfBTlightUp",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfBTheavyDown","SR1l_NJ_250lessMETlessInfBTheavyDown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfBTheavyUp","SR1l_NJ_250lessMETlessInfBTheavyUp",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfPUdown","SR1l_NJ_250lessMETlessInfPUdown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfPUup","SR1l_NJ_250lessMETlessInfPUup",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfPDFdown","SR1l_NJ_250lessMETlessInfPDFdown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfPDFup","SR1l_NJ_250lessMETlessInfPDFup",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfalphaSdown","SR1l_NJ_250lessMETlessInfalphaSdown",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfalphaSup","SR1l_NJ_250lessMETlessInfalphaSup",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfQ2down","SR1l_NJ_250lessMETlessInfQ2down",&SR1l_NJ_250lessMETlessInf);
+AddRegion("SR1l_NJ_250lessMETlessInfQ2up","SR1l_NJ_250lessMETlessInfQ2up",&SR1l_NJ_250lessMETlessInf);
     // ------------------
     // Channels
     // ------------------
@@ -183,11 +307,43 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     float nEvents =  myEvent.wNormalization.at(22);
     float SF = 1.37;
     //for number of SR
-    for(uint32_t SR=0; SR<3; SR++) //@MJ@ TODO nr of sig regions changes
+    for(uint32_t SR=0; SR<9; SR++) //@MJ@ TODO nr of sig regions changes
     {
         float w = 0;
         //normal
-        weightV.push_back(weightLumi*SF);
+        weightV.push_back(weightLumi*SF); //@MJ@ TODO do not forget SF
+        //LSFdown
+        if(counter == 1) statnames << "lepSFDN" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF_down*( nEvents / myEvent.wNormalization.at(30) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ));
+        weightV.push_back(w);
+        //LSFup
+        if(counter == 1) statnames << "lepSFUP" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF_up*( nEvents / myEvent.wNormalization.at(29) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ));
+        weightV.push_back(w);
+        //BTlightdown
+        if(counter == 1) statnames << "btagLightDN" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_DN*( nEvents / myEvent.wNormalization.at(18) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        weightV.push_back(w);
+        //BTlightup
+        if(counter == 1) statnames << "btagLightUP" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_light_UP*( nEvents / myEvent.wNormalization.at(16) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        weightV.push_back(w);
+        //BTheabydown
+        if(counter == 1) statnames << "btagHeavyDN" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_DN*( nEvents / myEvent.wNormalization.at(17) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        weightV.push_back(w);
+        //BTheavyup
+        if(counter == 1) statnames << "btagHeavyUP" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_btagsf_heavy_UP*( nEvents / myEvent.wNormalization.at(15) ) * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        weightV.push_back(w);
+        //PUdown
+        if(counter == 1) statnames << "PUdown" << endl;
+        w = SF * GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) * myEvent.weight_PUdown; //@MJ@ TODO PU without any normalization?!
+        weightV.push_back(w);
+        //PUup
+        if(counter == 1) statnames << "PUup"<< endl;
+        w = SF * GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) * myEvent.weight_PUup;
+        weightV.push_back(w);
         //PDFdown
         if(counter == 1) statnames << "pdfDN" << endl;
         w = SF * GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs((myEvent.pdf_down_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1) / myEvent.wNormalization.at(11) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
@@ -262,14 +418,14 @@ void BabyScrewdriver::PostProcessingStep()
     cout << "   > Making plots..." << endl;
     MakePlots();
     cout << "   > Saving plots..." << endl;
-    WritePlots("./plotsRatios/");
+    WritePlots("./"+outputName+"plotsRatios/");
 
     // ######################
     //  Tables and other stuff
     // ######################
 
+vector<string> totYield = { "SR1l_AB_250lessMETlessInf" , "SR1l_AB_250lessMETlessInfLSFdown" , "SR1l_AB_250lessMETlessInfLSFup" , "SR1l_AB_250lessMETlessInfBTlightDown" , "SR1l_AB_250lessMETlessInfBTlightUp" , "SR1l_AB_250lessMETlessInfBTheavyDown" , "SR1l_AB_250lessMETlessInfBTheavyUp" , "SR1l_AB_250lessMETlessInfPUdown" , "SR1l_AB_250lessMETlessInfPUup" , "SR1l_AB_250lessMETlessInfPDFdown" , "SR1l_AB_250lessMETlessInfPDFup" , "SR1l_AB_250lessMETlessInfalphaSdown" , "SR1l_AB_250lessMETlessInfalphaSup" , "SR1l_AB_250lessMETlessInfQ2down" , "SR1l_AB_250lessMETlessInfQ2up" , "SR1l_CD_250lessMETlessInf" , "SR1l_CD_250lessMETlessInfLSFdown" , "SR1l_CD_250lessMETlessInfLSFup" , "SR1l_CD_250lessMETlessInfBTlightDown" , "SR1l_CD_250lessMETlessInfBTlightUp" , "SR1l_CD_250lessMETlessInfBTheavyDown" , "SR1l_CD_250lessMETlessInfBTheavyUp" , "SR1l_CD_250lessMETlessInfPUdown" , "SR1l_CD_250lessMETlessInfPUup" , "SR1l_CD_250lessMETlessInfPDFdown" , "SR1l_CD_250lessMETlessInfPDFup" , "SR1l_CD_250lessMETlessInfalphaSdown" , "SR1l_CD_250lessMETlessInfalphaSup" , "SR1l_CD_250lessMETlessInfQ2down" , "SR1l_CD_250lessMETlessInfQ2up" , "SR1l_EFGH_250lessMETlessInf" , "SR1l_EFGH_250lessMETlessInfLSFdown" , "SR1l_EFGH_250lessMETlessInfLSFup" , "SR1l_EFGH_250lessMETlessInfBTlightDown" , "SR1l_EFGH_250lessMETlessInfBTlightUp" , "SR1l_EFGH_250lessMETlessInfBTheavyDown" , "SR1l_EFGH_250lessMETlessInfBTheavyUp" , "SR1l_EFGH_250lessMETlessInfPUdown" , "SR1l_EFGH_250lessMETlessInfPUup" , "SR1l_EFGH_250lessMETlessInfPDFdown" , "SR1l_EFGH_250lessMETlessInfPDFup" , "SR1l_EFGH_250lessMETlessInfalphaSdown" , "SR1l_EFGH_250lessMETlessInfalphaSup" , "SR1l_EFGH_250lessMETlessInfQ2down" , "SR1l_EFGH_250lessMETlessInfQ2up" , "SR1l_I_250lessMETlessInf" , "SR1l_I_250lessMETlessInfLSFdown" , "SR1l_I_250lessMETlessInfLSFup" , "SR1l_I_250lessMETlessInfBTlightDown" , "SR1l_I_250lessMETlessInfBTlightUp" , "SR1l_I_250lessMETlessInfBTheavyDown" , "SR1l_I_250lessMETlessInfBTheavyUp" , "SR1l_I_250lessMETlessInfPUdown" , "SR1l_I_250lessMETlessInfPUup" , "SR1l_I_250lessMETlessInfPDFdown" , "SR1l_I_250lessMETlessInfPDFup" , "SR1l_I_250lessMETlessInfalphaSdown" , "SR1l_I_250lessMETlessInfalphaSup" , "SR1l_I_250lessMETlessInfQ2down" , "SR1l_I_250lessMETlessInfQ2up" , "SR1l_CDEFGH_250lessMETlessInf" , "SR1l_CDEFGH_250lessMETlessInfLSFdown" , "SR1l_CDEFGH_250lessMETlessInfLSFup" , "SR1l_CDEFGH_250lessMETlessInfBTlightDown" , "SR1l_CDEFGH_250lessMETlessInfBTlightUp" , "SR1l_CDEFGH_250lessMETlessInfBTheavyDown" , "SR1l_CDEFGH_250lessMETlessInfBTheavyUp" , "SR1l_CDEFGH_250lessMETlessInfPUdown" , "SR1l_CDEFGH_250lessMETlessInfPUup" , "SR1l_CDEFGH_250lessMETlessInfPDFdown" , "SR1l_CDEFGH_250lessMETlessInfPDFup" , "SR1l_CDEFGH_250lessMETlessInfalphaSdown" , "SR1l_CDEFGH_250lessMETlessInfalphaSup" , "SR1l_CDEFGH_250lessMETlessInfQ2down" , "SR1l_CDEFGH_250lessMETlessInfQ2up" , "SR1l_NJlowTM_250lessMETlessInf" , "SR1l_NJlowTM_250lessMETlessInfLSFdown" , "SR1l_NJlowTM_250lessMETlessInfLSFup" , "SR1l_NJlowTM_250lessMETlessInfBTlightDown" , "SR1l_NJlowTM_250lessMETlessInfBTlightUp" , "SR1l_NJlowTM_250lessMETlessInfBTheavyDown" , "SR1l_NJlowTM_250lessMETlessInfBTheavyUp" , "SR1l_NJlowTM_250lessMETlessInfPUdown" , "SR1l_NJlowTM_250lessMETlessInfPUup" , "SR1l_NJlowTM_250lessMETlessInfPDFdown" , "SR1l_NJlowTM_250lessMETlessInfPDFup" , "SR1l_NJlowTM_250lessMETlessInfalphaSdown" , "SR1l_NJlowTM_250lessMETlessInfalphaSup" , "SR1l_NJlowTM_250lessMETlessInfQ2down" , "SR1l_NJlowTM_250lessMETlessInfQ2up" , "SR1l_NJmidTM_250lessMETlessInf" , "SR1l_NJmidTM_250lessMETlessInfLSFdown" , "SR1l_NJmidTM_250lessMETlessInfLSFup" , "SR1l_NJmidTM_250lessMETlessInfBTlightDown" , "SR1l_NJmidTM_250lessMETlessInfBTlightUp" , "SR1l_NJmidTM_250lessMETlessInfBTheavyDown" , "SR1l_NJmidTM_250lessMETlessInfBTheavyUp" , "SR1l_NJmidTM_250lessMETlessInfPUdown" , "SR1l_NJmidTM_250lessMETlessInfPUup" , "SR1l_NJmidTM_250lessMETlessInfPDFdown" , "SR1l_NJmidTM_250lessMETlessInfPDFup" , "SR1l_NJmidTM_250lessMETlessInfalphaSdown" , "SR1l_NJmidTM_250lessMETlessInfalphaSup" , "SR1l_NJmidTM_250lessMETlessInfQ2down" , "SR1l_NJmidTM_250lessMETlessInfQ2up" , "SR1l_NJhighTM_250lessMETlessInf" , "SR1l_NJhighTM_250lessMETlessInfLSFdown" , "SR1l_NJhighTM_250lessMETlessInfLSFup" , "SR1l_NJhighTM_250lessMETlessInfBTlightDown" , "SR1l_NJhighTM_250lessMETlessInfBTlightUp" , "SR1l_NJhighTM_250lessMETlessInfBTheavyDown" , "SR1l_NJhighTM_250lessMETlessInfBTheavyUp" , "SR1l_NJhighTM_250lessMETlessInfPUdown" , "SR1l_NJhighTM_250lessMETlessInfPUup" , "SR1l_NJhighTM_250lessMETlessInfPDFdown" , "SR1l_NJhighTM_250lessMETlessInfPDFup" , "SR1l_NJhighTM_250lessMETlessInfalphaSdown" , "SR1l_NJhighTM_250lessMETlessInfalphaSup" , "SR1l_NJhighTM_250lessMETlessInfQ2down" , "SR1l_NJhighTM_250lessMETlessInfQ2up" , "SR1l_NJ_250lessMETlessInf" , "SR1l_NJ_250lessMETlessInfLSFdown" , "SR1l_NJ_250lessMETlessInfLSFup" , "SR1l_NJ_250lessMETlessInfBTlightDown" , "SR1l_NJ_250lessMETlessInfBTlightUp" , "SR1l_NJ_250lessMETlessInfBTheavyDown" , "SR1l_NJ_250lessMETlessInfBTheavyUp" , "SR1l_NJ_250lessMETlessInfPUdown" , "SR1l_NJ_250lessMETlessInfPUup" , "SR1l_NJ_250lessMETlessInfPDFdown" , "SR1l_NJ_250lessMETlessInfPDFup" , "SR1l_NJ_250lessMETlessInfalphaSdown" , "SR1l_NJ_250lessMETlessInfalphaSup" , "SR1l_NJ_250lessMETlessInfQ2down" , "SR1l_NJ_250lessMETlessInfQ2up"};
 
- vector<string> totYield = { "SR1l_AB_250lessMETlessInf" , "SR1l_AB_250lessMETlessInfPDFdown" , "SR1l_AB_250lessMETlessInfPDFup" , "SR1l_AB_250lessMETlessInfalphaSdown" , "SR1l_AB_250lessMETlessInfalphaSup" , "SR1l_AB_250lessMETlessInfQ2down" , "SR1l_AB_250lessMETlessInfQ2up" , "SR1l_CDEFGH_250lessMETlessInf" , "SR1l_CDEFGH_250lessMETlessInfPDFdown" , "SR1l_CDEFGH_250lessMETlessInfPDFup" , "SR1l_CDEFGH_250lessMETlessInfalphaSdown" , "SR1l_CDEFGH_250lessMETlessInfalphaSup" , "SR1l_CDEFGH_250lessMETlessInfQ2down" , "SR1l_CDEFGH_250lessMETlessInfQ2up" , "SR1l_I_250lessMETlessInf" , "SR1l_I_250lessMETlessInfPDFdown" , "SR1l_I_250lessMETlessInfPDFup" , "SR1l_I_250lessMETlessInfalphaSdown" , "SR1l_I_250lessMETlessInfalphaSup" , "SR1l_I_250lessMETlessInfQ2down" , "SR1l_I_250lessMETlessInfQ2up"};
 
     TableDataMC(this, totYield,"lepChannel",  "includeSignal" ).Print(outputName+".tab", 6);
     TableDataMC(this, totYield,"lepChannel", "includeSignal" ).PrintLatex(outputName+".tex", 6);

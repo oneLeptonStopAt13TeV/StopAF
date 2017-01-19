@@ -110,8 +110,6 @@ AddRegion("SR1l_A_250lessMETless350alphaSdown","SR1l_A_250lessMETless350alphaSdo
 AddRegion("SR1l_A_250lessMETless350alphaSup","SR1l_A_250lessMETless350alphaSup",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_250lessMETless350Q2down","SR1l_A_250lessMETless350Q2down",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_250lessMETless350Q2up","SR1l_A_250lessMETless350Q2up",&SR1l_A_250lessMETless350);
-AddRegion("SR1l_A_250lessMETless350topPtModelingdown","SR1l_A_250lessMETless350topPtModelingdown",&SR1l_A_250lessMETless350);
-AddRegion("SR1l_A_250lessMETless350topPtModelingup","SR1l_A_250lessMETless350topPtModelingup",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_350lessMETless450","SR1l_A_350lessMETless450",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_350lessMETless450LSFdown","SR1l_A_350lessMETless450LSFdown",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_350lessMETless450LSFup","SR1l_A_350lessMETless450LSFup",&SR1l_A_350lessMETless450);
@@ -127,8 +125,6 @@ AddRegion("SR1l_A_350lessMETless450alphaSdown","SR1l_A_350lessMETless450alphaSdo
 AddRegion("SR1l_A_350lessMETless450alphaSup","SR1l_A_350lessMETless450alphaSup",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_350lessMETless450Q2down","SR1l_A_350lessMETless450Q2down",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_350lessMETless450Q2up","SR1l_A_350lessMETless450Q2up",&SR1l_A_350lessMETless450);
-AddRegion("SR1l_A_350lessMETless450topPtModelingdown","SR1l_A_350lessMETless450topPtModelingdown",&SR1l_A_350lessMETless450);
-AddRegion("SR1l_A_350lessMETless450topPtModelingup","SR1l_A_350lessMETless450topPtModelingup",&SR1l_A_350lessMETless450);
 AddRegion("SR1l_A_450lessMETless600","SR1l_A_450lessMETless600",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_450lessMETless600LSFdown","SR1l_A_450lessMETless600LSFdown",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_450lessMETless600LSFup","SR1l_A_450lessMETless600LSFup",&SR1l_A_450lessMETless600);
@@ -144,8 +140,6 @@ AddRegion("SR1l_A_450lessMETless600alphaSdown","SR1l_A_450lessMETless600alphaSdo
 AddRegion("SR1l_A_450lessMETless600alphaSup","SR1l_A_450lessMETless600alphaSup",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_450lessMETless600Q2down","SR1l_A_450lessMETless600Q2down",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_450lessMETless600Q2up","SR1l_A_450lessMETless600Q2up",&SR1l_A_450lessMETless600);
-AddRegion("SR1l_A_450lessMETless600topPtModelingdown","SR1l_A_450lessMETless600topPtModelingdown",&SR1l_A_450lessMETless600);
-AddRegion("SR1l_A_450lessMETless600topPtModelingup","SR1l_A_450lessMETless600topPtModelingup",&SR1l_A_450lessMETless600);
 AddRegion("SR1l_A_600lessMETlessInf","SR1l_A_600lessMETlessInf",&SR1l_A_600lessMETlessInf);
 AddRegion("SR1l_A_600lessMETlessInfLSFdown","SR1l_A_600lessMETlessInfLSFdown",&SR1l_A_600lessMETlessInf);
 AddRegion("SR1l_A_600lessMETlessInfLSFup","SR1l_A_600lessMETlessInfLSFup",&SR1l_A_600lessMETlessInf);
@@ -161,8 +155,6 @@ AddRegion("SR1l_A_600lessMETlessInfalphaSdown","SR1l_A_600lessMETlessInfalphaSdo
 AddRegion("SR1l_A_600lessMETlessInfalphaSup","SR1l_A_600lessMETlessInfalphaSup",&SR1l_A_600lessMETlessInf);
 AddRegion("SR1l_A_600lessMETlessInfQ2down","SR1l_A_600lessMETlessInfQ2down",&SR1l_A_600lessMETlessInf);
 AddRegion("SR1l_A_600lessMETlessInfQ2up","SR1l_A_600lessMETlessInfQ2up",&SR1l_A_600lessMETlessInf);
-AddRegion("SR1l_A_600lessMETlessInftopPtModelingdown","SR1l_A_600lessMETlessInftopPtModelingdown",&SR1l_A_600lessMETlessInf);
-AddRegion("SR1l_A_600lessMETlessInftopPtModelingup","SR1l_A_600lessMETlessInftopPtModelingup",&SR1l_A_600lessMETlessInf);
 AddRegion("SR1l_B_250lessMETless450","SR1l_B_250lessMETless450",&SR1l_B_250lessMETless450);
 AddRegion("SR1l_B_250lessMETless450LSFdown","SR1l_B_250lessMETless450LSFdown",&SR1l_B_250lessMETless450);
 AddRegion("SR1l_B_250lessMETless450LSFup","SR1l_B_250lessMETless450LSFup",&SR1l_B_250lessMETless450);
@@ -178,8 +170,6 @@ AddRegion("SR1l_B_250lessMETless450alphaSdown","SR1l_B_250lessMETless450alphaSdo
 AddRegion("SR1l_B_250lessMETless450alphaSup","SR1l_B_250lessMETless450alphaSup",&SR1l_B_250lessMETless450);
 AddRegion("SR1l_B_250lessMETless450Q2down","SR1l_B_250lessMETless450Q2down",&SR1l_B_250lessMETless450);
 AddRegion("SR1l_B_250lessMETless450Q2up","SR1l_B_250lessMETless450Q2up",&SR1l_B_250lessMETless450);
-AddRegion("SR1l_B_250lessMETless450topPtModelingdown","SR1l_B_250lessMETless450topPtModelingdown",&SR1l_B_250lessMETless450);
-AddRegion("SR1l_B_250lessMETless450topPtModelingup","SR1l_B_250lessMETless450topPtModelingup",&SR1l_B_250lessMETless450);
 AddRegion("SR1l_B_450lessMETless600","SR1l_B_450lessMETless600",&SR1l_B_450lessMETless600);
 AddRegion("SR1l_B_450lessMETless600LSFdown","SR1l_B_450lessMETless600LSFdown",&SR1l_B_450lessMETless600);
 AddRegion("SR1l_B_450lessMETless600LSFup","SR1l_B_450lessMETless600LSFup",&SR1l_B_450lessMETless600);
@@ -195,8 +185,6 @@ AddRegion("SR1l_B_450lessMETless600alphaSdown","SR1l_B_450lessMETless600alphaSdo
 AddRegion("SR1l_B_450lessMETless600alphaSup","SR1l_B_450lessMETless600alphaSup",&SR1l_B_450lessMETless600);
 AddRegion("SR1l_B_450lessMETless600Q2down","SR1l_B_450lessMETless600Q2down",&SR1l_B_450lessMETless600);
 AddRegion("SR1l_B_450lessMETless600Q2up","SR1l_B_450lessMETless600Q2up",&SR1l_B_450lessMETless600);
-AddRegion("SR1l_B_450lessMETless600topPtModelingdown","SR1l_B_450lessMETless600topPtModelingdown",&SR1l_B_450lessMETless600);
-AddRegion("SR1l_B_450lessMETless600topPtModelingup","SR1l_B_450lessMETless600topPtModelingup",&SR1l_B_450lessMETless600);
 AddRegion("SR1l_B_600lessMETlessInf","SR1l_B_600lessMETlessInf",&SR1l_B_600lessMETlessInf);
 AddRegion("SR1l_B_600lessMETlessInfLSFdown","SR1l_B_600lessMETlessInfLSFdown",&SR1l_B_600lessMETlessInf);
 AddRegion("SR1l_B_600lessMETlessInfLSFup","SR1l_B_600lessMETlessInfLSFup",&SR1l_B_600lessMETlessInf);
@@ -212,8 +200,6 @@ AddRegion("SR1l_B_600lessMETlessInfalphaSdown","SR1l_B_600lessMETlessInfalphaSdo
 AddRegion("SR1l_B_600lessMETlessInfalphaSup","SR1l_B_600lessMETlessInfalphaSup",&SR1l_B_600lessMETlessInf);
 AddRegion("SR1l_B_600lessMETlessInfQ2down","SR1l_B_600lessMETlessInfQ2down",&SR1l_B_600lessMETlessInf);
 AddRegion("SR1l_B_600lessMETlessInfQ2up","SR1l_B_600lessMETlessInfQ2up",&SR1l_B_600lessMETlessInf);
-AddRegion("SR1l_B_600lessMETlessInftopPtModelingdown","SR1l_B_600lessMETlessInftopPtModelingdown",&SR1l_B_600lessMETlessInf);
-AddRegion("SR1l_B_600lessMETlessInftopPtModelingup","SR1l_B_600lessMETlessInftopPtModelingup",&SR1l_B_600lessMETlessInf);
 AddRegion("SR1l_C_250lessMETless350","SR1l_C_250lessMETless350",&SR1l_C_250lessMETless350);
 AddRegion("SR1l_C_250lessMETless350LSFdown","SR1l_C_250lessMETless350LSFdown",&SR1l_C_250lessMETless350);
 AddRegion("SR1l_C_250lessMETless350LSFup","SR1l_C_250lessMETless350LSFup",&SR1l_C_250lessMETless350);
@@ -229,8 +215,6 @@ AddRegion("SR1l_C_250lessMETless350alphaSdown","SR1l_C_250lessMETless350alphaSdo
 AddRegion("SR1l_C_250lessMETless350alphaSup","SR1l_C_250lessMETless350alphaSup",&SR1l_C_250lessMETless350);
 AddRegion("SR1l_C_250lessMETless350Q2down","SR1l_C_250lessMETless350Q2down",&SR1l_C_250lessMETless350);
 AddRegion("SR1l_C_250lessMETless350Q2up","SR1l_C_250lessMETless350Q2up",&SR1l_C_250lessMETless350);
-AddRegion("SR1l_C_250lessMETless350topPtModelingdown","SR1l_C_250lessMETless350topPtModelingdown",&SR1l_C_250lessMETless350);
-AddRegion("SR1l_C_250lessMETless350topPtModelingup","SR1l_C_250lessMETless350topPtModelingup",&SR1l_C_250lessMETless350);
 AddRegion("SR1l_C_350lessMETless450","SR1l_C_350lessMETless450",&SR1l_C_350lessMETless450);
 AddRegion("SR1l_C_350lessMETless450LSFdown","SR1l_C_350lessMETless450LSFdown",&SR1l_C_350lessMETless450);
 AddRegion("SR1l_C_350lessMETless450LSFup","SR1l_C_350lessMETless450LSFup",&SR1l_C_350lessMETless450);
@@ -246,8 +230,6 @@ AddRegion("SR1l_C_350lessMETless450alphaSdown","SR1l_C_350lessMETless450alphaSdo
 AddRegion("SR1l_C_350lessMETless450alphaSup","SR1l_C_350lessMETless450alphaSup",&SR1l_C_350lessMETless450);
 AddRegion("SR1l_C_350lessMETless450Q2down","SR1l_C_350lessMETless450Q2down",&SR1l_C_350lessMETless450);
 AddRegion("SR1l_C_350lessMETless450Q2up","SR1l_C_350lessMETless450Q2up",&SR1l_C_350lessMETless450);
-AddRegion("SR1l_C_350lessMETless450topPtModelingdown","SR1l_C_350lessMETless450topPtModelingdown",&SR1l_C_350lessMETless450);
-AddRegion("SR1l_C_350lessMETless450topPtModelingup","SR1l_C_350lessMETless450topPtModelingup",&SR1l_C_350lessMETless450);
 AddRegion("SR1l_C_450lessMETless550","SR1l_C_450lessMETless550",&SR1l_C_450lessMETless550);
 AddRegion("SR1l_C_450lessMETless550LSFdown","SR1l_C_450lessMETless550LSFdown",&SR1l_C_450lessMETless550);
 AddRegion("SR1l_C_450lessMETless550LSFup","SR1l_C_450lessMETless550LSFup",&SR1l_C_450lessMETless550);
@@ -263,8 +245,6 @@ AddRegion("SR1l_C_450lessMETless550alphaSdown","SR1l_C_450lessMETless550alphaSdo
 AddRegion("SR1l_C_450lessMETless550alphaSup","SR1l_C_450lessMETless550alphaSup",&SR1l_C_450lessMETless550);
 AddRegion("SR1l_C_450lessMETless550Q2down","SR1l_C_450lessMETless550Q2down",&SR1l_C_450lessMETless550);
 AddRegion("SR1l_C_450lessMETless550Q2up","SR1l_C_450lessMETless550Q2up",&SR1l_C_450lessMETless550);
-AddRegion("SR1l_C_450lessMETless550topPtModelingdown","SR1l_C_450lessMETless550topPtModelingdown",&SR1l_C_450lessMETless550);
-AddRegion("SR1l_C_450lessMETless550topPtModelingup","SR1l_C_450lessMETless550topPtModelingup",&SR1l_C_450lessMETless550);
 AddRegion("SR1l_C_550lessMETless650","SR1l_C_550lessMETless650",&SR1l_C_550lessMETless650);
 AddRegion("SR1l_C_550lessMETless650LSFdown","SR1l_C_550lessMETless650LSFdown",&SR1l_C_550lessMETless650);
 AddRegion("SR1l_C_550lessMETless650LSFup","SR1l_C_550lessMETless650LSFup",&SR1l_C_550lessMETless650);
@@ -280,8 +260,6 @@ AddRegion("SR1l_C_550lessMETless650alphaSdown","SR1l_C_550lessMETless650alphaSdo
 AddRegion("SR1l_C_550lessMETless650alphaSup","SR1l_C_550lessMETless650alphaSup",&SR1l_C_550lessMETless650);
 AddRegion("SR1l_C_550lessMETless650Q2down","SR1l_C_550lessMETless650Q2down",&SR1l_C_550lessMETless650);
 AddRegion("SR1l_C_550lessMETless650Q2up","SR1l_C_550lessMETless650Q2up",&SR1l_C_550lessMETless650);
-AddRegion("SR1l_C_550lessMETless650topPtModelingdown","SR1l_C_550lessMETless650topPtModelingdown",&SR1l_C_550lessMETless650);
-AddRegion("SR1l_C_550lessMETless650topPtModelingup","SR1l_C_550lessMETless650topPtModelingup",&SR1l_C_550lessMETless650);
 AddRegion("SR1l_C_650lessMETlessInf","SR1l_C_650lessMETlessInf",&SR1l_C_650lessMETlessInf);
 AddRegion("SR1l_C_650lessMETlessInfLSFdown","SR1l_C_650lessMETlessInfLSFdown",&SR1l_C_650lessMETlessInf);
 AddRegion("SR1l_C_650lessMETlessInfLSFup","SR1l_C_650lessMETlessInfLSFup",&SR1l_C_650lessMETlessInf);
@@ -297,8 +275,6 @@ AddRegion("SR1l_C_650lessMETlessInfalphaSdown","SR1l_C_650lessMETlessInfalphaSdo
 AddRegion("SR1l_C_650lessMETlessInfalphaSup","SR1l_C_650lessMETlessInfalphaSup",&SR1l_C_650lessMETlessInf);
 AddRegion("SR1l_C_650lessMETlessInfQ2down","SR1l_C_650lessMETlessInfQ2down",&SR1l_C_650lessMETlessInf);
 AddRegion("SR1l_C_650lessMETlessInfQ2up","SR1l_C_650lessMETlessInfQ2up",&SR1l_C_650lessMETlessInf);
-AddRegion("SR1l_C_650lessMETlessInftopPtModelingdown","SR1l_C_650lessMETlessInftopPtModelingdown",&SR1l_C_650lessMETlessInf);
-AddRegion("SR1l_C_650lessMETlessInftopPtModelingup","SR1l_C_650lessMETlessInftopPtModelingup",&SR1l_C_650lessMETlessInf);
 AddRegion("SR1l_D_250lessMETless350","SR1l_D_250lessMETless350",&SR1l_D_250lessMETless350);
 AddRegion("SR1l_D_250lessMETless350LSFdown","SR1l_D_250lessMETless350LSFdown",&SR1l_D_250lessMETless350);
 AddRegion("SR1l_D_250lessMETless350LSFup","SR1l_D_250lessMETless350LSFup",&SR1l_D_250lessMETless350);
@@ -314,8 +290,6 @@ AddRegion("SR1l_D_250lessMETless350alphaSdown","SR1l_D_250lessMETless350alphaSdo
 AddRegion("SR1l_D_250lessMETless350alphaSup","SR1l_D_250lessMETless350alphaSup",&SR1l_D_250lessMETless350);
 AddRegion("SR1l_D_250lessMETless350Q2down","SR1l_D_250lessMETless350Q2down",&SR1l_D_250lessMETless350);
 AddRegion("SR1l_D_250lessMETless350Q2up","SR1l_D_250lessMETless350Q2up",&SR1l_D_250lessMETless350);
-AddRegion("SR1l_D_250lessMETless350topPtModelingdown","SR1l_D_250lessMETless350topPtModelingdown",&SR1l_D_250lessMETless350);
-AddRegion("SR1l_D_250lessMETless350topPtModelingup","SR1l_D_250lessMETless350topPtModelingup",&SR1l_D_250lessMETless350);
 AddRegion("SR1l_D_350lessMETless450","SR1l_D_350lessMETless450",&SR1l_D_350lessMETless450);
 AddRegion("SR1l_D_350lessMETless450LSFdown","SR1l_D_350lessMETless450LSFdown",&SR1l_D_350lessMETless450);
 AddRegion("SR1l_D_350lessMETless450LSFup","SR1l_D_350lessMETless450LSFup",&SR1l_D_350lessMETless450);
@@ -331,8 +305,6 @@ AddRegion("SR1l_D_350lessMETless450alphaSdown","SR1l_D_350lessMETless450alphaSdo
 AddRegion("SR1l_D_350lessMETless450alphaSup","SR1l_D_350lessMETless450alphaSup",&SR1l_D_350lessMETless450);
 AddRegion("SR1l_D_350lessMETless450Q2down","SR1l_D_350lessMETless450Q2down",&SR1l_D_350lessMETless450);
 AddRegion("SR1l_D_350lessMETless450Q2up","SR1l_D_350lessMETless450Q2up",&SR1l_D_350lessMETless450);
-AddRegion("SR1l_D_350lessMETless450topPtModelingdown","SR1l_D_350lessMETless450topPtModelingdown",&SR1l_D_350lessMETless450);
-AddRegion("SR1l_D_350lessMETless450topPtModelingup","SR1l_D_350lessMETless450topPtModelingup",&SR1l_D_350lessMETless450);
 AddRegion("SR1l_D_450lessMETless550","SR1l_D_450lessMETless550",&SR1l_D_450lessMETless550);
 AddRegion("SR1l_D_450lessMETless550LSFdown","SR1l_D_450lessMETless550LSFdown",&SR1l_D_450lessMETless550);
 AddRegion("SR1l_D_450lessMETless550LSFup","SR1l_D_450lessMETless550LSFup",&SR1l_D_450lessMETless550);
@@ -348,8 +320,6 @@ AddRegion("SR1l_D_450lessMETless550alphaSdown","SR1l_D_450lessMETless550alphaSdo
 AddRegion("SR1l_D_450lessMETless550alphaSup","SR1l_D_450lessMETless550alphaSup",&SR1l_D_450lessMETless550);
 AddRegion("SR1l_D_450lessMETless550Q2down","SR1l_D_450lessMETless550Q2down",&SR1l_D_450lessMETless550);
 AddRegion("SR1l_D_450lessMETless550Q2up","SR1l_D_450lessMETless550Q2up",&SR1l_D_450lessMETless550);
-AddRegion("SR1l_D_450lessMETless550topPtModelingdown","SR1l_D_450lessMETless550topPtModelingdown",&SR1l_D_450lessMETless550);
-AddRegion("SR1l_D_450lessMETless550topPtModelingup","SR1l_D_450lessMETless550topPtModelingup",&SR1l_D_450lessMETless550);
 AddRegion("SR1l_D_550lessMETlessInf","SR1l_D_550lessMETlessInf",&SR1l_D_550lessMETlessInf);
 AddRegion("SR1l_D_550lessMETlessInfLSFdown","SR1l_D_550lessMETlessInfLSFdown",&SR1l_D_550lessMETlessInf);
 AddRegion("SR1l_D_550lessMETlessInfLSFup","SR1l_D_550lessMETlessInfLSFup",&SR1l_D_550lessMETlessInf);
@@ -365,8 +335,6 @@ AddRegion("SR1l_D_550lessMETlessInfalphaSdown","SR1l_D_550lessMETlessInfalphaSdo
 AddRegion("SR1l_D_550lessMETlessInfalphaSup","SR1l_D_550lessMETlessInfalphaSup",&SR1l_D_550lessMETlessInf);
 AddRegion("SR1l_D_550lessMETlessInfQ2down","SR1l_D_550lessMETlessInfQ2down",&SR1l_D_550lessMETlessInf);
 AddRegion("SR1l_D_550lessMETlessInfQ2up","SR1l_D_550lessMETlessInfQ2up",&SR1l_D_550lessMETlessInf);
-AddRegion("SR1l_D_550lessMETlessInftopPtModelingdown","SR1l_D_550lessMETlessInftopPtModelingdown",&SR1l_D_550lessMETlessInf);
-AddRegion("SR1l_D_550lessMETlessInftopPtModelingup","SR1l_D_550lessMETlessInftopPtModelingup",&SR1l_D_550lessMETlessInf);
 AddRegion("SR1l_E_250lessMETless350","SR1l_E_250lessMETless350",&SR1l_E_250lessMETless350);
 AddRegion("SR1l_E_250lessMETless350LSFdown","SR1l_E_250lessMETless350LSFdown",&SR1l_E_250lessMETless350);
 AddRegion("SR1l_E_250lessMETless350LSFup","SR1l_E_250lessMETless350LSFup",&SR1l_E_250lessMETless350);
@@ -382,8 +350,6 @@ AddRegion("SR1l_E_250lessMETless350alphaSdown","SR1l_E_250lessMETless350alphaSdo
 AddRegion("SR1l_E_250lessMETless350alphaSup","SR1l_E_250lessMETless350alphaSup",&SR1l_E_250lessMETless350);
 AddRegion("SR1l_E_250lessMETless350Q2down","SR1l_E_250lessMETless350Q2down",&SR1l_E_250lessMETless350);
 AddRegion("SR1l_E_250lessMETless350Q2up","SR1l_E_250lessMETless350Q2up",&SR1l_E_250lessMETless350);
-AddRegion("SR1l_E_250lessMETless350topPtModelingdown","SR1l_E_250lessMETless350topPtModelingdown",&SR1l_E_250lessMETless350);
-AddRegion("SR1l_E_250lessMETless350topPtModelingup","SR1l_E_250lessMETless350topPtModelingup",&SR1l_E_250lessMETless350);
 AddRegion("SR1l_E_350lessMETless550","SR1l_E_350lessMETless550",&SR1l_E_350lessMETless550);
 AddRegion("SR1l_E_350lessMETless550LSFdown","SR1l_E_350lessMETless550LSFdown",&SR1l_E_350lessMETless550);
 AddRegion("SR1l_E_350lessMETless550LSFup","SR1l_E_350lessMETless550LSFup",&SR1l_E_350lessMETless550);
@@ -399,8 +365,6 @@ AddRegion("SR1l_E_350lessMETless550alphaSdown","SR1l_E_350lessMETless550alphaSdo
 AddRegion("SR1l_E_350lessMETless550alphaSup","SR1l_E_350lessMETless550alphaSup",&SR1l_E_350lessMETless550);
 AddRegion("SR1l_E_350lessMETless550Q2down","SR1l_E_350lessMETless550Q2down",&SR1l_E_350lessMETless550);
 AddRegion("SR1l_E_350lessMETless550Q2up","SR1l_E_350lessMETless550Q2up",&SR1l_E_350lessMETless550);
-AddRegion("SR1l_E_350lessMETless550topPtModelingdown","SR1l_E_350lessMETless550topPtModelingdown",&SR1l_E_350lessMETless550);
-AddRegion("SR1l_E_350lessMETless550topPtModelingup","SR1l_E_350lessMETless550topPtModelingup",&SR1l_E_350lessMETless550);
 AddRegion("SR1l_E_550lessMETlessInf","SR1l_E_550lessMETlessInf",&SR1l_E_550lessMETlessInf);
 AddRegion("SR1l_E_550lessMETlessInfLSFdown","SR1l_E_550lessMETlessInfLSFdown",&SR1l_E_550lessMETlessInf);
 AddRegion("SR1l_E_550lessMETlessInfLSFup","SR1l_E_550lessMETlessInfLSFup",&SR1l_E_550lessMETlessInf);
@@ -416,8 +380,6 @@ AddRegion("SR1l_E_550lessMETlessInfalphaSdown","SR1l_E_550lessMETlessInfalphaSdo
 AddRegion("SR1l_E_550lessMETlessInfalphaSup","SR1l_E_550lessMETlessInfalphaSup",&SR1l_E_550lessMETlessInf);
 AddRegion("SR1l_E_550lessMETlessInfQ2down","SR1l_E_550lessMETlessInfQ2down",&SR1l_E_550lessMETlessInf);
 AddRegion("SR1l_E_550lessMETlessInfQ2up","SR1l_E_550lessMETlessInfQ2up",&SR1l_E_550lessMETlessInf);
-AddRegion("SR1l_E_550lessMETlessInftopPtModelingdown","SR1l_E_550lessMETlessInftopPtModelingdown",&SR1l_E_550lessMETlessInf);
-AddRegion("SR1l_E_550lessMETlessInftopPtModelingup","SR1l_E_550lessMETlessInftopPtModelingup",&SR1l_E_550lessMETlessInf);
 AddRegion("SR1l_F_250lessMETless450","SR1l_F_250lessMETless450",&SR1l_F_250lessMETless450);
 AddRegion("SR1l_F_250lessMETless450LSFdown","SR1l_F_250lessMETless450LSFdown",&SR1l_F_250lessMETless450);
 AddRegion("SR1l_F_250lessMETless450LSFup","SR1l_F_250lessMETless450LSFup",&SR1l_F_250lessMETless450);
@@ -433,8 +395,6 @@ AddRegion("SR1l_F_250lessMETless450alphaSdown","SR1l_F_250lessMETless450alphaSdo
 AddRegion("SR1l_F_250lessMETless450alphaSup","SR1l_F_250lessMETless450alphaSup",&SR1l_F_250lessMETless450);
 AddRegion("SR1l_F_250lessMETless450Q2down","SR1l_F_250lessMETless450Q2down",&SR1l_F_250lessMETless450);
 AddRegion("SR1l_F_250lessMETless450Q2up","SR1l_F_250lessMETless450Q2up",&SR1l_F_250lessMETless450);
-AddRegion("SR1l_F_250lessMETless450topPtModelingdown","SR1l_F_250lessMETless450topPtModelingdown",&SR1l_F_250lessMETless450);
-AddRegion("SR1l_F_250lessMETless450topPtModelingup","SR1l_F_250lessMETless450topPtModelingup",&SR1l_F_250lessMETless450);
 AddRegion("SR1l_F_450lessMETlessInf","SR1l_F_450lessMETlessInf",&SR1l_F_450lessMETlessInf);
 AddRegion("SR1l_F_450lessMETlessInfLSFdown","SR1l_F_450lessMETlessInfLSFdown",&SR1l_F_450lessMETlessInf);
 AddRegion("SR1l_F_450lessMETlessInfLSFup","SR1l_F_450lessMETlessInfLSFup",&SR1l_F_450lessMETlessInf);
@@ -450,8 +410,6 @@ AddRegion("SR1l_F_450lessMETlessInfalphaSdown","SR1l_F_450lessMETlessInfalphaSdo
 AddRegion("SR1l_F_450lessMETlessInfalphaSup","SR1l_F_450lessMETlessInfalphaSup",&SR1l_F_450lessMETlessInf);
 AddRegion("SR1l_F_450lessMETlessInfQ2down","SR1l_F_450lessMETlessInfQ2down",&SR1l_F_450lessMETlessInf);
 AddRegion("SR1l_F_450lessMETlessInfQ2up","SR1l_F_450lessMETlessInfQ2up",&SR1l_F_450lessMETlessInf);
-AddRegion("SR1l_F_450lessMETlessInftopPtModelingdown","SR1l_F_450lessMETlessInftopPtModelingdown",&SR1l_F_450lessMETlessInf);
-AddRegion("SR1l_F_450lessMETlessInftopPtModelingup","SR1l_F_450lessMETlessInftopPtModelingup",&SR1l_F_450lessMETlessInf);
 AddRegion("SR1l_G_250lessMETless350","SR1l_G_250lessMETless350",&SR1l_G_250lessMETless350);
 AddRegion("SR1l_G_250lessMETless350LSFdown","SR1l_G_250lessMETless350LSFdown",&SR1l_G_250lessMETless350);
 AddRegion("SR1l_G_250lessMETless350LSFup","SR1l_G_250lessMETless350LSFup",&SR1l_G_250lessMETless350);
@@ -467,8 +425,6 @@ AddRegion("SR1l_G_250lessMETless350alphaSdown","SR1l_G_250lessMETless350alphaSdo
 AddRegion("SR1l_G_250lessMETless350alphaSup","SR1l_G_250lessMETless350alphaSup",&SR1l_G_250lessMETless350);
 AddRegion("SR1l_G_250lessMETless350Q2down","SR1l_G_250lessMETless350Q2down",&SR1l_G_250lessMETless350);
 AddRegion("SR1l_G_250lessMETless350Q2up","SR1l_G_250lessMETless350Q2up",&SR1l_G_250lessMETless350);
-AddRegion("SR1l_G_250lessMETless350topPtModelingdown","SR1l_G_250lessMETless350topPtModelingdown",&SR1l_G_250lessMETless350);
-AddRegion("SR1l_G_250lessMETless350topPtModelingup","SR1l_G_250lessMETless350topPtModelingup",&SR1l_G_250lessMETless350);
 AddRegion("SR1l_G_350lessMETless450","SR1l_G_350lessMETless450",&SR1l_G_350lessMETless450);
 AddRegion("SR1l_G_350lessMETless450LSFdown","SR1l_G_350lessMETless450LSFdown",&SR1l_G_350lessMETless450);
 AddRegion("SR1l_G_350lessMETless450LSFup","SR1l_G_350lessMETless450LSFup",&SR1l_G_350lessMETless450);
@@ -484,8 +440,6 @@ AddRegion("SR1l_G_350lessMETless450alphaSdown","SR1l_G_350lessMETless450alphaSdo
 AddRegion("SR1l_G_350lessMETless450alphaSup","SR1l_G_350lessMETless450alphaSup",&SR1l_G_350lessMETless450);
 AddRegion("SR1l_G_350lessMETless450Q2down","SR1l_G_350lessMETless450Q2down",&SR1l_G_350lessMETless450);
 AddRegion("SR1l_G_350lessMETless450Q2up","SR1l_G_350lessMETless450Q2up",&SR1l_G_350lessMETless450);
-AddRegion("SR1l_G_350lessMETless450topPtModelingdown","SR1l_G_350lessMETless450topPtModelingdown",&SR1l_G_350lessMETless450);
-AddRegion("SR1l_G_350lessMETless450topPtModelingup","SR1l_G_350lessMETless450topPtModelingup",&SR1l_G_350lessMETless450);
 AddRegion("SR1l_G_450lessMETless600","SR1l_G_450lessMETless600",&SR1l_G_450lessMETless600);
 AddRegion("SR1l_G_450lessMETless600LSFdown","SR1l_G_450lessMETless600LSFdown",&SR1l_G_450lessMETless600);
 AddRegion("SR1l_G_450lessMETless600LSFup","SR1l_G_450lessMETless600LSFup",&SR1l_G_450lessMETless600);
@@ -501,8 +455,6 @@ AddRegion("SR1l_G_450lessMETless600alphaSdown","SR1l_G_450lessMETless600alphaSdo
 AddRegion("SR1l_G_450lessMETless600alphaSup","SR1l_G_450lessMETless600alphaSup",&SR1l_G_450lessMETless600);
 AddRegion("SR1l_G_450lessMETless600Q2down","SR1l_G_450lessMETless600Q2down",&SR1l_G_450lessMETless600);
 AddRegion("SR1l_G_450lessMETless600Q2up","SR1l_G_450lessMETless600Q2up",&SR1l_G_450lessMETless600);
-AddRegion("SR1l_G_450lessMETless600topPtModelingdown","SR1l_G_450lessMETless600topPtModelingdown",&SR1l_G_450lessMETless600);
-AddRegion("SR1l_G_450lessMETless600topPtModelingup","SR1l_G_450lessMETless600topPtModelingup",&SR1l_G_450lessMETless600);
 AddRegion("SR1l_G_600lessMETlessInf","SR1l_G_600lessMETlessInf",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_G_600lessMETlessInfLSFdown","SR1l_G_600lessMETlessInfLSFdown",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_G_600lessMETlessInfLSFup","SR1l_G_600lessMETlessInfLSFup",&SR1l_G_600lessMETlessInf);
@@ -518,8 +470,6 @@ AddRegion("SR1l_G_600lessMETlessInfalphaSdown","SR1l_G_600lessMETlessInfalphaSdo
 AddRegion("SR1l_G_600lessMETlessInfalphaSup","SR1l_G_600lessMETlessInfalphaSup",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_G_600lessMETlessInfQ2down","SR1l_G_600lessMETlessInfQ2down",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_G_600lessMETlessInfQ2up","SR1l_G_600lessMETlessInfQ2up",&SR1l_G_600lessMETlessInf);
-AddRegion("SR1l_G_600lessMETlessInftopPtModelingdown","SR1l_G_600lessMETlessInftopPtModelingdown",&SR1l_G_600lessMETlessInf);
-AddRegion("SR1l_G_600lessMETlessInftopPtModelingup","SR1l_G_600lessMETlessInftopPtModelingup",&SR1l_G_600lessMETlessInf);
 AddRegion("SR1l_H_250lessMETless450","SR1l_H_250lessMETless450",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_250lessMETless450LSFdown","SR1l_H_250lessMETless450LSFdown",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_250lessMETless450LSFup","SR1l_H_250lessMETless450LSFup",&SR1l_H_250lessMETless450);
@@ -535,8 +485,6 @@ AddRegion("SR1l_H_250lessMETless450alphaSdown","SR1l_H_250lessMETless450alphaSdo
 AddRegion("SR1l_H_250lessMETless450alphaSup","SR1l_H_250lessMETless450alphaSup",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_250lessMETless450Q2down","SR1l_H_250lessMETless450Q2down",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_250lessMETless450Q2up","SR1l_H_250lessMETless450Q2up",&SR1l_H_250lessMETless450);
-AddRegion("SR1l_H_250lessMETless450topPtModelingdown","SR1l_H_250lessMETless450topPtModelingdown",&SR1l_H_250lessMETless450);
-AddRegion("SR1l_H_250lessMETless450topPtModelingup","SR1l_H_250lessMETless450topPtModelingup",&SR1l_H_250lessMETless450);
 AddRegion("SR1l_H_450lessMETlessInf","SR1l_H_450lessMETlessInf",&SR1l_H_450lessMETlessInf);
 AddRegion("SR1l_H_450lessMETlessInfLSFdown","SR1l_H_450lessMETlessInfLSFdown",&SR1l_H_450lessMETlessInf);
 AddRegion("SR1l_H_450lessMETlessInfLSFup","SR1l_H_450lessMETlessInfLSFup",&SR1l_H_450lessMETlessInf);
@@ -552,8 +500,6 @@ AddRegion("SR1l_H_450lessMETlessInfalphaSdown","SR1l_H_450lessMETlessInfalphaSdo
 AddRegion("SR1l_H_450lessMETlessInfalphaSup","SR1l_H_450lessMETlessInfalphaSup",&SR1l_H_450lessMETlessInf);
 AddRegion("SR1l_H_450lessMETlessInfQ2down","SR1l_H_450lessMETlessInfQ2down",&SR1l_H_450lessMETlessInf);
 AddRegion("SR1l_H_450lessMETlessInfQ2up","SR1l_H_450lessMETlessInfQ2up",&SR1l_H_450lessMETlessInf);
-AddRegion("SR1l_H_450lessMETlessInftopPtModelingdown","SR1l_H_450lessMETlessInftopPtModelingdown",&SR1l_H_450lessMETlessInf);
-AddRegion("SR1l_H_450lessMETlessInftopPtModelingup","SR1l_H_450lessMETlessInftopPtModelingup",&SR1l_H_450lessMETlessInf);
 AddRegion("SR1l_I_250lessMETless350","SR1l_I_250lessMETless350",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_250lessMETless350LSFdown","SR1l_I_250lessMETless350LSFdown",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_250lessMETless350LSFup","SR1l_I_250lessMETless350LSFup",&SR1l_I_250lessMETless350);
@@ -569,8 +515,6 @@ AddRegion("SR1l_I_250lessMETless350alphaSdown","SR1l_I_250lessMETless350alphaSdo
 AddRegion("SR1l_I_250lessMETless350alphaSup","SR1l_I_250lessMETless350alphaSup",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_250lessMETless350Q2down","SR1l_I_250lessMETless350Q2down",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_250lessMETless350Q2up","SR1l_I_250lessMETless350Q2up",&SR1l_I_250lessMETless350);
-AddRegion("SR1l_I_250lessMETless350topPtModelingdown","SR1l_I_250lessMETless350topPtModelingdown",&SR1l_I_250lessMETless350);
-AddRegion("SR1l_I_250lessMETless350topPtModelingup","SR1l_I_250lessMETless350topPtModelingup",&SR1l_I_250lessMETless350);
 AddRegion("SR1l_I_350lessMETless450","SR1l_I_350lessMETless450",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_350lessMETless450LSFdown","SR1l_I_350lessMETless450LSFdown",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_350lessMETless450LSFup","SR1l_I_350lessMETless450LSFup",&SR1l_I_350lessMETless450);
@@ -586,8 +530,6 @@ AddRegion("SR1l_I_350lessMETless450alphaSdown","SR1l_I_350lessMETless450alphaSdo
 AddRegion("SR1l_I_350lessMETless450alphaSup","SR1l_I_350lessMETless450alphaSup",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_350lessMETless450Q2down","SR1l_I_350lessMETless450Q2down",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_350lessMETless450Q2up","SR1l_I_350lessMETless450Q2up",&SR1l_I_350lessMETless450);
-AddRegion("SR1l_I_350lessMETless450topPtModelingdown","SR1l_I_350lessMETless450topPtModelingdown",&SR1l_I_350lessMETless450);
-AddRegion("SR1l_I_350lessMETless450topPtModelingup","SR1l_I_350lessMETless450topPtModelingup",&SR1l_I_350lessMETless450);
 AddRegion("SR1l_I_450lessMETless550","SR1l_I_450lessMETless550",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_450lessMETless550LSFdown","SR1l_I_450lessMETless550LSFdown",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_450lessMETless550LSFup","SR1l_I_450lessMETless550LSFup",&SR1l_I_450lessMETless550);
@@ -603,8 +545,6 @@ AddRegion("SR1l_I_450lessMETless550alphaSdown","SR1l_I_450lessMETless550alphaSdo
 AddRegion("SR1l_I_450lessMETless550alphaSup","SR1l_I_450lessMETless550alphaSup",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_450lessMETless550Q2down","SR1l_I_450lessMETless550Q2down",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_450lessMETless550Q2up","SR1l_I_450lessMETless550Q2up",&SR1l_I_450lessMETless550);
-AddRegion("SR1l_I_450lessMETless550topPtModelingdown","SR1l_I_450lessMETless550topPtModelingdown",&SR1l_I_450lessMETless550);
-AddRegion("SR1l_I_450lessMETless550topPtModelingup","SR1l_I_450lessMETless550topPtModelingup",&SR1l_I_450lessMETless550);
 AddRegion("SR1l_I_550lessMETlessInf","SR1l_I_550lessMETlessInf",&SR1l_I_550lessMETlessInf);
 AddRegion("SR1l_I_550lessMETlessInfLSFdown","SR1l_I_550lessMETlessInfLSFdown",&SR1l_I_550lessMETlessInf);
 AddRegion("SR1l_I_550lessMETlessInfLSFup","SR1l_I_550lessMETlessInfLSFup",&SR1l_I_550lessMETlessInf);
@@ -620,8 +560,6 @@ AddRegion("SR1l_I_550lessMETlessInfalphaSdown","SR1l_I_550lessMETlessInfalphaSdo
 AddRegion("SR1l_I_550lessMETlessInfalphaSup","SR1l_I_550lessMETlessInfalphaSup",&SR1l_I_550lessMETlessInf);
 AddRegion("SR1l_I_550lessMETlessInfQ2down","SR1l_I_550lessMETlessInfQ2down",&SR1l_I_550lessMETlessInf);
 AddRegion("SR1l_I_550lessMETlessInfQ2up","SR1l_I_550lessMETlessInfQ2up",&SR1l_I_550lessMETlessInf);
-AddRegion("SR1l_I_550lessMETlessInftopPtModelingdown","SR1l_I_550lessMETlessInftopPtModelingdown",&SR1l_I_550lessMETlessInf);
-AddRegion("SR1l_I_550lessMETlessInftopPtModelingup","SR1l_I_550lessMETlessInftopPtModelingup",&SR1l_I_550lessMETlessInf);
 
     // ------------------
     // Channels
@@ -748,13 +686,13 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_ISRnjets_UP*( nEvents / myEvent.wNormalization.at(26))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )  ; //TODO
         weightV.push_back(w);*/
        //topptmodelling
-        if(counter == 1) statnames << "topPtModeling" << endl;
-        w = GetLumi() *   myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) * weight_pt;
-        weightV.push_back(w);
+        //if(counter == 1) statnames << "topPtModeling" << endl;
+        //w = GetLumi() *   myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) * weight_pt;
+        //weightV.push_back(w);
         //topptmodelling obsolete
-        if(counter == 1) statnames << "topPtmodeling2" << endl;
-        w = GetLumi() *   myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ); //not ready now
-        weightV.push_back(w);
+        //if(counter == 1) statnames << "topPtmodeling2" << endl;
+        //w = GetLumi() *   myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ); //not ready now
+        //weightV.push_back(w);
     }
 
     vector<string> theReg;

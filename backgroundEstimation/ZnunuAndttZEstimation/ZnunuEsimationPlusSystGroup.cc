@@ -7,9 +7,9 @@
 #include "TLorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
 
-#define USE_TTZ
+//#define USE_TTZ
 //#define USE_WZ
-//#define USE_ZZ
+#define USE_ZZ
 
 #define USE_VAR_BASELINE
 #define USE_LEP1

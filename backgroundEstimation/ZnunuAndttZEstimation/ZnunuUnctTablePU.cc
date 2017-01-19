@@ -7,7 +7,9 @@
 #include "../sonicScrewdriver/interface/Table.h"
 
 //usage
-//./ZnunuUnctTablePU yieldMorPU.tab signalRegMorPU.txt statNamesPU.txt 3 yieldJECDownMor.tab yieldJECUpMor.tab(=nparameters per one signal region, nUnc+1 = 16 currently)
+//./ZnunuUnctTablePU yieldMorttZPU.tab signalRegMorPU.txt statNamesPU.txt 3 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ttZ(=nparameters per one signal region, nUnc+1 = 16 currently)
+//./ZnunuUnctTablePU yieldMorWZPU.tab signalRegMorPU.txt statNamesPU.txt 3 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab WZ(=nparameters per one signal region, nUnc+1 = 16 currently)
+//./ZnunuUnctTablePU yieldMorZZPU.tab signalRegMorPU.txt statNamesPU.txt 3 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ZZ(=nparameters per one signal region, nUnc+1 = 16 currently)
 
 using namespace std;
 using namespace theDoctor;
@@ -25,10 +27,20 @@ int main(int argc, char *argv[]){
         TString nUncs = argv[4];
         string JECDownTab = argv[5];
         string JECUpTab = argv[6];
+        string currentProcess = argv[7];
+
         int nUnc = nUncs.Atoi();
 
+        //@MJ@ TODO do not rewrite this in all places!!!
+        Figure SF = Figure(1,0);
+        if( currentProcess == "ttZ")
+           SF = Figure(1.37,0.16);
+        else if(currentProcess == "WZ")
+           SF = Figure(0.93,0.14);
+
+
         vector<string> regions;
-        vector<string> datasets = {"Znunu"}; //@MJ@ TODO change the datasets to meaningful ones
+        vector<string> datasets = {currentProcess}; //@MJ@ TODO change the datasets to meaningful ones
 
 	string line;
         ifstream regfile(inputFile);
@@ -92,7 +104,7 @@ int main(int argc, char *argv[]){
        theDoctor::Figure yieldVal;
        for(uint32_t r=0; r<regions.size();r++)
        {
-           theDoctor::Figure resall = tab.Get(regions.at(r), datasets.at(0));
+           theDoctor::Figure resall = tab.Get(regions.at(r), datasets.at(0)) * SF;
 
            if(r == 0 || r%nUnc == 0)
            {
@@ -132,10 +144,10 @@ int main(int argc, char *argv[]){
            }
            cout << realReg.at(uncLine-1) << " value " <<  colI.at(r-((uncLine-1)*(nUnc)))<< endl;
        }
-        tI.Print(static_cast<string>("tableUncZnunuPU.tab"),2);
-        tI.PrintLatex(static_cast<string>("tableUncZnunuPU.tex"),2);
-        trel.Print(static_cast<string>("tableUncZnunuRelPU.tab"),2, "noError");
-        trel.PrintLatex(static_cast<string>("tableUncZunuRelPU.tex"),2, "noError");
+        tI.Print(static_cast<string>(currentProcess+"tableUncPU.tab"),2);
+        tI.PrintLatex(static_cast<string>(currentProcess+"tableUncPU.tex"),2);
+        trel.Print(static_cast<string>(currentProcess+"tableUncRelPU.tab"),2, "noError");
+        trel.PrintLatex(static_cast<string>(currentProcess+"tableUncRelPU.tex"),2, "noError");
 
        TFile fi2("ttZuncertaintiesPU.root","RECREATE");
        histo.at(0)->Write();

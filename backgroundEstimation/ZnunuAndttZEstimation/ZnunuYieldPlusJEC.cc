@@ -7,7 +7,9 @@
 #include "TLorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
 
-#define USE_VAR_BASELINE_UP
+#define USE_TTZ
+#define USE_TTZNLO
+#define USE_VAR_BASELINE
 
 #define USE_LEP1
 #define USE_LEP2
@@ -76,7 +78,7 @@ void BabyScrewdriver::Init()
     // ------------------
     // Datasets
     // ------------------
-    //#ifdef USE_TTZ
+    #ifdef USE_TTZ
     AddProcessClass("ttZ", "ttZ", "background", kBlue);
     	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
@@ -85,15 +87,22 @@ void BabyScrewdriver::Init()
     	AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
     	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
-    //outputName = "yieldMorTTZ";
-    //#endif
+    outputName = "yieldZnunuMorTTZ";
+    #endif
+
+    #ifdef USE_TTZNLO
+    AddProcessClass("ttZNLO", "ttZNLO", "background", kBlue);
+    	AddDataset("TTZToLLNuNu_M-10_amcnlo_pythia8_25ns","ttZNLO",0,0);
+    outputName = "yieldZnunuMorTTZNLO";
+    #endif
+
 
     //#ifdef USE_ZZWZ
     AddProcessClass("ZZ", "ZZ", "background", kBlue);
     	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZ",0,0);
     AddProcessClass("WZ", "WZ", "background", kBlue);
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","WZ",0,0);
-    outputName = "yieldMorZNuNu";
+    //outputName = "yieldMorZNuNu";
     //#endif
 
 AddRegion("SR1l_A_250lessMETless350","SR1l_A_250lessMETless350",&SR1l_A_250lessMETless350);
@@ -169,7 +178,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
 
     myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
-    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZ" || currentProcessClass == "ttZ" || currentProcessClass == "WZ")  && ( !(myEvent.isZtoNuNu) ))
+    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZ" || currentProcessClass == "ttZ" || currentProcessClass == "WZ" ||  currentProcessClass == "ttZNLO")  && ( !(myEvent.isZtoNuNu) ))
     {
          currentProcessClass = "";
     }

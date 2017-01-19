@@ -8,7 +8,7 @@
 
 //usage
 //vim uncertainties.txt
-//./ZnunuUnctTablePerProcessTheoreticalUnc ttZtableUnc.tab ttZtableUncRelHigher.tab realregions.txt uncertainties.txt ttZgrouptableUncRelHigher.tab grouprealregions.txt groupuncertainties.txt
+//./ZnunuUnctTablePerProcessTheoreticalUnc ttZtableUnc.tab ttZtableUncRelHigher.tab realregions.txt uncertainties.txt ttZgrouptableUncRelHigher.tab grouprealregions.txt groupuncertainties.txt ttZ
 
 using namespace std;
 using namespace theDoctor;
@@ -16,7 +16,7 @@ using namespace theDoctor;
 
 int main(int argc, char *argv[]){
 
-        if(argc != 8)
+        if(argc != 9)
             throw std::runtime_error("Bad number of arguments!");
          
         //get info from arguments
@@ -27,6 +27,7 @@ int main(int argc, char *argv[]){
         string theoTabRel = argv[5];
         string theoRegions = argv[6];
         string theouncNames = argv[7];
+        string currentProcess = argv[8];
         //specify dataset to be read
         string group = "groupTheoretical";
 
@@ -74,11 +75,11 @@ int main(int argc, char *argv[]){
      
 
         cout << "in here 3" << endl;
-       Table tabAbs(inputTabAbs);
+        Table tabAbs(inputTabAbs);
         cout << "in here 3.1" << endl;
-       Table tabRel(inputTabRel);
+        Table tabRel(inputTabRel);
         cout << "in here 3.2" << endl;
-       Table tabTheo(theoTabRel);
+        Table tabTheo(theoTabRel);
 
         cout << "in here 3.5" << endl;
         //read names of sysematics 
@@ -122,6 +123,35 @@ int main(int argc, char *argv[]){
                     if(regionsTheoA.at(ab).find(METBin) != std::string::npos )
                     {
                         cout << "MET bin AB " << METBin << " ,real region " << regions.at(r) << " ,teho region " << regionsTheoA.at(ab) << endl;
+                        Figure yieldAB(0,0);
+                        for(uint32_t c= 0; c<colI.size(); c++)
+                        {
+                            if(c==0)
+                            {
+                                yieldAB = tabAbs.Get(colI.at(c),regions.at(r) );
+                            }
+                            if(c%2 != 0)
+                            {
+                                Figure relTheoreticalInPer = tabTheo.Get(colI.at(c), regionsTheoA.at(ab) );
+                                Figure relTheoretical = Figure( relTheoreticalInPer.value()/100, 0);
+                                if(yieldAB.value()!= 0)
+                                {
+                                    tabAbs.Set(colI.at(c),regions.at(r), yieldAB-(yieldAB*relTheoretical) );
+                                    tabAbs.Set(colI.at(c+1),regions.at(r), yieldAB+(yieldAB*relTheoretical) );
+                                    tabRel.Set(colI.at(c),regions.at(r),relTheoreticalInPer);
+                                }
+                                else
+                                {
+                                    tabAbs.Set(colI.at(c),regions.at(r), Figure(0,0) );
+                                    tabAbs.Set(colI.at(c+1),regions.at(r), Figure(0,0) );
+                                    tabRel.Set(colI.at(c),regions.at(r),Figure(0,0));
+ 
+                                }
+                                 
+
+                            }
+                        }
+                        
                     }
 
                 }
@@ -138,6 +168,34 @@ int main(int argc, char *argv[]){
                     if(regionsTheoC.at(cd).find(METBin) != std::string::npos )
                     {
                         cout << "MET bin CDEFGH " << METBin << " ,real region " << regions.at(r) << " ,teho region " << regionsTheoC.at(cd) << endl;
+                        Figure yieldCD(0,0);
+                        for(uint32_t c= 0; c<colI.size(); c++)
+                        {
+                            if(c==0)
+                            {
+                                yieldCD = tabAbs.Get(colI.at(c),regions.at(r) );
+                            }
+                            if(c%2 != 0)
+                            {
+                                Figure relTheoreticalInPer = tabTheo.Get(colI.at(c), regionsTheoC.at(cd) );
+                                Figure relTheoretical = Figure( relTheoreticalInPer.value()/100, 0);
+                                if(yieldCD.value() !=0)
+                                {
+                                    tabAbs.Set(colI.at(c),regions.at(r), yieldCD-(yieldCD*relTheoretical) );
+                                    tabAbs.Set(colI.at(c+1),regions.at(r), yieldCD+(yieldCD*relTheoretical) );
+                                    tabRel.Set(colI.at(c),regions.at(r),relTheoreticalInPer);
+                                }
+                                else
+                                {
+                                    tabAbs.Set(colI.at(c),regions.at(r), Figure(0,0) );
+                                    tabAbs.Set(colI.at(c+1),regions.at(r), Figure(0,0) );
+                                    tabRel.Set(colI.at(c),regions.at(r),Figure(0,0));
+ 
+                                }
+                                 
+
+                            }
+                        }
                     }
 
                 }
@@ -344,6 +402,10 @@ int main(int argc, char *argv[]){
 */
         //@MJ@ TODO add lumi, CS
 
+        tabAbs.Print(static_cast<string>("recomputed"+currentProcess+"tableUnc.tab"),4);
+        tabAbs.PrintLatex(static_cast<string>("recomputed"+currentProcess+"tableUnc.tex"),4);
+        tabRel.Print(static_cast<string>("recomputed"+currentProcess+"tableUncRelHigher.tab"),4, "noError");
+        tabRel.PrintLatex(static_cast<string>("recomputed"+currentProcess+"tableUncRelHigher.tex"),4, "noError");
  
 /*        tabSum.Print(static_cast<string>(group+"summedprocessesZnunu.tab"),4);
         tabSum.PrintLatex(static_cast<string>(group+"summedprocessesZnunu.tex"),4); 
