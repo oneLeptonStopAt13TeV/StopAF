@@ -127,7 +127,7 @@ AddRegion("SR1l_I_250lessMETlessInfPUup","SR1l_I_250lessMETlessInfPUup",&SR1l_I_
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    SetLumi(36.46);
+    SetLumi(35.867);
 
 fillYieldsVector();
     Create1DHistos();
@@ -178,11 +178,11 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         weightV.push_back(weightLumi);
         //PUdown
         if(counter == 1) statnames << "PUdown" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )*myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_PUdown; //@MJ@ TODO PU without any normalization?!
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )*myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )* myEvent.weight_PUdown; //@MJ@ TODO PU without any normalization?!
         weightV.push_back(w);
         //PUup
         if(counter == 1) statnames << "PUup"<< endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )*myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_PUup;
+        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )*myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )* myEvent.weight_PUup;
         weightV.push_back(w);
     }
 
@@ -270,7 +270,7 @@ vector<string> totYield = { "SR1l_A_250lessMETlessInf" , "SR1l_A_250lessMETlessI
     float getWeight(string currentProcessType, float lumi)
     {
         float nEvents =  myEvent.wNormalization.at(22);
-        float all_weights = lumi*  myEvent.scale1fb *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_PU;
+        float all_weights = lumi*  myEvent.scale1fb *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )* myEvent.weight_PU;
         //cout << "cs: " << myEvent.crossSection << "scale 1 fb " << myEvent.scale1fb << " weight total: " << all_weights << endl;
         if(currentProcessType == "signal")
              throw std::runtime_error("weight for signal still waitning to be implemented!");

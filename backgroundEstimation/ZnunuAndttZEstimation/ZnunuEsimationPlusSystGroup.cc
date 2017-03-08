@@ -8,8 +8,8 @@
 #include "Math/GenVector/LorentzVector.h"
 
 //#define USE_TTZ
-//#define USE_WZ
-#define USE_ZZ
+#define USE_WZ
+//#define USE_ZZ
 
 #define USE_VAR_BASELINE
 #define USE_LEP1
@@ -59,8 +59,9 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/haweber_v22/";
     totalNumberOfWorkers = 1;
 
     vector<float> METBins1 = {250,350,450,600};
@@ -78,12 +79,12 @@ void BabyScrewdriver::Init()
     #ifdef USE_TTZ
     AddProcessClass("ttZ", "ttZ", "background", kMagenta-3);
     	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
         outputName = "groupRegionsttZ";
     #endif
     	
@@ -255,7 +256,7 @@ AddRegion("SR1l_I_550lessMETlessInfQ2up","SR1l_I_550lessMETlessInfQ2up",&SR1l_I_
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    SetLumi(36.46);
+    SetLumi(35.867);
 
     Create1DHistos();
 
@@ -287,7 +288,6 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     if( ( currentProcessClass == "ttZ" || currentProcessClass == "ZZWZ" || currentProcessClass == "ZZ"|| currentProcessClass == "WZ" ) && !(myEvent.isZtoNuNu) )
          currentProcessClass = "";
 
-    float weightLumi = getWeight(currentProcessType, GetLumi()); //@MJ@ TODO cross section form file?!
 
     //@MJ@ TODO I hate myself for this, but no better solution foud
     //computation of up/down weights
@@ -296,11 +296,19 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
     float weight_pt = 1;
     if( currentProcessClass == "ttZ")
         weight_pt = reweightTop(myEvent.top_pt, myEvent.atop_pt);
+
+    float nEvents =  myEvent.wNormalization.at(22);
+    float ISRNJ = 1;
+    if( currentProcessClass == "ttZ")
+    {
+        ISRNJ = myEvent.weight_ISRnjets*( nEvents / myEvent.wNormalization.at(25));
+    }
+    float weightLumi = getWeight(currentProcessType, GetLumi())*ISRNJ;
+
  
     vector<float> weightV;
     vector<float> weightVTot;
     weightV.clear();
-    float nEvents =  myEvent.wNormalization.at(22);
     //for number of SR
     for(uint32_t SR=0; SR<20; SR++) //@MJ@ TODO nr of sig regions changes
     {
@@ -309,28 +317,28 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         weightV.push_back(weightLumi);
         //PDFdown
         if(counter == 1) statnames << "pdfDN" << endl;
-        w =  GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs((myEvent.pdf_down_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1) / myEvent.wNormalization.at(11) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        w =  GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs((myEvent.pdf_down_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1) / myEvent.wNormalization.at(11) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) );
         //cout << "pdfd  " << pdfd << " w " << w << endl;
         weightV.push_back(w);
         //PDFup
         if(counter == 1) statnames << "pdfUP" << endl;
-        w = GetLumi() *  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * abs((myEvent.pdf_up_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1)/ myEvent.wNormalization.at(10) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        w = GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )  * abs((myEvent.pdf_up_weight/myEvent.genweights->at(0)) * (  myEvent.wNormalization.at(1)/ myEvent.wNormalization.at(10) ))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) );
         weightV.push_back(w);
         //alphaSdown
         if(counter == 1) statnames << "alphaSDN" << endl;
-        w = GetLumi() *  myEvent.scale1fb *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * abs(myEvent.weight_alphas_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(13)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) ; //TODO
+        w = GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * abs(myEvent.weight_alphas_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(13)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) ; //TODO
         weightV.push_back(w);
         //alphaSup
         if(counter == 1) statnames << "alphaSUP" << endl;
-        w = GetLumi() *  myEvent.scale1fb *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs(myEvent.weight_alphas_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(12)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ) ; //TODO
+        w = GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs(myEvent.weight_alphas_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(12)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) ; //TODO
         weightV.push_back(w);
         //Q2down
         if(counter == 1) statnames << "Q2DN" << endl;
-        w = GetLumi() *  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs(myEvent.weight_q2_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(9)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )  ; //TODO
+        w = GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) )* abs(myEvent.weight_q2_down*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(9)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) )  ; //TODO
         weightV.push_back(w);
         //Q2up
         if(counter == 1) statnames << "Q2UP" << endl;
-        w = GetLumi() *  myEvent.scale1fb *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28)) * abs(myEvent.weight_q2_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(5)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) ); //TODO
+        w = GetLumi() *  myEvent.scale1fb*ISRNJ* myEvent.weight_PU *  myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28)) * abs(myEvent.weight_q2_up*( myEvent.wNormalization.at(1) / myEvent.wNormalization.at(5)))* myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ); //TODO
         weightV.push_back(w);
     }
 
@@ -411,7 +419,7 @@ vector<string> totYield = { "SR1l_AB_250lessMETless350" , "SR1l_AB_250lessMETles
     float getWeight(string currentProcessType, float lumi)
     {
         float nEvents =  myEvent.wNormalization.at(22);
-        float all_weights = lumi*  myEvent.scale1fb * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        float all_weights = lumi*  myEvent.scale1fb* myEvent.weight_PU * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) )* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) );
         if(currentProcessType == "signal")
              throw std::runtime_error("weight for signal still waitning to be implemented!");
         return all_weights;

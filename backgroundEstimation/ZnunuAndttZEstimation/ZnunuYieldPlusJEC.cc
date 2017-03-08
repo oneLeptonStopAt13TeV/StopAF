@@ -8,7 +8,7 @@
 #include "Math/GenVector/LorentzVector.h"
 
 #define USE_TTZ
-#define USE_TTZNLO
+//#define USE_TTZNLO
 #define USE_VAR_BASELINE
 
 #define USE_LEP1
@@ -55,8 +55,9 @@ void BabyScrewdriver::Init()
 {
     PrintBoxedMessage("Initializing babyScrewdriver");
 
-    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
+    //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/NotSkimmed";
     //babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/isuarez_v11/";
+    babyTuplePath = "/opt/sbg/data/data1/cms/echabert/Stop1lSharedBabies/haweber_v22/";
     totalNumberOfWorkers = 1;
 
 
@@ -81,12 +82,12 @@ void BabyScrewdriver::Init()
     #ifdef USE_TTZ
     AddProcessClass("ttZ", "ttZ", "background", kBlue);
     	AddDataset("ttZJets_13TeV_madgraphMLM","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
-    	AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_1","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_2","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_3","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_4","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_5","ttZ",0,0);
+    	//AddDataset("ttZJets_13TeV_madgraphMLM_6","ttZ",0,0);
     outputName = "yieldZnunuMorTTZ";
     #endif
 
@@ -97,13 +98,12 @@ void BabyScrewdriver::Init()
     #endif
 
 
-    //#ifdef USE_ZZWZ
-    AddProcessClass("ZZ", "ZZ", "background", kBlue);
-    	AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZ",0,0);
+    //AddProcessClass("ZZ", "ZZ", "background", kBlue);
+    	//AddDataset("ZZTo2Q2Nu_amcnlo_pythia8_25ns","ZZ",0,0);
     AddProcessClass("WZ", "WZ", "background", kBlue);
     	AddDataset("WZTo1L3Nu_amcnlo_pythia8_25ns","WZ",0,0);
-    //outputName = "yieldMorZNuNu";
-    //#endif
+    //AddProcessClass("tZq", "tZq", "background", kBlue);
+    	//AddDataset("tZq_ll_4f_amcatnlo-pythia8_25ns","tZq",0,0);
 
 AddRegion("SR1l_A_250lessMETless350","SR1l_A_250lessMETless350",&SR1l_A_250lessMETless350);
 AddRegion("SR1l_A_350lessMETless450","SR1l_A_350lessMETless450",&SR1l_A_350lessMETless450);
@@ -147,7 +147,7 @@ AddRegion("SR1l_I_550lessMETlessInf","SR1l_I_550lessMETlessInf",&SR1l_I_550lessM
     
     AddChannel("lepChannel","lepChannel", &lepChannel);
 
-    SetLumi(36.46);
+    SetLumi(35.867);
 
     Create1DHistos();
 
@@ -167,7 +167,7 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
         nthentry =0;
         checkNegativeYields = true;
     }
-       
+
 
     string currentProcessClass = GetProcessClass(currentDataset);
     string currentProcessType  = GetProcessClassType(currentProcessClass);
@@ -178,13 +178,20 @@ void BabyScrewdriver::ActionForEachEvent(string currentDataset)
 
 
     myEvent.trigger = CheckTrigger( myEvent.is_data, currentDataset);
-    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZ" || currentProcessClass == "ttZ" || currentProcessClass == "WZ" ||  currentProcessClass == "ttZNLO")  && ( !(myEvent.isZtoNuNu) ))
+    if( (currentProcessClass == "Znunu" || currentProcessClass =="ZZ" || currentProcessClass == "ttZ" || currentProcessClass == "WZ" ||  currentProcessClass == "ttZNLO"||  currentProcessClass == "tZq")  && ( !(myEvent.isZtoNuNu) ))
     {
          currentProcessClass = "";
     }
-  
-
-    float weightLumi = getWeight(currentProcessType, GetLumi());
+    
+    float nEventsN =  myEvent.wNormalization.at(22);
+    float ISRNJ = 1;
+    if( currentProcessClass == "ttZ")
+    {
+        ISRNJ = myEvent.weight_ISRnjets*( nEventsN / myEvent.wNormalization.at(25));
+        //ISRNJ=1;
+    }
+    cout <<"class " << currentProcessClass  << " ngoodjets" << myEvent.ngoodjets << "ISR njets weight "  << myEvent.weight_ISRnjets*( nEventsN / myEvent.wNormalization.at(25)) << endl;
+    float weightLumi = getWeight(currentProcessType, GetLumi())*ISRNJ; 
     float weight     = weightLumi;
 
     if (currentProcessType == "data") weight = 1.0;
@@ -256,7 +263,7 @@ vector<string> totYield = { "SR1l_A_250lessMETless350" , "SR1l_A_350lessMETless4
     float getWeight(string currentProcessType, float lumi)
     {
         float nEvents =  myEvent.wNormalization.at(22);
-        float all_weights = lumi*  myEvent.scale1fb  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31) );
+        float all_weights = lumi*  myEvent.scale1fb /** myEvent.weight_PU*/  * myEvent.weight_lepSF*( nEvents / myEvent.wNormalization.at(28) ) * myEvent.weight_vetoLepSF*( nEvents / myEvent.wNormalization.at(31))* myEvent.weight_btagsf*( nEvents / myEvent.wNormalization.at(14) ) ;
 
         if(currentProcessType == "signal")
              throw std::runtime_error("weight for signal still waitning to be implemented!");

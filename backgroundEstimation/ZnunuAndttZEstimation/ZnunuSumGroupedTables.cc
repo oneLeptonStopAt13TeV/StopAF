@@ -36,6 +36,7 @@ int main(int argc, char *argv[]){
             while ( getline (regfile,line) )
             {
                 regions.push_back(line);
+                cout << "regions " << line << endl;
             }
             regfile.close();
         }
@@ -64,12 +65,18 @@ int main(int argc, char *argv[]){
        for(uint32_t s=0; s<colI.size(); s++)
        {
                if(s==0 || s%2 == 1)
+               {
                    systOutNames.push_back(colI.at(s));
+                   cout << "syst out anmes " << colI.at(s) << endl;
+               }
        }
  
- 
+
+        cout << "in here 1" << endl; 
         Table tabSum( colI, regions );
+        cout << "in here 2" << endl; 
         Table thigher(systOutNames, regions);
+        cout << "in here 3" << endl; 
 
         for(uint32_t r = 0; r<regions.size(); r++)
         {

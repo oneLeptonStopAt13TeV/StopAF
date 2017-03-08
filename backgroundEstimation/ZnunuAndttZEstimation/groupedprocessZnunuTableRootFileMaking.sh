@@ -3,10 +3,10 @@ make ZnunuUnctRootFileSummed
 make ZnunuUnctSummedTables
 make ZnunuUnctTablePerProcessTheoreticalUnc
 make ZnunuSumGroupedTables
-./ZnunuUnctTablePerProcess yieldMorttZ.tab signalRegMor.txt statNames.txt 17 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ttZ notgroup
-./ZnunuUnctTablePerProcess yieldMorWZ.tab signalRegMor.txt statNames.txt 17 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab WZ notgroup
-./ZnunuUnctTablePerProcess groupRegionsttZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab ttZ group
-./ZnunuUnctTablePerProcess groupRegionsWZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldMorZNuNuJECDown.tab yieldMorZNuNuJECUp.tab WZ group
+./ZnunuUnctTablePerProcess yieldMorttZ.tab signalRegMor.txt statNames.txt 17 yieldZnunuMorTTZJECDown.tab yieldZnunuMorTTZJECUp.tab ttZ notgroup
+./ZnunuUnctTablePerProcess yieldMorWZ.tab signalRegMor.txt statNames.txt 17 yieldZnunuMorTTZJECDown.tab yieldZnunuMorTTZJECUp.tab WZ notgroup
+./ZnunuUnctTablePerProcess groupRegionsttZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldZnunuMorTTZJECDown.tab yieldZnunuMorTTZJECUp.tab ttZ group
+./ZnunuUnctTablePerProcess groupRegionsWZ.tab signalRegMorGroup.txt statNamesGroup.txt 7 yieldZnunuMorTTZJECDown.tab yieldZnunuMorTTZJECUp.tab WZ group
 ./ZnunuSumGroupedTables ttZgrouptableUnc.tab WZgrouptableUnc.tab ZZgrouptableUnc.tab grouprealregions.txt groupuncertainties.txt groupttZWZZZ
 ./ZnunuUnctTablePerProcessTheoreticalUnc ttZtableUnc.tab ttZtableUncRelHigher.tab realregions.txt uncertainties.txt groupttZWZZZsummedprocessesRelHigherZnunu.tab grouprealregions.txt groupuncertainties.txt ttZ
 ./ZnunuUnctTablePerProcessTheoreticalUnc WZtableUnc.tab WZtableUncRelHigher.tab realregions.txt uncertainties.txt groupttZWZZZsummedprocessesRelHigherZnunu.tab grouprealregions.txt groupuncertainties.txt WZ

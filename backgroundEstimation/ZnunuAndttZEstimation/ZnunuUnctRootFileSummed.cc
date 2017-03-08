@@ -111,7 +111,9 @@ int main(int argc, char *argv[]){
                    if(resall.value() == 0)
                        histo.at(s)->SetBinContent(r+1, 0 );
                    else
-                       histo.at(s)->SetBinContent(r+1,resall.value()-resall.error() );      
+                       histo.at(s)->SetBinContent(r+1,resall.value()-resall.error() );     
+
+                  cout << "MC stat unc " << (resall.error()/resall.value())*100 << endl; 
                    
                }
                else if(colI.at(s) == "mcStatsUP")

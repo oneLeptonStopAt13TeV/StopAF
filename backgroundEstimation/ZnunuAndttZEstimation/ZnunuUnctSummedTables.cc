@@ -115,16 +115,25 @@ int main(int argc, char *argv[]){
 	//recompute PU and set the normalization unc
 	Figure PUDNtot(0.0);
 	Figure PUUPtot(0.0);
-	//Figure PUyieldtot(0.0);
+	/*Figure PUyieldtot(0.0);
 	for(uint32_t p=0; p<regions.size(); p++)
 	{
 	    PUDNtot += ( tab1.Get("PUdown", regions.at(p)) + tab2.Get("PUdown", regions.at(p))); //+ tab3.Get("PUdown", regions.at(p)));
 	    PUUPtot += ( tab1.Get("PUup", regions.at(p)) +  tab2.Get("PUup", regions.at(p))); //+ tab3.Get("PUup", regions.at(p)));
+	    PUyieldtot += ( tab1.Get("yield", regions.at(p)) +  tab2.Get("yield", regions.at(p))); //+ tab3.Get("PUup", regions.at(p)));
 	    //PUyieldtot += tI.Get("yield", regions.at(p));
 	}
 	Figure two(2,0);
-	Figure perDiff = (PUUPtot-PUDNtot)/(PUUPtot+PUDNtot);
-	Figure fPerDiff = Figure(abs(perDiff.value()), perDiff.error());
+	//Figure perDiff = (PUUPtot-PUDNtot)/(PUUPtot+PUDNtot);
+	Figure perDiff1 = (PUUPtot-PUyieldtot)/(PUyieldtot);
+	Figure perDiff2 = (PUDNtot-PUyieldtot)/(PUyieldtot);
+	Figure fPerDiff;
+        if(abs(perDiff1.value()) > abs(perDiff2.value()))
+        { 
+            fPerDiff= Figure(abs(perDiff1.value()), perDiff1.error());
+        }
+        else
+            fPerDiff= Figure(abs(perDiff2.value()), perDiff2.error());
 	Figure PUY1(0.0);
 	Figure PUY2(0.0);
 	Figure PUY3(0.0);
@@ -143,13 +152,14 @@ int main(int argc, char *argv[]){
 		//tab3.Set("PUdown", regions.at(p), PUY3 - (PUY3*fPerDiff));
 		//tab3.Set("PUup", regions.at(p), PUY3 + (PUY3*fPerDiff));
 
-	}
+	}*/
         //@MJ@ TODO update one day thigher with new PU
 
         for(uint32_t r = 0; r<regions.size(); r++)
         {
             Figure y1;
             Figure y2;
+            Figure y;
             //Figure y3;
             float unc1;
             float unc2;
@@ -166,6 +176,10 @@ int main(int argc, char *argv[]){
             float unc1Syst;
             float unc2Syst;
             //float unc3Syst;
+            float relJES = 0.04; //4%
+            float relPU = 0.01; //4%
+            Figure frelJES(0.04,0); //4%
+            Figure frelPU(0.01,0); //4%
             for(uint32_t c = 0; c< colI.size(); c++)
             {
                 Figure f1 = tab1.Get(colI.at(c), regions.at(r));
@@ -179,6 +193,7 @@ int main(int argc, char *argv[]){
                 {
                     y1 = f1;
                     y2 = f2;
+                    y=f;
                     //y3 = f3;
                     unc1 = 0;
                     unc2 = 0;
@@ -198,6 +213,34 @@ int main(int argc, char *argv[]){
                     //unc3Stat = y3.error()*y3.error();
 
                 }
+                //@MJ@ fixed JES
+                /*else if(colI.at(c) == "jesDN")
+                {
+                    tabSum.Set(colI.at(c), regions.at(r),y-(y*frelJES) ); 
+                       unc1 += (y1.value()*relJES)* (y1.value()*relJES) ;
+                       unc2 += (y2.value()*relJES)* (y2.value()*relJES) ;
+                     
+                       unc1Syst += (y1.value()*relJES)* (y1.value()*relJES) ;
+                       unc2Syst += (y2.value()*relJES)* (y2.value()*relJES) ;
+                }
+                else if(colI.at(c) == "jesUP")
+                {
+                    tabSum.Set(colI.at(c), regions.at(r),y+(y*frelJES) ); 
+                }*/
+                //@MJ@ PU=1%
+                /*else if(colI.at(c) == "PUdown")
+                {
+                    tabSum.Set(colI.at(c), regions.at(r),y-(y*frelPU) ); 
+                       unc1 += (y1.value()*relPU)* (y1.value()*relPU) ;
+                       unc2 += (y2.value()*relPU)* (y2.value()*relPU) ;
+                     
+                       unc1Syst += (y1.value()*relPU)* (y1.value()*relPU) ;
+                       unc2Syst += (y2.value()*relPU)* (y2.value()*relPU) ;
+                }
+                else if(colI.at(c) == "PUup")
+                {
+                    tabSum.Set(colI.at(c), regions.at(r),y+(y*frelPU) ); 
+                }*/
                 else if(c%2 != 0)
                 {
                     bef1 = f1.value();
@@ -210,7 +253,7 @@ int main(int argc, char *argv[]){
                    uncHigher2 = abs(bef2-y2.value()) > abs(f2.value() - y2.value()) ? abs(bef2-y2.value()): abs(f2.value() - y2.value());
                    //uncHigher3 = abs(bef3-y3.value()) > abs(f3.value() - y3.value()) ? abs(bef3-y3.value()): abs(f3.value() - y3.value());
 
-                   if(colI.at(c) == "lepSFDN" || colI.at(c) == "lepSFUP"|| colI.at(c) == "topPtModeling" || colI.at(c) == "topPtmodeling2")
+                   if(colI.at(c) == "lepSFDN" || colI.at(c) == "lepSFUP" ||  colI.at(c) == "ISRnjetsDown" || colI.at(c) == "ISRnjetsUp"||  colI.at(c) == "PUdown" || colI.at(c) == "PUup")
                    {
                        cout << "in top pt 1" << endl;
                        unc1 += uncHigher1*uncHigher1;
@@ -300,7 +343,7 @@ int main(int argc, char *argv[]){
                    uncHigher = abs(uncBef-yieldVal.value()) > abs(resall.value() - yieldVal.value()) ? abs(uncBef-yieldVal.value()): abs(resall.value() - yieldVal.value());
 
 
-                   if(colI.at(c) == "lepSFDN" || colI.at(c) == "lepSFUP"|| colI.at(c) == "topPtModeling" || colI.at(c) == "topPtmodeling2")
+                   if(colI.at(c) == "lepSFDN" || colI.at(c) == "lepSFUP" ||  colI.at(c) == "ISRnjetsDown" || colI.at(c) == "ISRnjetsUp")
                    {
                        cout << "in top pt 2" << colI.at(c) << endl;
                        uncTot += uncHigher*uncHigher ;
@@ -310,6 +353,26 @@ int main(int argc, char *argv[]){
                        else
                            thigher.Set(systOutNames.at(c/2), regions.at(r), Figure(0, 0));
 
+                   }
+                   //@MJ@ fixed jes
+                   /*else if(colI.at(c) == "jesDN" || colI.at(c) == "jesUP")
+                   {
+                       float trelJES = 0.04; //4%
+                       uncTot += (trelJES*yieldVal.value()) * (trelJES*yieldVal.value()) ;
+                       uncTotSyst +=  (trelJES*yieldVal.value()) * (trelJES*yieldVal.value()) ;
+
+                       thigher.Set(systOutNames.at(c/2), regions.at(r), Figure((trelJES)*100, 0));
+                   }*/
+                   //@MJ@ PU=3%
+                   else if(colI.at(c) == "PUdown" || colI.at(c) == "PUup")
+                   {
+                       cout << "in here PU2" << endl;
+                       float trelPU = 0.03; //1%
+                       uncTot += (trelPU*yieldVal.value()) * (trelPU*yieldVal.value()) ;
+                       uncTotSyst +=  (trelPU*yieldVal.value()) * (trelPU*yieldVal.value()) ;
+
+                       cout << "region " << regions.at(r) << "uncPU" << (trelPU*yieldVal.value()) * (trelPU*yieldVal.value()) << endl;
+                       thigher.Set(systOutNames.at(c/2), regions.at(r), Figure((trelPU)*100, 0));
                    }
                    else
                    {

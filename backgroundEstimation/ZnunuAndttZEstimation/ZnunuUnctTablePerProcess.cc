@@ -38,9 +38,15 @@ int main(int argc, char *argv[]){
         //@MJ@ TODO apply SF
         Figure SF = Figure(1,0);
         if( currentProcess == "ttZ")
-           SF = Figure(1.37,0.16);
+        {
+           SF = Figure(1.21,0.11);
+           //SF = Figure(1.14,0.30);
+        }
         else if(currentProcess == "WZ")
-           SF = Figure(0.93,0.14);
+        {
+           SF = Figure(1.14,0.30);
+           //SF = Figure(1.21,0.11);
+        }
 
         vector<string> regions;
         //specify dataset to be read
@@ -152,11 +158,11 @@ int main(int argc, char *argv[]){
        uint32_t l = 0;
        theDoctor::Figure yieldVal;
 
+       bool makeZero = false;
        //loop over all regions
        for(uint32_t r=0; r<regions.size();r++)
        {
            theDoctor::Figure resall = tab.Get(regions.at(r), datasets.at(0)) * Figure(SF.value(), 0); //@MJ@ TODO do not propate error of SF to statistics!!!
-           
            //first there is real region value
            if(r == 0 || r%nUnc == 0)
            {
@@ -185,6 +191,14 @@ int main(int argc, char *argv[]){
            //then all systematics
            else
            {
+               if(makeZero)
+               {
+                   if(yieldVal.value() == 0)
+                   {
+                       Figure fZero(0,0);
+                       resall = fZero;
+                   }
+               }
                if(uncBef == 0)
                {
                    uncBef = resall.value();
@@ -195,7 +209,7 @@ int main(int argc, char *argv[]){
                    uncTot += uncHigher*uncHigher ;//@MJ@TODO now average unc, change to maximal?!
 
                 
-                   if(systOutNames.at(l) == "lepSFDN" || systOutNames.at(l) == "lepSFUP"|| systOutNames.at(l) == "topPtModeling" || systOutNames.at(l) == "topPtmodeling2")
+                   if(systOutNames.at(l) == "lepSFDN" || systOutNames.at(l) == "lepSFUP"|| systOutNames.at(l) == "ISRnjetsDown" || systOutNames.at(l) == "ISRnjetsUp"|| systOutNames.at(l) == "PUdown" || systOutNames.at(l) == "PUup")
                    {
                        if(yieldVal.value() != 0)
                            thigher.Set(systOutNames.at(l), realReg.at(uncLine-1), Figure((uncHigher/yieldVal.value())*100, 0));
@@ -249,13 +263,27 @@ int main(int argc, char *argv[]){
 	       {     
 		   theDoctor::Figure JECd = tJECdown.Get(realReg.at(j), currentProcess ) * Figure(SF.value(), 0);
 		   theDoctor::Figure JECu = tJECup.Get(realReg.at(j), currentProcess) * Figure(SF.value(), 0);
-	   
+
 		   Figure SFDN = Figure(SF.value()-SF.error(),0 );
 		   Figure SFUP = Figure(SF.value()+SF.error(),0 );
 		   Figure nDN = tab.Get(realReg.at(j), currentProcess ) * SFDN;
 		   Figure nUP = tab.Get(realReg.at(j), currentProcess ) * SFUP;
-		   Figure relZZNorm(0.06,0);
+
 		   Figure nyield = tI.Get("yield", realReg.at(j));
+
+                   if(makeZero)
+                   {
+                       if(nyield.value() == 0)
+                       {
+                           Figure fZero(0,0);
+                           JECd = fZero;
+                           JECu = fZero;
+                           nDN = fZero;
+                           nUP = fZero;
+                       }
+                   }
+	   
+		   Figure relZZNorm(0.06,0);
 
 		   if(currentProcess == "ZZ")
 		   {

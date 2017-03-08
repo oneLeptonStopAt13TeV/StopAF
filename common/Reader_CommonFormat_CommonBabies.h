@@ -61,10 +61,10 @@ typedef struct
     bool         trigger = 0;
     //vector<float> ak8pfjets_phi;
     //vector<float> ak10pfjets_phi;
-    float         lep1_passMediumID = -13;
-    float         lep1_passTightID = -13;
-    float         lep1_passLooseID = -13;
-    float         lep2_mass = -13;
+    bool         lep1_passMediumID = -13;
+    bool         lep1_passTightID = -13;
+    bool         lep1_passLooseID = -13;
+    bool         lep2_mass = -13;
     int           runId = -13;
     //float         pv_ndof = -13;
     //int           numberOfGeneratedLeptons = -13;
@@ -101,6 +101,7 @@ typedef struct
     //vector<float> ak8pfjets_tau2;
     //vector<float> ak10pfjets_tau2;
     int           ngoodbtags = -13;
+    int           ntightbtags = -13;
     float         lep2_eta = -13;
     float         crossSection = -13;
     float         kfactor = -13;
@@ -112,7 +113,7 @@ typedef struct
     float         MT = -13;
     //float         jetsPhi = -13;
     int           ngoodjets = -13;
-    float         lep1_passVeto = -13;
+    bool         lep1_passVeto = -13;
     float         pfmet = -13;
     float         lep1_MiniIso = -13;
     float         lep1_relIso = -13;
@@ -190,7 +191,7 @@ typedef struct
     vector<int>*   genqs_status;
     float         top_pt = -13;
     float         atop_pt = -13;
-    float         dphiMET = -13;
+    float         lep1_dphiMET = -13;
     //uint32_t      nthentry = 0;
 
     //@MJ@ TODO fill these
@@ -521,7 +522,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         //myEvent->lep1_mass = myEvent->lep1_p4->M();//@MJ@ TODO something is going on
     }
     #endif
-    #ifdef USE_LEP1_EXT
+    #ifdef USE_LEP1
     if(theTree->GetListOfBranches()->FindObject("lep1_passVeto"))
         theTree->SetBranchAddress("lep1_passVeto",           &(myEvent->lep1_passVeto));
     if(theTree->GetListOfBranches()->FindObject("lep1_passLooseID"))
@@ -682,12 +683,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("ngoodbtags"))
         theTree->SetBranchAddress("ngoodbtags",              &(myEvent->ngoodbtags));
+    if(theTree->GetListOfBranches()->FindObject("ntightbtags"))
+        theTree->SetBranchAddress("ntightbtags",              &(myEvent->ntightbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2"))
         theTree->SetBranchAddress("mindphi_met_j1_j2",      &(myEvent->dphi_ak4pfjets_met));
-    //if(theTree->GetListOfBranches()->FindObject("dphiMET"))
-        //theTree->SetBranchAddress("dphiMET",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("lep1_dphiMET"))
+        theTree->SetBranchAddress("lep1_dphiMET",      &(myEvent->lep1_dphiMET));
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
         theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
+    if(theTree->GetListOfBranches()->FindObject("Mlb_closestb"))
+        theTree->SetBranchAddress("Mlb_closestb",                     &(myEvent->Mlb));
     #endif
 
 
@@ -706,12 +711,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jup_ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("jup_ngoodbtags"))
         theTree->SetBranchAddress("jup_ngoodbtags",              &(myEvent->ngoodbtags));
+    if(theTree->GetListOfBranches()->FindObject("jup_ntightbtags"))
+        theTree->SetBranchAddress("jup_ntightbtags",              &(myEvent->ntightbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jup"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jup",      &(myEvent->dphi_ak4pfjets_met));
-    //if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jup"))
-    //    theTree->SetBranchAddress("dphiMET_rl_jup",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("lep1_dphiMET_rl_jup"))
+        theTree->SetBranchAddress("lep1_dphiMET_rl_jup",      &(myEvent->lep1_dphiMET));
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi_rl_jup"))
         theTree->SetBranchAddress("pfmet_phi_rl_jup",               &(myEvent->pfmet_phi));
+    if(theTree->GetListOfBranches()->FindObject("Mlb_closestb_jup"))
+        theTree->SetBranchAddress("Mlb_closestb_jup",                     &(myEvent->Mlb));
     #endif
 
     #ifdef USE_VAR_BASELINE_DOWN
@@ -727,12 +736,16 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("jdown_ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("jdown_ngoodbtags"))
         theTree->SetBranchAddress("jdown_ngoodbtags",              &(myEvent->ngoodbtags));
+    if(theTree->GetListOfBranches()->FindObject("jdown_ntightbtags"))
+        theTree->SetBranchAddress("jdown_ntightbtags",              &(myEvent->ntightbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl_jdown"))
         theTree->SetBranchAddress("mindphi_met_j1_j2_rl_jdown",      &(myEvent->dphi_ak4pfjets_met));
-    //if(theTree->GetListOfBranches()->FindObject("dphiMET_rl_jdown"))
-    //    theTree->SetBranchAddress("dphiMET_rl_jdown",      &(myEvent->dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("lep1_dphiMET_rl_jdown"))
+        theTree->SetBranchAddress("lep1_dphiMET_rl_jdown",      &(myEvent->lep1_dphiMET));
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi_rl_jdown"))
         theTree->SetBranchAddress("pfmet_phi_rl_jdown",               &(myEvent->pfmet_phi));
+    if(theTree->GetListOfBranches()->FindObject("Mlb_closestb_jdown"))
+        theTree->SetBranchAddress("Mlb_closestb_jdown",                     &(myEvent->Mlb));
     #endif
 
     #ifdef USE_GLOBAL_VAR
@@ -750,8 +763,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("mass_chargino",                  &(myEvent->mass_chargino));
     if(theTree->GetListOfBranches()->FindObject("mass_stop"))
         theTree->SetBranchAddress("mass_stop",                  &(myEvent->mass_stop));
-    if(theTree->GetListOfBranches()->FindObject("Mlb_closestb"))
-        theTree->SetBranchAddress("Mlb_closestb",                     &(myEvent->Mlb));
     //theTree->SetBranchAddress("Mlb_leadb",               &(myEvent->Mlb_leadb));
     if(theTree->GetListOfBranches()->FindObject("topness"))
         theTree->SetBranchAddress("topness",                 &(myEvent->topness));
@@ -917,16 +928,7 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
     myEvent->lep2_mass = sqrt(myEvent->lep2_p4.M2());
     #endif
 
-    myEvent->dphiMET = abs(myEvent->lep1_phi - myEvent->pfmet_phi) < TMath::Pi()  ? abs(myEvent->lep1_phi - myEvent->pfmet_phi) : 2*TMath::Pi() - abs(myEvent->lep1_phi - myEvent->pfmet_phi) ;
-    //cout << "dphimetlep " << myEvent->dphiMET << endl;
-
-    //myEvent->dphiMET = 0;
-    //cout << "dphimetlep intermediate " << myEvent->dphiMET << endl;
-
-    //TVector3 lepVec( myEvent->lep1_p4.x(),  myEvent->lep1_p4.y(),  myEvent->lep1_p4.z() );
-    //TVector3 metVec( myEvent->pfmet*cos(myEvent->pfmet_phi), myEvent->pfmet*sin(myEvent->pfmet_phi), 0 );
-    //myEvent->dphiMET = fabs( lepVec.DeltaPhi(metVec) ); 
-    //cout << "dphimetlep second try " << myEvent->dphiMET << endl;
+    //myEvent->lep1_dphiMET = abs(myEvent->lep1_phi - myEvent->pfmet_phi) < TMath::Pi()  ? abs(myEvent->lep1_phi - myEvent->pfmet_phi) : 2*TMath::Pi() - abs(myEvent->lep1_phi - myEvent->pfmet_phi) ; //@MJ@ TODO remove
 
     myEvent->genqs_p4 = *(myEvent->p4genqs_p4);
     for(uint32_t t = 0; t<myEvent->genqs_id->size(); t++)

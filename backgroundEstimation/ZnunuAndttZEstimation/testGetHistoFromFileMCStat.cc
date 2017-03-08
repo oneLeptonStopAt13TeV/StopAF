@@ -14,10 +14,7 @@ int main(){
         sonic.LoadXMLConfig("config.xml");
         //sonic.GetProcessClassTagList(&processes);
         processes.push_back("ttZ");
-        vector<string> systematicsDN = {"PDFdown", "alphaSdown", "Q2down"};
-        vector<string> systematicsUP = {"PDFup", "alphaSup", "Q2up" };
-        //vector<string> systematicsUP = {"PUup"};
-        //vector<string> systematicsDN = {"PUdown"};
+        vector<string> systematicsDN = {""};
         //vector<string> systematicsUP = {"PDFup"};
         //vector<string> systematicsDN = {"PDFdown"};
         //vector<string> systematicsUP = {"alphaSup"};
@@ -30,12 +27,11 @@ int main(){
         //vector<string> regions = {"SR1l_NJlowTM_250lessMETlessInf", "SR1l_NJmidTM_250lessMETlessInf", "SR1l_NJhighTM_250lessMETlessInf"};
         //vector<string> regions = {"SR1l_NJ_250lessMETlessInf"};
         //vector<string> variable = {"METAB", "METCD", "MET3EFGHI", "MET3EFGHI"};
-        //vector<string> variable = {"MET", "MET", "MET"};
-        vector<string> variable = {"MET", "MET"};
+        vector<string> variable = {"METN2", "METN2"};
         //vector<string> variable = {"Mlb", "Mlb"};
         //vector<string> variable = {"Njets", "Njets","Njets"};
         //vector<string> variable = {"Njets"};
-        //vector<string> variable = {"METN2","METN2"};
+        //vector<string> variable = {"MET"};
         //vector<string> variable = {"topnessMod", "topnessMod" };
         //string sample = "METplotsttZNLOplotsRatios";
         string sample = "METplotsttZplotsRatios";
@@ -45,7 +41,7 @@ int main(){
         {
 
 		vector<TH1D*> down;
-		vector<TH1D*> up;
+	//	vector<TH1D*> up;
                 TH1D* absUnc;
                 //read systematics
                 for(uint32_t u=0; u<systematicsDN.size(); u++)
@@ -55,27 +51,21 @@ int main(){
                     cout << "region dn " << regions.at(r)+systematicsDN.at(u) << endl;
                 }
 		
-                for(uint32_t uu=0; uu<systematicsUP.size(); uu++)
-                {
-		    vector<TH1D*> hh = sonic.Get1DHistoCloneFromFile(sample, "1DSuperimposedNoNorm",variable.at(r),processes,regions.at(r)+systematicsUP.at(uu),"lepChannel");
-		    up.push_back(hh.at(0));
-                    cout << "region up " << (regions.at(r)+systematicsUP.at(uu)).c_str() << endl;
-                }
                 absUnc = dynamic_cast<TH1D*>(down.at(0)->Clone());
 
                 ///fil/ the histogram with rel Syst
                 for(uint32_t b = 0; b<down.at(0)->GetNbinsX(); b++)
                 {
+                    Double_t Yield = 0;
                     Double_t dnYield = 0;
-                    Double_t upYield = 0;
                     Double_t all = 0;
                     for(uint32_t hist = 0; hist<down.size(); hist++)
                     {
-                         dnYield = down.at(hist)->GetBinContent(b+1);
-                         upYield = up.at(hist)->GetBinContent(b+1);
+                         Yield = down.at(hist)->GetBinContent(b+1);
+                         dnYield = down.at(hist)->GetBinContent(b+1) - down.at(hist)->GetBinError(b+1);
                          //if(upYield+dnYield != 0)
-                         all+= (abs(upYield-dnYield)/2)*(abs(upYield-dnYield)/2); //@MJ@ TODO protect for 0,, start here!!!!
-                         cout << "syst " <<  hist << " rel bin" << b << " " << (abs(upYield-dnYield))/(abs(upYield+dnYield)) << endl ; 
+                         all+= (abs(Yield-dnYield))*(abs(Yield-dnYield)); //@MJ@ TODO protect for 0,, start here!!!!
+                         //cout << "syst " <<  hist << " rel bin" << b << " " << (abs(upYield-dnYield))/(abs(upYield+dnYield)) << endl ; 
                     }
                     cout << "all " << sqrt(all) << endl;
                     absUnc->SetBinContent(b+1,sqrt(all));
@@ -164,8 +154,8 @@ int main(){
 	       can->cd();
 	       main->Draw();
 	       ratio->Draw("same");
-	       can->SaveAs((regions.at(r)+variable.at(r)+sample+".root").c_str());
-	       can->SaveAs((regions.at(r)+variable.at(r)+sample+".eps").c_str());
+	       can->SaveAs((regions.at(r)+variable.at(r)+sample+"Statistics.root").c_str());
+	       can->SaveAs((regions.at(r)+variable.at(r)+sample+"Statistics.eps").c_str());
                //delete main;
                //delete ratio;
                //delete can;

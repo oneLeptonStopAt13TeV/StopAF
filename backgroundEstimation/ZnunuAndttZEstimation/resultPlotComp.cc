@@ -7,21 +7,24 @@
 #include "../sonicScrewdriver/interface/Table.h"
 
 
-//./resultPlot yieldZnunuMorTTZNLOSR.tab realregions.txt 
+//./resultPlotComp groupsummedprocessesZnunuNEW.tab groupsummedprocessesZnunuOLD.tab  realregions.txt 
 using namespace std;
 using namespace theDoctor;
 
 int main(int argc, char *argv[]){
 
-        if(argc != 3)
+        if(argc != 4)
             throw std::runtime_error("Bad number of arguments!");
 
-        string inputTab = argv[1];
-        TString inputFile = argv[2];
+        string inputTab1 = argv[1];
+        string inputTab2 = argv[2];
+        TString inputFile = argv[3];
 
         vector<string> regions;
-        vector<string> datasets = {"ttZ", "ttZNLO"}; //@MJ@ TODO change the datasets to meaningful ones
+        //vector<string> datasets = {"yield", "yield"}; //@MJ@ TODO change the datasets to meaningful ones
+        vector<string> datasets = {"ttZ", "ttZ"}; //@MJ@ TODO change the datasets to meaningful ones
 
+        TH1::SetDefaultSumw2();
 
 	string line;
         ifstream regfile(inputFile);
@@ -49,17 +52,23 @@ int main(int argc, char *argv[]){
         }
 
        //theDoctor::SonicScrewdriver sonic;
-       Table tab(inputTab);
 
        vector<TH1F*> histo;
        for(uint32_t h =0; h<datasets.size(); h++)
        {
            histo.push_back(new TH1F(datasets.at(h).c_str(), datasets.at(h).c_str(), regions.size(), 0, regions.size()));
        }
+       Table tab;
        for(uint32_t r=0; r<regions.size();r++)
        {
            for(uint32_t d=0; d<datasets.size();d++)
            {
+               if(d==0) 
+               tab = Table(inputTab1);
+               else
+               tab = Table(inputTab2);
+
+               //theDoctor::Figure res = tab.Get(datasets.at(d),regions.at(r));
                theDoctor::Figure res = tab.Get(regions.at(r),datasets.at(d));
                histo.at(d)->SetBinContent(r+1,res.value());
                histo.at(d)->SetBinError(r+1,res.error());
@@ -75,15 +84,22 @@ int main(int argc, char *argv[]){
            if(c==0)
            {
               histo.at(c)->SetLineColor(kBlack);
-              histo.at(c)->Draw("hist e"); //SET titles (per bin?!)
-              histo.at(c)->GetXaxis()->SetTitle("signal regions");
-              histo.at(c)->GetYaxis()->SetTitle("yield");
+              //histo.at(c)->Draw("hist e"); //SET titles (per bin?!)
+              //histo.at(c)->GetXaxis()->SetTitle("signal regions");
+              //histo.at(c)->GetYaxis()->SetTitle("yield");
            }
            else
            {               
               //histo.at(c)->SetLineColor(c+2);
-              histo.at(c)->SetLineColor(kRed);
-              histo.at(c)->Draw("same hist e");
+              //histo.at(c)->SetLineColor(kRed);
+              //histo.at(c)->Draw("same hist e");
+
+              histo.at(0)->SetLineColor(kBlack);
+              histo.at(0)->Divide(histo.at(1));
+              float max = histo.at(0)->GetMaximum();
+              histo.at(0)->SetMaximum(max*1.2);
+              histo.at(0)->Draw("e");
+              
            }
        }
 
@@ -95,8 +111,8 @@ int main(int argc, char *argv[]){
        uint32_t bin = 1;
        for(uint32_t b = 0; b<regions.size(); b++)
        {
-           if(b+1==6 || b+1==7 || b+1==12 || b+1==15 || b+1==16 || b+1==27)
-               continue;
+           //if(b+1==6 || b+1==7 || b+1==12 || b+1==15 || b+1==16 || b+1==27)
+           //    continue;
            double value1 = histo.at(0)->GetBinContent(b+1); 
            double error1 = histo.at(0)->GetBinError(b+1); 
            h1->SetBinContent(bin,value1);
@@ -109,5 +125,5 @@ int main(int argc, char *argv[]){
        }
 
        cout << "chi2 test 2: " << h1->Chi2Test(h2, "WW P") << endl;
-       can->SaveAs("plotTest.root"); //@MJ@ TODO svae to root file
+       can->SaveAs("plotComparisonPU.root"); //@MJ@ TODO svae to root file
 }

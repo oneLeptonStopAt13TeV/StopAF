@@ -9,6 +9,8 @@ using namespace std;
 
 int main(){
 
+        TH1::SetDefaultSumw2(); 
+
         vector<string> processes;
 	theDoctor::SonicScrewdriver sonic(false);
         sonic.LoadXMLConfig("config.xml");
@@ -16,8 +18,6 @@ int main(){
         processes.push_back("ttZ");
         vector<string> systematicsDN = {"PDFdown", "alphaSdown", "Q2down"};
         vector<string> systematicsUP = {"PDFup", "alphaSup", "Q2up" };
-        //vector<string> systematicsUP = {"PUup"};
-        //vector<string> systematicsDN = {"PUdown"};
         //vector<string> systematicsUP = {"PDFup"};
         //vector<string> systematicsDN = {"PDFdown"};
         //vector<string> systematicsUP = {"alphaSup"};
@@ -26,22 +26,29 @@ int main(){
         //vector<string> systematicsDN = {"Q2down"};
         //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CD_250lessMETlessInf", "SR1l_EFGH_250lessMETlessInf", "SR1l_I_250lessMETlessInf"};
         //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf", "SR1l_I_250lessMETlessInf"};
-        vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf"};
+        //vector<string> regions = {"SR1l_AB_250lessMETlessInf", "SR1l_CDEFGH_250lessMETlessInf"};
         //vector<string> regions = {"SR1l_NJlowTM_250lessMETlessInf", "SR1l_NJmidTM_250lessMETlessInf", "SR1l_NJhighTM_250lessMETlessInf"};
-        //vector<string> regions = {"SR1l_NJ_250lessMETlessInf"};
+        vector<string> regions = {"SR1l_NJ_250lessMETlessInf"};
         //vector<string> variable = {"METAB", "METCD", "MET3EFGHI", "MET3EFGHI"};
         //vector<string> variable = {"MET", "MET", "MET"};
-        vector<string> variable = {"MET", "MET"};
+        //vector<string> folder = {"METplotsttZplotsRatios","METplotsttZplotsRatiosOLD"};
+        vector<string> folder = {"METplotsttZplotsRatios","METplotsttZNLOplotsRatios"};
         //vector<string> variable = {"Mlb", "Mlb"};
         //vector<string> variable = {"Njets", "Njets","Njets"};
-        //vector<string> variable = {"Njets"};
-        //vector<string> variable = {"METN2","METN2"};
+        vector<string> variable = {"Njets"};
+        //vector<string> variable = {"MET"};
         //vector<string> variable = {"topnessMod", "topnessMod" };
-        //string sample = "METplotsttZNLOplotsRatios";
-        string sample = "METplotsttZplotsRatios";
 
+
+        TPad* mainT;
+        TPad* ratioT;
+        TH1D* hres; 
         //per each region
         for(uint32_t r =0; r<regions.size(); r++)
+        {
+	       TCanvas *can = new TCanvas((regions.at(r)+"Can").c_str(),(regions.at(r)+"Can").c_str());
+	       can->cd();
+        for(uint32_t fo=0; fo<folder.size(); fo++)
         {
 
 		vector<TH1D*> down;
@@ -50,14 +57,14 @@ int main(){
                 //read systematics
                 for(uint32_t u=0; u<systematicsDN.size(); u++)
                 {
-		    vector<TH1D*> h = sonic.Get1DHistoCloneFromFile(sample, "1DSuperimposedNoNorm", variable.at(r),processes,regions.at(r)+systematicsDN.at(u),"lepChannel");
+		    vector<TH1D*> h = sonic.Get1DHistoCloneFromFile(folder.at(fo), "1DSuperimposedNoNorm", variable.at(r),processes,regions.at(r)+systematicsDN.at(u),"lepChannel");
 		    down.push_back(h.at(0));
                     cout << "region dn " << regions.at(r)+systematicsDN.at(u) << endl;
                 }
 		
                 for(uint32_t uu=0; uu<systematicsUP.size(); uu++)
                 {
-		    vector<TH1D*> hh = sonic.Get1DHistoCloneFromFile(sample, "1DSuperimposedNoNorm",variable.at(r),processes,regions.at(r)+systematicsUP.at(uu),"lepChannel");
+		    vector<TH1D*> hh = sonic.Get1DHistoCloneFromFile(folder.at(fo), "1DSuperimposedNoNorm",variable.at(r),processes,regions.at(r)+systematicsUP.at(uu),"lepChannel");
 		    up.push_back(hh.at(0));
                     cout << "region up " << (regions.at(r)+systematicsUP.at(uu)).c_str() << endl;
                 }
@@ -84,7 +91,7 @@ int main(){
 
                //open file and read pads
 	       TFile* f = NULL;
-               f = new TFile((sample+"/1DDataMCComparison.root").c_str());
+               f = new TFile((folder.at(fo)+"/1DDataMCComparison.root").c_str());
 	       TCanvas * c = NULL;
 	       c = dynamic_cast<TCanvas*>(f->Get(("lepChannel/"+regions.at(r)+"/"+variable.at(r)).c_str()));
 	       TList *t = NULL;
@@ -106,6 +113,8 @@ int main(){
 	       TList* o = NULL;
 	       o = ratio->GetListOfPrimitives();
 	       TH1D* theRatio = dynamic_cast<TH1D*>(o->At(0));
+
+               
 
                //set statistics and draw new histograms
                if(absUnc->GetNbinsX() != theHist->GetNbinsX())
@@ -136,41 +145,56 @@ int main(){
                    }
 
                }
-               main->cd();
+               if(fo==0)
+               {
                theHist->SetFillColor(kMagenta-3);
                theHist->SetLineColor(kMagenta-3);
                theHist->SetFillStyle(1001);
                theHist->SetMarkerStyle(8);
                theHist->SetMarkerColor(kBlack);
+               }
+               else
+               {
+               theHist->SetFillColor(kBlue);
+               theHist->SetLineColor(kBlue);
+               theHist->SetFillStyle(1001);
+               theHist->SetMarkerStyle(8);
+               theHist->SetMarkerColor(kBlack);
+               theHist->Draw("same E2");
+               }
                //TH1* theHistStackH= theHistStack->GetHistogram();
                //cout << "nstack hist" << theHistStack->GetNhists() << endl;
                //theHistStackH->SetFillColor(kBlack);
                //theHistStackH->SetFillStyle(1001);
                //theHistStackH->Draw("same");
                //theHistStack->Paint("noclear");
-               theHist->Draw("same E2");
 
-	       ratio->cd();
-	       theRatio->SetMarkerStyle(1);
-	       theRatio->SetFillColor(kMagenta-3);
-	       theRatio->SetFillStyle(1001);
-	       theRatio->Draw("E2");
-	       theRatioDN->Draw("same");
-	       theRatioUP->Draw("same");
+ 
 	       cout << "c " << c << " p1 " << main << " p2 " << ratio << "TH1D " << theRatio << " TH1 main " << theHist << endl;
                
+               can->cd();
 
-	       TCanvas *can = new TCanvas((regions.at(r)+"Can").c_str(),(regions.at(r)+"Can").c_str());
-	       can->cd();
-	       main->Draw();
-	       ratio->Draw("same");
-	       can->SaveAs((regions.at(r)+variable.at(r)+sample+".root").c_str());
-	       can->SaveAs((regions.at(r)+variable.at(r)+sample+".eps").c_str());
+               if(fo==0)
+               {
+               //theHist->Draw("E2");
+               hres=(TH1D*)theHist->Clone();
+               }
+               else
+               {
+               hres->Divide(theHist);
+               float max = hres->GetMaximum();
+               hres->SetMaximum(1.2*max);
+               hres->Draw("E2");
+               }
+
                //delete main;
                //delete ratio;
                //delete can;
                //delete f;
 
+       }
+	       can->SaveAs((regions.at(r)+variable.at(r)+"PlotsNLOLO.root").c_str());
+	       can->SaveAs((regions.at(r)+variable.at(r)+"PlotsNLOLO.eps").c_str());
        }
  
 }
