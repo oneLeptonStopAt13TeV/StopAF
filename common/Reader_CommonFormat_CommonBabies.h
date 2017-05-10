@@ -380,6 +380,21 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
 {
     myEvent->hasGenInfo = false;
 
+    //fill weight normalization for data and MC
+    
+    TH1D* hWeight = NULL;
+    hWeight = dynamic_cast<TH1D*>(f->Get("h_counter"));
+    if (hWeight != NULL)
+    {
+	cout << "weight hist " << hWeight << " get " <<  f->Get("h_counter")<< " file " << f << endl;
+	myEvent->wNormalization.clear();
+	myEvent->wNormalization.push_back(-13); //@MJ@ ATTENTION vector.at(0) random number to sy synchronized with binning numbering
+	for(uint32_t n=0; n<hWeight->GetNbinsX(); n++)
+	{
+            myEvent->wNormalization.push_back(hWeight->GetBinContent(n+1));
+	}
+	cout << "normalization size " << myEvent->wNormalization.size() << endl;
+    }
    /* myEvent->pointerForTriggerName = NULL;
     myEvent->pointerForTriggerPass = NULL;
     myEvent->pointerForgen_neutralino_m = 0;
@@ -413,18 +428,6 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     myEvent->pointerForGenLostLeptons_pdgid = 0;
     #endif
 */
-    //fill weight normalization
-    TH1F* hWeight = NULL;
-    hWeight = (TH1F*)f->Get("h_counter");
-    cout << "weight hist " << hWeight << " get " <<  f->Get("h_counter")<< " file " << f << endl;
-    myEvent->wNormalization.clear();
-    myEvent->wNormalization.push_back(-13); //@MJ@ ATTENTION vector.at(0) random number to sy synchronized with binning numbering
-    for(uint32_t n=0; n<hWeight->GetNbinsX(); n++)
-    {
-         myEvent->wNormalization.push_back(hWeight->GetBinContent(n+1));
-    }
-    cout << "normalization size " << myEvent->wNormalization.size() << endl;
-
 
    //entries in tree
    myEvent->nentries = theTree->GetEntries();
@@ -895,7 +898,7 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
 // #  Function to read one event  #
 // ################################
  
-void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
+void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent, TFile* f)
 {
     theTree->GetEntry(i);
     //myEvent->nthentry = i;
@@ -946,6 +949,32 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent)
                 myEvent->atop_pt = myEvent->genqs_p4.at(t).Pt();
         }
 
+    }
+    //fill weight normalization
+    
+    TH1D* hWeight = NULL;
+    hWeight = dynamic_cast<TH1D*>(f->Get("h_counter"));
+    if(hWeight==NULL)
+    {
+        TH3D* hSigWeight = NULL;
+            hSigWeight = dynamic_cast<TH3D*>(f->Get("h_counterSMS"));
+        if( hSigWeight == NULL)
+            throw std::runtime_error("weights cannot be filled");
+
+        TH2F* h2Dplane = dynamic_cast<TH2F*>(f->Get("histNEvts"));
+        TH1D* projX = h2Dplane->ProjectionX();
+        TH1D* projY = h2Dplane->ProjectionY();
+        int binNX = projX->FindBin(myEvent->mass_stop);
+        int binNY = projY->FindBin(myEvent->mass_lsp);
+        //cout << "binNx " << binNX << " binNY " << binNY << endl;
+	//cout << "weight hist " << hSigWeight << " get " <<  f->Get("h_counter")<< " file " << f << endl;
+	myEvent->wNormalization.clear();
+	myEvent->wNormalization.push_back(-13); //@MJ@ ATTENTION vector.at(0) random number to sy synchronized with binning numbering
+	for(uint32_t n=0; n<hSigWeight->GetNbinsZ(); n++)
+	{
+            myEvent->wNormalization.push_back(hSigWeight->GetBinContent(binNX,binNY, n+1));
+	}
+	//cout << "normalization size " << myEvent->wNormalization.size() << "first element " << myEvent->wNormalization.at(1) << endl;
     }
     
     // Put actual content of special type branches where they should be...
