@@ -192,6 +192,8 @@ typedef struct
     float         top_pt = -13;
     float         atop_pt = -13;
     float         lep1_dphiMET = -13;
+
+    uint32_t      nEvents = 0;
     //uint32_t      nthentry = 0;
 
     //@MJ@ TODO fill these
@@ -473,6 +475,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("is1lepFromTop",          &(myEvent->is1lepFromTop));
     if(theTree->GetListOfBranches()->FindObject("isZtoNuNu"))
         theTree->SetBranchAddress("isZtoNuNu",                &(myEvent->isZtoNuNu));
+    if(theTree->GetListOfBranches()->FindObject("nEvents"))
+        theTree->SetBranchAddress("nEvents",                &(myEvent->nEvents));
 
     //trigger
     if(theTree->GetListOfBranches()->FindObject("HLT_SingleEl"))
