@@ -55,6 +55,8 @@ typedef struct
     int          HLT_SingleMu;
     int          HLT_MET;
     int          HLT_MET100_MHT100;
+    int          HLT_MET110_MHT110;
+    int          HLT_MET120_MHT120;
     int          HLT_DiEl;
     int          HLT_DiMu;
     int          HLT_MuE;
@@ -231,6 +233,8 @@ typedef struct
     ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4lep2_p4 = NULL;
     vector< ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > genqs_p4;
     vector< ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >* p4genqs_p4 = NULL;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > ak4pfjets_leadbtag_p4;
+    ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >* p4ak4pfjets_leadbtag_p4 = NULL;
 
     bool PassTrackVeto = -13;
     bool PassTauVeto = -13;
@@ -487,6 +491,10 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("HLT_MET",               &(myEvent->HLT_MET));
     if(theTree->GetListOfBranches()->FindObject("HLT_MET100_MHT100"))
         theTree->SetBranchAddress("HLT_MET100_MHT100",               &(myEvent->HLT_MET100_MHT100));
+    if(theTree->GetListOfBranches()->FindObject("HLT_MET110_MHT110"))
+        theTree->SetBranchAddress("HLT_MET110_MHT110",               &(myEvent->HLT_MET110_MHT110));
+    if(theTree->GetListOfBranches()->FindObject("HLT_MET120_MHT120"))
+        theTree->SetBranchAddress("HLT_MET120_MHT120",               &(myEvent->HLT_MET120_MHT120));
     if(theTree->GetListOfBranches()->FindObject("HLT_DiEl"))
         theTree->SetBranchAddress("HLT_DiEl",               &(myEvent->HLT_DiEl));
     if(theTree->GetListOfBranches()->FindObject("HLT_DiMu"))
@@ -589,6 +597,8 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     //    theTree->SetBranchAddress("ak4pfjets_loose_pfid",    &(myEvent->ak4pfjets_loose_pfid));
     if(theTree->GetListOfBranches()->FindObject("ak4pfjets_rho"))
         theTree->SetBranchAddress("ak4pfjets_rho",           &(myEvent->ak4pfjets_rho));
+    if(theTree->GetListOfBranches()->FindObject("ak4pfjets_leadbtag_p4"))
+        theTree->SetBranchAddress("ak4pfjets_leadbtag_p4",           &(myEvent->p4ak4pfjets_leadbtag_p4));
     #endif
 
     //Fat jets, PV
@@ -954,6 +964,11 @@ void ReadEvent(TTree* theTree, long int i, babyEvent* myEvent, TFile* f)
         }
 
     }
+    //jets 4-vector
+    #ifdef USE_JETS
+    myEvent->ak4pfjets_leadbtag_p4 = *(myEvent->p4ak4pfjets_leadbtag_p4);
+    #endif 
+
     //fill weight normalization
     
     TH1D* hWeight = NULL;
