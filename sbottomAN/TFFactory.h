@@ -130,7 +130,7 @@ TFProducer(vector<string> regions, string bkgType, string CRtype)
 void produceTFTable(string inputTabNameSR, string inputTabNameCR, string outputName)
 {
     vector<string> colId;
-    colId.push_back("CR data");
+    colId.push_back("CRdata");
     colId.push_back("TF");
     colId.push_back(TFBkg);
 
