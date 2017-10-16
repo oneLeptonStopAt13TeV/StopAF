@@ -94,7 +94,7 @@ class Selection:
 	       for var in self.variables:
 	         selection = selection.replace(var['name'],"myEvent."+var['babyTuple'])
 	   
-	       dump = "bool "+region['name']+"() { return ( baseline() && "+selection+" ); }\n" 
+	       dump = "bool "+region['name']+"() { return ("+selection+" && baseline()  ); }\n" 
 	       myfile.write(dump)
 	       print dump
 
@@ -158,10 +158,10 @@ class Selection:
 	       dump="AddRegion(\""+name+"\",\""+name+"\",&"+name+");\n" #and all the regions for the up/down , do this more clever with a list
 	       myfile.write(dump)
 	       print dump
-               systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "ISRnjetsDown", "ISRnjetsUp" ]
+               #good ones systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "ISRnjetsDown", "ISRnjetsUp" ]
                #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
                #systs = ["PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
-               #systs = []
+               systs = []
                for syst in systs:
 	           dump="AddRegion(\""+name+syst+"\",\""+name+syst+"\",&"+name+");\n"
 	           myfile.write(dump)
@@ -308,10 +308,10 @@ class Selection:
 	         myfile.write(dump)
 	         dump= " , "
 	         myfile.write(dump)
-                 systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "ISRnjetsDown", "ISRnjetsUp"  ]
+                 # good ones systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "ISRnjetsDown", "ISRnjetsUp"  ]
                  #systs = ["LSFdown", "LSFup", "BTlightDown", "BTlightUp","BTheavyDown", "BTheavyUp", "PUdown", "PUup", "PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up", "topPtModelingdown", "topPtModelingup" ]
                  #systs = ["PDFdown", "PDFup", "alphaSdown", "alphaSup", "Q2down", "Q2up" ]
-                 #systs = []
+                 systs = []
                  for syst in systs:
 	             dump= "\"" +name+syst+"\""
 	             myfile.write(dump)

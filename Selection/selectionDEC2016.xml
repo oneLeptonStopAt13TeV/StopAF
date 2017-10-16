@@ -24,7 +24,7 @@
  </Variables>
 
 
- <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jmet>=0.5 and trigger and tmod>-1000 and Mlb>=0"  /> 
+ <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jmet>=0.5 and trigger and tmod>-1000 and Mlb>=0 and passGoodVtx() and passFilters()"  /> 
  <Regions>
   <Region name="SR1l" selection="Nbjets>=1 and NLeps==1 and NVLeps==1 and TrackVeto and TauVeto"/>
  </Regions>

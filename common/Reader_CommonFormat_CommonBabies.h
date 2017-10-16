@@ -46,8 +46,10 @@ typedef struct
     //vector<float> ak4pfjets_qgtag;
     float         ak4pfjets_rho = -13;
     float         dphi_ak4pfjets_met = -13;
+    float         dphi_ak4pfjets_met_rl = -13;
     //float         jetsPt = -13;
     float         pfmet_phi = -13;
+    float         pfmet_phi_rl = -13;
     //float         met_sig = -13;
     //vector<float> ak8pfjets_pt;
     //vector<float> ak10pfjets_pt;
@@ -108,6 +110,7 @@ typedef struct
     float         crossSection = -13;
     float         kfactor = -13;
     float         mt_met_lep = -13;
+    float         mt_met_lep_rl = -13;
     //float         M3b = -13;
     int           lep1_pdgid = -13;
     //float         jetsCSVv2 = -13;
@@ -117,6 +120,7 @@ typedef struct
     int           ngoodjets = -13;
     bool         lep1_passVeto = -13;
     float         pfmet = -13;
+    float         pfmet_rl = -13;
     float         lep1_MiniIso = -13;
     float         lep1_relIso = -13;
     int           lumiId = -13;
@@ -165,6 +169,7 @@ typedef struct
     float         lep2_relIso = -13;
     //float         pv_rho = -13;
     float         MT2W = -13;
+    float         MT2W_rl = -13;
     int          isZtoNuNu = -13;
     //float         ETmiss = -13;
     //int           numberOfSelectedElectrons = -13;
@@ -173,6 +178,7 @@ typedef struct
     int           nvetoleps = -13;
     float         topness = -13;
     float         topnessMod = -13;
+    float         topnessMod_rl = -13;
     //float         chi2 = -13;
     //float         ETmissPhi = -13;
     //int64_t      totalNumberOfInitialEvent = -13;
@@ -181,7 +187,15 @@ typedef struct
     int           nvertex = -13;
     //int           puIntime = -13;
     float           puTrue = -13;
-    bool           is_data = -13;
+    bool           is_data = 0;
+    float           filt_met = 0;
+    float          filt_badChargedCandidateFilter = 0;
+    bool           filt_jetWithBadMuon = 0;
+    bool           filt_pfovercalomet = 0;
+    float           filt_badMuonFilter = 0;
+    bool           filt_duplicatemuons = 0;
+    bool           filt_badmuons = 0;
+    bool           filt_nobadmuons = 0;
     int           is0lep = -13;
     int           is1lep = -13;
     int           is2lep = -13;
@@ -194,6 +208,9 @@ typedef struct
     float         top_pt = -13;
     float         atop_pt = -13;
     float         lep1_dphiMET = -13;
+    float         lep1_dphiMET_rl = -13;
+    float         lep2_dphiMET = -13;
+    float         lep2_dphiMET_rl = -13;
 
     uint32_t      nEvents = 0;
     //uint32_t      nthentry = 0;
@@ -481,6 +498,22 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("isZtoNuNu",                &(myEvent->isZtoNuNu));
     if(theTree->GetListOfBranches()->FindObject("nEvents"))
         theTree->SetBranchAddress("nEvents",                &(myEvent->nEvents));
+    if(theTree->GetListOfBranches()->FindObject("filt_met"))
+        theTree->SetBranchAddress("filt_met",               &(myEvent->filt_met));
+    if(theTree->GetListOfBranches()->FindObject("filt_badChargedCandidateFilter"))
+        theTree->SetBranchAddress("filt_badChargedCandidateFilter",               &(myEvent->filt_badChargedCandidateFilter));
+    if(theTree->GetListOfBranches()->FindObject("filt_jetWithBadMuon"))
+        theTree->SetBranchAddress("filt_jetWithBadMuon",               &(myEvent->filt_jetWithBadMuon));
+    if(theTree->GetListOfBranches()->FindObject("filt_pfovercalomet"))
+        theTree->SetBranchAddress("filt_pfovercalomet",               &(myEvent->filt_pfovercalomet));
+    if(theTree->GetListOfBranches()->FindObject("filt_badMuonFilter"))
+        theTree->SetBranchAddress("filt_badMuonFilter",               &(myEvent->filt_badMuonFilter));
+    if(theTree->GetListOfBranches()->FindObject("filt_duplicatemuons"))
+        theTree->SetBranchAddress("filt_duplicatemuons",               &(myEvent->filt_duplicatemuons));
+    if(theTree->GetListOfBranches()->FindObject("filt_badmuons"))
+        theTree->SetBranchAddress("filt_badmuons",               &(myEvent->filt_badmuons));
+    if(theTree->GetListOfBranches()->FindObject("filt_nobadmuons"))
+        theTree->SetBranchAddress("filt_nobadmuons",               &(myEvent->filt_nobadmuons));
 
     //trigger
     if(theTree->GetListOfBranches()->FindObject("HLT_SingleEl"))
@@ -690,12 +723,20 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     //theTree->SetBranchAddress("met_sig",                 &(myEvent->met_sig));
     if(theTree->GetListOfBranches()->FindObject("pfmet"))
         theTree->SetBranchAddress("pfmet",                   &(myEvent->pfmet));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_rl"))
+        theTree->SetBranchAddress("pfmet_rl",                   &(myEvent->pfmet_rl));
     if(theTree->GetListOfBranches()->FindObject("MT2W"))
         theTree->SetBranchAddress("MT2W",                    &(myEvent->MT2W));
+    if(theTree->GetListOfBranches()->FindObject("MT2W_rl"))
+        theTree->SetBranchAddress("MT2W_rl",                    &(myEvent->MT2W_rl));
     if(theTree->GetListOfBranches()->FindObject("mt_met_lep"))
         theTree->SetBranchAddress("mt_met_lep",              &(myEvent->mt_met_lep));
+    if(theTree->GetListOfBranches()->FindObject("mt_met_lep_rl"))
+        theTree->SetBranchAddress("mt_met_lep_rl",              &(myEvent->mt_met_lep_rl));
     if(theTree->GetListOfBranches()->FindObject("topnessMod"))
         theTree->SetBranchAddress("topnessMod",                 &(myEvent->topnessMod));
+    if(theTree->GetListOfBranches()->FindObject("topnessMod_rl"))
+        theTree->SetBranchAddress("topnessMod_rl",                 &(myEvent->topnessMod_rl));
     if(theTree->GetListOfBranches()->FindObject("ngoodjets"))
         theTree->SetBranchAddress("ngoodjets",               &(myEvent->ngoodjets));
     if(theTree->GetListOfBranches()->FindObject("ngoodbtags"))
@@ -704,10 +745,20 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
         theTree->SetBranchAddress("ntightbtags",              &(myEvent->ntightbtags));
     if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2"))
         theTree->SetBranchAddress("mindphi_met_j1_j2",      &(myEvent->dphi_ak4pfjets_met));
+    if(theTree->GetListOfBranches()->FindObject("mindphi_met_j1_j2_rl"))
+        theTree->SetBranchAddress("mindphi_met_j1_j2_rl",      &(myEvent->dphi_ak4pfjets_met_rl));
     if(theTree->GetListOfBranches()->FindObject("lep1_dphiMET"))
         theTree->SetBranchAddress("lep1_dphiMET",      &(myEvent->lep1_dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("lep1_dphiMET_rl"))
+        theTree->SetBranchAddress("lep1_dphiMET_rl",      &(myEvent->lep1_dphiMET_rl));
+    if(theTree->GetListOfBranches()->FindObject("lep2_dphiMET"))
+        theTree->SetBranchAddress("lep2_dphiMET",      &(myEvent->lep2_dphiMET));
+    if(theTree->GetListOfBranches()->FindObject("lep2_dphiMET_rl"))
+        theTree->SetBranchAddress("lep2_dphiMET_rl",      &(myEvent->lep2_dphiMET_rl));
     if(theTree->GetListOfBranches()->FindObject("pfmet_phi"))
         theTree->SetBranchAddress("pfmet_phi",               &(myEvent->pfmet_phi));
+    if(theTree->GetListOfBranches()->FindObject("pfmet_phi_rl"))
+        theTree->SetBranchAddress("pfmet_phi_rl",               &(myEvent->pfmet_phi_rl));
     if(theTree->GetListOfBranches()->FindObject("Mlb_closestb"))
         theTree->SetBranchAddress("Mlb_closestb",                     &(myEvent->Mlb));
     #endif
@@ -769,8 +820,11 @@ void InitializeBranchesForReading(TTree* theTree, babyEvent* myEvent, TFile* f)
     //theTree->SetBranchAddress("Mjjj",                    &(myEvent->Mjjj));
     if(theTree->GetListOfBranches()->FindObject("hadronic_top_chi2"))
         theTree->SetBranchAddress("hadronic_top_chi2",       &(myEvent->hadronic_top_chi2));
-    if(theTree->GetListOfBranches()->FindObject("nvtx"))
-        theTree->SetBranchAddress("nvtx",                 &(myEvent->nvertex));
+    if(theTree->GetListOfBranches()->FindObject("nvtxs"))
+    {
+        theTree->SetBranchAddress("nvtxs",                 &(myEvent->nvertex));
+        //cout << " nvertex filled by "  << myEvent->nvertex << endl;
+    }
     //theTree->SetBranchAddress("puIntime",                &(myEvent->puIntime));
     if(theTree->GetListOfBranches()->FindObject("pu_ntrue"))
         theTree->SetBranchAddress("pu_ntrue",                  &(myEvent->puTrue));

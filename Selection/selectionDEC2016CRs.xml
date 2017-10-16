@@ -15,6 +15,12 @@
    <Variable name="lep1_TightID" babyTuple="lep1_passTightID" />
    <Variable name="lep1_pdgid" babyTuple="lep1_pdgid" />
    <Variable name="lep1_pt" babyTuple="lep1_pt" />
+   <Variable name="lep1_MiniIso" babyTuple="lep1_MiniIso" />
+   <Variable name="lep2_MediumID" babyTuple="lep2_passMediumID" />
+   <Variable name="lep2_TightID" babyTuple="lep2_passTightID" />
+   <Variable name="lep2_pdgid" babyTuple="lep2_pdgid" />
+   <Variable name="lep2_pt" babyTuple="lep2_pt" />
+   <Variable name="lep2_MiniIso" babyTuple="lep2_MiniIso" />
    <Variable name="trigger" babyTuple="trigger"/>
    <Variable name="NVLeps" babyTuple="nvetoleps"/>
    <Variable name="dphiML" babyTuple="lep1_dphiMET"/>
@@ -22,9 +28,9 @@
  </Variables>
 
 
- <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jmet>=0.5 and trigger and tmod>-1000 and Mlb()>=0"  /> 
+ <Baseline  name="baseline" selection="MET>=250 and MT>=150 and Njets>=2 and DPhi_jmet>=0.5 and trigger and passFilters() and passGoodVtx() and tmod>-1000 and Mlb()>=0"  /> 
  <Regions>
-  <Region name="CR2l" selection="Nbjets>=1 and NLeps==2 and NVLeps==2 and TrackVeto and TauVeto"/>
+  <Region name="CR2l" selection="lep1_pt>20.0 and lep2_pt>10.0 and lep1_MiniIso!>0.1 and lep2_MiniIso!>0.1 and dilepSel() and Nbjets>=1 and TrackVeto and TauVeto" />
   <Region name="CR0b" selection="Nbjets==0 and NLeps==1 and NVLeps==1 and TrackVeto and TauVeto"/>
  </Regions>
  <Bins>
